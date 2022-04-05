@@ -6,7 +6,7 @@ interface PatientPropsArray {
 }
 
 export default function BasicTable(props : PatientPropsArray) {
-  
+
   return (
     <div>
       <Table striped bordered hover>

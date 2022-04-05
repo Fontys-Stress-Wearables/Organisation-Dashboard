@@ -1,5 +1,4 @@
 import { useNavigate, Link as LinkRouter } from "react-router-dom";
-import {listItems} from '../home/listitems';
 
 const Sidebar = () => {
 
