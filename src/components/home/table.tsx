@@ -15,7 +15,7 @@ export default function BasicTable(props : PatientPropsArray) {
             <th>#</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Username</th>
+            <th>Birthdate</th>
           </tr>
         </thead>
         <tbody>
