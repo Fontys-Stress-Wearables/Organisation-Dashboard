@@ -15,7 +15,7 @@ const Header = () => {
       <Nav.Link href="#patient-groups">Patient-groups</Nav.Link>
     </Nav>
     <Nav>
-      <Nav.Link className="justify-content-end" href="#logout">Logout</Nav.Link>
+      <Nav.Link className="justify-content-end" href="signin">Logout</Nav.Link>
     </Nav>
     </Container>
   </Navbar>
