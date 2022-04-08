@@ -9,10 +9,10 @@ const Header = () => {
     <Container>
     <Navbar.Brand href="#home">SWSP Organisation Management</Navbar.Brand>
     <Nav className="me-auto">
-      <Nav.Link href="#home">Home</Nav.Link>
-      <Nav.Link href="#patients">Patients</Nav.Link>
-      <Nav.Link href="#caregivers">Caregivers</Nav.Link>
-      <Nav.Link href="#patient-groups">Patient-groups</Nav.Link>
+      <Nav.Link href="home">Home</Nav.Link>
+      <Nav.Link href="patients">Patients</Nav.Link>
+      <Nav.Link href="caregivers">Caregivers</Nav.Link>
+      <Nav.Link href="patient-groups">Patient-groups</Nav.Link>
     </Nav>
     <Nav>
       <Nav.Link className="justify-content-end" href="signin">Logout</Nav.Link>
