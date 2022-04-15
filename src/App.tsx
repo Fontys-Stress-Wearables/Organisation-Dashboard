@@ -6,6 +6,7 @@ import { SignIn } from './components/signin';
 import { Patients } from './components/patients';
 import { Caregivers } from './components/caregivers';
 import { PatientGroups } from './components/patient-groups';
+import { Home } from './components/home';
 
 function App() {
   return (

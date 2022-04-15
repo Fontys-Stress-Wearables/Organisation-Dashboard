@@ -1,0 +1,27 @@
+.patientTable {
+    background-color: #D3D3D3;
+    margin: left;
+    width: 50%;
+    padding: 16px;
+    height: 100%
+}
+
+.searchbar {
+   margin: auto;
+}
+
+.patientcard {
+    margin: right;
+    width: 50%;
+    padding: 16px;
+    height: 100%;
+    background-color: #D3D3D3;
+}
+
+.patient {
+    display: flex;
+    width: 100%;
+    background-color: #D3D3D3;
+    flex-wrap: wrap;
+    height: 100%;
+}

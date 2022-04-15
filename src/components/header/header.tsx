@@ -7,7 +7,7 @@ const Header = () => {
   return(
     <Navbar bg="primary" variant="dark">
     <Container>
-    <Navbar.Brand href="#home">SWSP Organisation Management</Navbar.Brand>
+    <Navbar.Brand href="home">SWSP Organisation Management</Navbar.Brand>
     <Nav className="me-auto">
       <Nav.Link href="home">Home</Nav.Link>
       <Nav.Link href="patients">Patients</Nav.Link>
