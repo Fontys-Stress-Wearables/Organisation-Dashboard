@@ -1,13 +1,13 @@
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
-import styles from "./signin.module.scss";
+import styles from "./loading.module.scss";
 
-const SignIn = () => {
+const Loading = () => {
     return(
-        <div className={styles.formContainer}>
+        <div className={styles.container}>
             
         </div>
     ); 
 }
 
-export default SignIn
+export default Loading
