@@ -4,11 +4,11 @@ import App from './App';
 import { PUBLIC_URL } from './utilities/environment'
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
 import { MsalProvider, MsalAuthenticationTemplate } from "@azure/msal-react";
-import { msalConfig } from "./authConfig";
+import { msalConfig, appRoles } from "./authConfig";
 import Loading from "./components/loading/loading"
+import { AppGuard } from './AppGuard';
 
 const msalInstance = new PublicClientApplication(msalConfig);
-
 
 ReactDOM.render(
   <BrowserRouter basename={PUBLIC_URL}>
@@ -17,7 +17,9 @@ ReactDOM.render(
         interactionType={InteractionType.Redirect}
         loadingComponent={Loading}
       >
-        <App />
+        <AppGuard exact roles={[appRoles.Admin]}>
+          <App/>
+        </AppGuard>
       </MsalAuthenticationTemplate>
     </MsalProvider>
   </BrowserRouter>,

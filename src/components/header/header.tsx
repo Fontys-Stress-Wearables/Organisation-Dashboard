@@ -25,17 +25,16 @@ const Header = () => {
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
       account: accounts[0]
-  };
-  
-  
+    };
+
     instance.acquireTokenSilent(request).then((response: any) => {
       console.log(response.accessToken);
-  }).catch((e: any) => {
-    console.log(e)
+    }).catch((e: any) => {
+      console.log(e)
       instance.acquireTokenPopup(request).then((response: any) => {
         console.log(response.accessToken);
       });
-  });
+    });
   }
 
   return (
@@ -51,9 +50,9 @@ const Header = () => {
         <Nav>
           {
             isAuthenticated ?
-            <>
-              <Nav.Link className="justify-content-end" onClick={() => requestToken()} >{accounts[0] && accounts[0].name}</Nav.Link>
-              <Nav.Link className="justify-content-end" onClick={() => handleLogout(instance)} >Logout</Nav.Link>
+              <>
+                <Nav.Link className="justify-content-end" onClick={() => requestToken()} >{accounts[0] && accounts[0].name}</Nav.Link>
+                <Nav.Link className="justify-content-end" onClick={() => handleLogout(instance)} >Logout</Nav.Link>
               </>
               :
               <Nav.Link className="justify-content-end" onClick={() => handleLogin(instance)} >Login</Nav.Link>

@@ -1,6 +1,7 @@
 import { API_URL } from '../environment'
 
 interface ApiCalls {
+    token?: String
     path: String
     method: 'POST' | 'GET' | 'PUT' | 'DELETE'
     body?: string | PatientProps
@@ -48,12 +49,15 @@ interface PatientPropsResponse {
     response: PatientProps
 }
 
-const callApi = async ({ path, method, body }: ApiCalls) => {
+const callApi = async ({ token, path, method, body }: ApiCalls) => {
     const url = `${API_URL}/${path}`
 
     const fetchOptions: RequestInit = {
         method,
-        headers: { "Content-type": "application/json" }
+        headers: { 
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }
     }
 
     if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
@@ -75,8 +79,8 @@ const callApi = async ({ path, method, body }: ApiCalls) => {
     }
 }
 
-export const getPatients = (): Promise<PatientsPropsResponse> => {
-    return callApi({ path: 'patients', method: 'GET' })
+export const getPatients = (accessToken: string): Promise<PatientsPropsResponse> => {
+    return callApi({ token: accessToken, path: 'patients', method: 'GET' })
 }
 
 export const createPatient = (PatientProps: PatientProps): Promise<PatientsPropsResponse> => {
