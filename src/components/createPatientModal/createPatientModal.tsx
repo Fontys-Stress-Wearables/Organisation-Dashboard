@@ -6,10 +6,6 @@ import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
 
-// interface ChangeProps {
-//   onChange: ({name, value}: { name: keyof PatientProps; value: string}) => void
-// }
-
 const CreatePatientModal = () => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
