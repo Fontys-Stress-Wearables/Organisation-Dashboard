@@ -13,7 +13,6 @@ const Patients: React.FC = () => {
     const { instance, accounts } = useMsal();
     
     const updatePatientTable = (update: boolean):void => {
-      console.log(update);
       setUpdateTable(update);
     }
 
@@ -53,7 +52,7 @@ const Patients: React.FC = () => {
           })
         });
       });  
-    });
+    }, [updateTable]);
 
     return(
        <div className={styles.container}>
