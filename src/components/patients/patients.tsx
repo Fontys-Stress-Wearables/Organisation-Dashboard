@@ -52,7 +52,6 @@ const Patients = () => {
 
     return(
        <div className={styles.container}>
-          <div>
               <div className={styles.searchbar}>
                 <Searchbar/>
               </div>
@@ -81,7 +80,6 @@ const Patients = () => {
               </Accordion>
             </div>
           </div> 
-       </div>
     );
 }
 

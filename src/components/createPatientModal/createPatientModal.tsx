@@ -83,7 +83,7 @@ const CreatePatientModal = () => {
     return (
       <>
         <Button variant="success" onClick={handleShow}>
-           <img src={AddIcon}></img>
+           Add patient <img src={AddIcon}></img> 
         </Button>
   
         <Modal show={show} onHide={handleClose}>
