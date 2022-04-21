@@ -1,6 +1,7 @@
 import { API_URL } from '../environment'
 
 interface ApiCalls {
+    token?: String
     path: String
     method: 'POST' | 'GET' | 'PUT' | 'DELETE'
     body?: string | PatientProps
@@ -48,32 +49,38 @@ interface PatientPropsResponse {
     response: PatientProps
 }
 
-const callApi = ({ path, method, body }: ApiCalls) => {
+const callApi = async ({ token, path, method, body }: ApiCalls) => {
     const url = `${API_URL}/${path}`
 
     const fetchOptions: RequestInit = {
         method,
-        headers: {"Content-type": "application/json"}
+        headers: { 
+            "Content-type": "application/json",
+            "Authorization": "Bearer " + token
+        }
     }
 
     if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
 
-    return fetch(url, fetchOptions).then((response) => {
-        if (!response.ok) throw Error(`${response.status}|${response.statusText}`)
-        return response.text()
-    }).then((response) => ({
-        error: false,
-        response: response && response.length > 0 ? JSON.parse(response) : {}
-    })).catch((e) => {
+    try {
+        const response = await fetch(url, fetchOptions);
+        if (!response.ok)
+            throw Error(`${response.status}|${response.statusText}`);
+        const response_1 = await response.text();
+        return ({
+            error: false,
+            response: response_1 && response_1.length > 0 ? JSON.parse(response_1) : {}
+        });
+    } catch (e) {
         return {
             error: true,
             response: e
-        }
-    })
+        };
+    }
 }
 
-export const getPatients = (): Promise<PatientsPropsResponse> => {
-    return callApi({ path: 'patients', method: 'GET' })
+export const getPatients = (accessToken: string): Promise<PatientsPropsResponse> => {
+    return callApi({ token: accessToken, path: 'patients', method: 'GET' })
 }
 
 export const createPatient = (PatientProps: PatientProps): Promise<PatientsPropsResponse> => {

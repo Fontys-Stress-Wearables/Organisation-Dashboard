@@ -6,6 +6,8 @@ import { Searchbar } from "../searchbar";
 import styles from "./patients.module.scss";
 import EditIcon from "./edit_black.svg";
 import {CreatePatientModal} from "../createPatientModal";
+import { useMsal } from "@azure/msal-react";
+
 
 const Patients = () => {
     const obj = {firstName: "", lastName: "", birthdate: ""}
@@ -14,9 +16,16 @@ const Patients = () => {
     const [patients, setPatients] = useState<PatientProps[]>([]);
     const [patientToggle, setPatientToggle] = useState(false);
     const [patient, setPatient] = useState<PatientProps>(obj);
+    const { instance, accounts } = useMsal();
+
+    const request = {
+      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      account: accounts[0]
+  };
 
     useEffect(() => {
-        getPatients().then((response) => {
+      instance.acquireTokenSilent(request).then((res: any) => {
+        getPatients(res.accessToken).then((response) => {
           if(response.error){
             setError(true)
           } else {
@@ -28,6 +37,24 @@ const Patients = () => {
           console.error('Error occured while fetching patients', err)
           setError(true)
         })
+    }).catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          getPatients(res.accessToken).then((response) => {
+            if(response.error){
+              setError(true)
+            } else {
+              const foundPatients = response.response
+              setError(false)
+              setPatients(foundPatients)
+            }
+          }).catch((err) => {
+            console.error('Error occured while fetching patients', err)
+            setError(true)
+          })
+        });
+    });
+          
+        
       }, [])
 
     return(
