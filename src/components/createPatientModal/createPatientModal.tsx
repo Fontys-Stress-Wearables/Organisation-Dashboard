@@ -13,7 +13,7 @@ import { useMsal } from "@azure/msal-react";
 const CreatePatientModal = () => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
-    const [patient, setPatient] = useState<PatientProps>({firstName: "firstName", lastName: "", birthdate: ""});
+    const [patient, setPatient] = useState<PatientProps>();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const { instance, accounts } = useMsal();
@@ -23,22 +23,36 @@ const CreatePatientModal = () => {
       account: accounts[0]
     };
 
-    function handleChange(evt: React.ChangeEvent<HTMLInputElement>) {
-      const value = evt.target.value;
-      setPatient({
-        ...patient,
-        [evt.target.name]: value
-      });
-    }
-     const [date, setDate] = useState("");
-  const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
-  };
+    const [firstname, setFirstname] = useState("");
+
+    const handleChangeFirstname = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFirstname(event.target.value);
+    };
+
+    const [lastname, setLastname] = useState("");
+
+    const handleChangeLastname = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setLastname(event.target.value);
+    };
+
+    const [date, setDate] = useState("");
+
+    const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDate(event.target.value);
+    };
 
     const handleSubmit = () => {
+      const handlePatient: PatientProps = {
+        firstName: firstname,
+        lastName: lastname,
+        birthdate: date
+      }
+
+      setPatient(handlePatient);
+
       instance.acquireTokenSilent(request).then((res: any) => {
         console.log(patient);
-        createPatient(res.accessToken, patient).then((response) => {
+        createPatient(res.accessToken, handlePatient).then((response) => {
           if(response.error){
             setError(true)
           } else {
@@ -52,7 +66,7 @@ const CreatePatientModal = () => {
         })
       }).catch((error) => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          createPatient(res.accessToken, patient).then((response) => {
+          createPatient(res.accessToken, handlePatient).then((response) => {
             if(response.error){
               setError(true)
             } else {
@@ -66,6 +80,7 @@ const CreatePatientModal = () => {
           })
         });
       });  
+
       handleClose();
     }
 
@@ -87,7 +102,7 @@ const CreatePatientModal = () => {
                   type="string"
                   placeholder="First name"
                   autoFocus
-                  onChange={(firstName) => handleChange()}
+                  onChange={handleChangeFirstname}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -96,8 +111,7 @@ const CreatePatientModal = () => {
                   type="string"
                   placeholder="Last name"
                   autoFocus
-                  value={}
-                  onChange={(lastName) => handleChange()}
+                  onChange={handleChangeLastname}
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
@@ -106,7 +120,7 @@ const CreatePatientModal = () => {
                   type="date"
                   placeholder="Birthdate"
                   autoFocus
-                  onChange={(e) => handleChange}
+                  onChange={handleChangeDate}
                 />
               </Form.Group>
             </Form>
