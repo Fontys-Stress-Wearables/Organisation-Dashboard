@@ -116,6 +116,7 @@ const CreatePatientModal = () => {
                   type="date"
                   placeholder="Birthdate"
                   autoFocus
+                  max={new Date().toISOString().split("T")[0]}
                   onChange={handleChangeDate}
                 />
               </Form.Group>
