@@ -53,14 +53,12 @@ const Patients = () => {
     return(
        <div className={styles.container}>
           <div>
-            <div className={styles.actionBar}>
               <div className={styles.searchbar}>
                 <Searchbar/>
               </div>
               <div className={styles.createPatientModal}>
                 <CreatePatientModal/>
               </div>
-            </div>
             <div className={styles.accordion}>
               <Accordion defaultActiveKey="0">
                 {patients && patients.length ? (
