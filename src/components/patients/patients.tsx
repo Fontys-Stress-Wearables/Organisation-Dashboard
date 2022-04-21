@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Accordion, Alert } from "react-bootstrap";
+import { Accordion, Alert, Button } from "react-bootstrap";
 import { getPatients, PatientProps } from "../../utilities/api/calls";
 import { Searchbar } from "../searchbar";
 import styles from "./patients.module.scss";
@@ -63,13 +63,7 @@ const Patients = () => {
                 {patients && patients.length ? (
                   patients.map((p, index) =>(
                     <Accordion.Item eventKey={index.toString()}>
-                      <Accordion.Header> {p.firstName} </Accordion.Header>
-                      <Accordion.Body>
-                        {p.firstName} {p.lastName}: 
-                        The patient is part of the following patient-groups: {p.patientGroups}. 
-                        Do you wish to edit the patientdata: 
-                        <img src={EditIcon}></img>
-                      </Accordion.Body>
+                      <Accordion.Header> {p.firstName} {p.lastName} </Accordion.Header>
                     </Accordion.Item>
                   ))
                 ) : (
