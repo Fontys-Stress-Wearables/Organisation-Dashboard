@@ -6,6 +6,7 @@ import styles from "./patients.module.scss";
 import EditIcon from "./edit_black.svg";
 import {CreatePatientModal} from "../createPatientModal";
 import { useMsal } from "@azure/msal-react";
+import BasicTable from "../table/table";
 
 
 const Patients = () => {
@@ -58,20 +59,14 @@ const Patients = () => {
               <div className={styles.createPatientModal}>
                 <CreatePatientModal/>
               </div>
-            <div className={styles.accordion}>
-              <Accordion defaultActiveKey="0">
-                {patients && patients.length ? (
-                  patients.map((p, index) =>(
-                    <Accordion.Item eventKey={index.toString()}>
-                      <Accordion.Header> {p.firstName} {p.lastName} </Accordion.Header>
-                    </Accordion.Item>
-                  ))
-                ) : (
-                  <div>
-                    <Alert variant="primary">No patients found</Alert>
-                  </div>
-                )}
-              </Accordion>
+            <div className={styles.Table}>
+              {patients && patients.length ?(
+                <BasicTable patients={patients}/>
+            ) : (
+              <div>
+                <Alert variant="primary">No patients found</Alert>
+              </div>
+              )}            
             </div>
           </div> 
     );
