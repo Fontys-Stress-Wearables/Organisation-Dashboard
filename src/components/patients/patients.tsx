@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Accordion, Alert } from "react-bootstrap";
 import { getPatients, PatientProps } from "../../utilities/api/calls";
-import { Patientcard } from "../patientcard";
 import { Searchbar } from "../searchbar";
 import styles from "./patients.module.scss";
 import EditIcon from "./edit_black.svg";
@@ -10,18 +9,14 @@ import { useMsal } from "@azure/msal-react";
 
 
 const Patients = () => {
-    const obj = {firstName: "", lastName: "", birthdate: ""}
-
     const [error, setError] = useState(false);
     const [patients, setPatients] = useState<PatientProps[]>([]);
-    const [patientToggle, setPatientToggle] = useState(false);
-    const [patient, setPatient] = useState<PatientProps>(obj);
     const { instance, accounts } = useMsal();
 
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
       account: accounts[0]
-  };
+    };
 
     useEffect(() => {
       instance.acquireTokenSilent(request).then((res: any) => {
@@ -52,10 +47,8 @@ const Patients = () => {
             setError(true)
           })
         });
-    });
-          
-        
-      }, [])
+    });  
+    }, [])
 
     return(
        <div className={styles.container}>
@@ -89,11 +82,6 @@ const Patients = () => {
               </Accordion>
             </div>
           </div> 
-          
-
-          {/* <div className={styles.patientcard}>
-            <Patientcard patient={patient}/>
-          </div> */}
        </div>
     );
 }

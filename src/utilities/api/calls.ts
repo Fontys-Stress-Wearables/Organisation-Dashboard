@@ -1,3 +1,4 @@
+import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
 import { API_URL } from '../environment'
 
 interface ApiCalls {
@@ -45,12 +46,17 @@ interface PatientsPropsResponse extends BaseApiResponse {
     response: PatientProps[]
 }
 
-interface PatientPropsResponse {
+interface PatientPropsResponse extends BaseApiResponse {
     response: PatientProps
 }
 
 const callApi = async ({ token, path, method, body }: ApiCalls) => {
     const url = `${API_URL}/${path}`
+    // const { instance, accounts } = useMsal();
+    // const request = {
+    //   scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+    //   account: accounts[0]
+    // };
 
     const fetchOptions: RequestInit = {
         method,
@@ -83,8 +89,8 @@ export const getPatients = (accessToken: string): Promise<PatientsPropsResponse>
     return callApi({ token: accessToken, path: 'patients', method: 'GET' })
 }
 
-export const createPatient = (PatientProps: PatientProps): Promise<PatientsPropsResponse> => {
-    return callApi({ path: 'patients', method: 'POST', body: PatientProps })
+export const createPatient = (accesToken: string, patientProps: PatientProps): Promise<PatientPropsResponse> => {
+    return callApi({ token: accesToken, path: 'patients', method: 'POST', body: patientProps })
 }
 
 export const getPatient = (id: string): Promise<PatientPropsResponse> => {
