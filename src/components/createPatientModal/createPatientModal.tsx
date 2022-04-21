@@ -6,7 +6,13 @@ import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
 
-const CreatePatientModal = () => {
+type CreatePatientModalProps = {
+  onClick?:(val: string) => void
+};
+
+const CreatePatientModal: React.FC<CreatePatientModalProps> = ({
+  onClick=()=>{}
+}) => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
     const [patient, setPatient] = useState<PatientProps>();

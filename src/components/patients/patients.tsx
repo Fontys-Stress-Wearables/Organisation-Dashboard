@@ -11,9 +11,10 @@ import BasicTable from "../table/table";
 
 const Patients = () => {
     const [error, setError] = useState(false);
+    const [updateTable, setUpdateTable] = useState(false);
     const [patients, setPatients] = useState<PatientProps[]>([]);
     const { instance, accounts } = useMsal();
-
+    
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
       account: accounts[0]
@@ -53,11 +54,8 @@ const Patients = () => {
 
     return(
        <div className={styles.container}>
-              <div className={styles.searchbar}>
-                <Searchbar/>
-              </div>
               <div className={styles.createPatientModal}>
-                <CreatePatientModal/>
+                <CreatePatientModal updateTable={updateTable}/>
               </div>
             <div className={styles.Table}>
               {patients && patients.length ?(

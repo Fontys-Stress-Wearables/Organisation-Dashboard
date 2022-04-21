@@ -4,7 +4,11 @@ import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
 
-const Searchbar = () => {
+interface Searchbar {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+}
+
+const Searchbar = (props : Searchbar ) => {
     return(
         <div>
             <InputGroup className="mb-3">
