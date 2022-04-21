@@ -68,6 +68,7 @@ const Patients = () => {
                     <Accordion.Item eventKey={index.toString()}>
                       <Accordion.Header> {p.firstName} </Accordion.Header>
                       <Accordion.Body>
+                        {p.firstName} {p.lastName}: 
                         The patient is part of the following patient-groups: {p.patientGroups}. 
                         Do you wish to edit the patientdata: 
                         <img src={EditIcon}></img>
