@@ -2,7 +2,6 @@ import { useState } from "react";
 import Accordion from "react-bootstrap/esm/Accordion";
 import Alert from "react-bootstrap/esm/Alert";
 import { CaregiverProps } from "../../utilities/api/calls";
-import CreateCaregiverModal from "../createCaregiverModal/createCaregiverModal";
 import { Searchbar } from "../searchbar";
 import styles from "./caregivers.module.scss"
 
