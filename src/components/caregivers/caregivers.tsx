@@ -17,9 +17,6 @@ const Caregivers = () => {
                 <div className={styles.searchbar}>
                 <Searchbar/>
                 </div>
-                <div className={styles.createCaregiverModal}>
-                <CreateCaregiverModal/>
-                </div>
             </div>
             <div className={styles.accordion}>
                 <Accordion defaultActiveKey="0">
