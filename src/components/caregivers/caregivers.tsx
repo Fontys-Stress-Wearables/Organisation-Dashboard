@@ -38,11 +38,6 @@ const Caregivers = () => {
                 </Accordion>
             </div>
             </div> 
-            
-
-            {/* <div className={styles.patientcard}>
-            <Patientcard patient={patient}/>
-            </div> */}
      </div>
     );
 }
