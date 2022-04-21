@@ -10,7 +10,7 @@ interface PatientPropsArray {
   patients: PatientProps[]
 }
 
-export default function BasicTable(props : PatientPropsArray) {
+const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
   const formatDate = (birthdate : string) =>{
     var date = new Date(birthdate);
     return date.toLocaleDateString()
@@ -24,7 +24,7 @@ export default function BasicTable(props : PatientPropsArray) {
   }
 
   useEffect(() => {
-    const results = props.patients.filter(p =>
+    const results = patients.filter(p =>
       p.firstName.toLowerCase().includes(search)
     );
     setSearchResults(results);
@@ -65,3 +65,5 @@ export default function BasicTable(props : PatientPropsArray) {
     </div>  
   );
 }
+
+export default BasicTable

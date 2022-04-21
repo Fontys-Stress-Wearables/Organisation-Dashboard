@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
@@ -6,13 +6,12 @@ import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
 
-type CreatePatientModalProps = {
-  onClick?:(val: string) => void
-};
+interface  ICreatePatinetModalProps {
+  update: boolean,
+  updatePatientTable: (arg: boolean) => void
+}
 
-const CreatePatientModal: React.FC<CreatePatientModalProps> = ({
-  onClick=()=>{}
-}) => {
+const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, updatePatientTable }) => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
     const [patient, setPatient] = useState<PatientProps>();
@@ -43,7 +42,12 @@ const CreatePatientModal: React.FC<CreatePatientModalProps> = ({
       setDate(event.target.value);
     };
 
-    const handleSubmit = () => {
+    function handleUpdate(){
+      updatePatientTable(!update);
+    }
+
+    function handleSubmit(){
+      
       const handlePatient: PatientProps = {
         firstName: firstname,
         lastName: lastname,
@@ -91,7 +95,6 @@ const CreatePatientModal: React.FC<CreatePatientModalProps> = ({
         <Button variant="success" onClick={handleShow}>
            Add patient <img src={AddIcon}></img> 
         </Button>
-  
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Create a new patient in the system</Modal.Title>
@@ -132,7 +135,7 @@ const CreatePatientModal: React.FC<CreatePatientModalProps> = ({
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button variant="primary" onClick={() => {handleSubmit(); handleUpdate();}}>
               Save Changes
             </Button>
           </Modal.Footer>
