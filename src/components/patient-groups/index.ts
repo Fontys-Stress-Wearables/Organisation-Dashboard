@@ -1,0 +1,1 @@
+export {default as PatientGroups} from './patient-groups'
