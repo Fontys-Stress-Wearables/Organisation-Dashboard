@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
@@ -6,7 +6,12 @@ import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
 
-const CreatePatientModal = () => {
+interface  ICreatePatinetModalProps {
+  update: boolean,
+  updatePatientTable: (arg: boolean) => void
+}
+
+const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, updatePatientTable }) => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
     const [patient, setPatient] = useState<PatientProps>();
@@ -37,7 +42,13 @@ const CreatePatientModal = () => {
       setDate(event.target.value);
     };
 
-    const handleSubmit = () => {
+    const handleUpdate = useCallback(event => {
+      updatePatientTable(!update)
+    }, [updatePatientTable])
+  
+
+    function handleSubmit(){
+      
       const handlePatient: PatientProps = {
         firstName: firstname,
         lastName: lastname,
@@ -85,7 +96,6 @@ const CreatePatientModal = () => {
         <Button variant="success" onClick={handleShow}>
            Add patient <img src={AddIcon}></img> 
         </Button>
-  
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Create a new patient in the system</Modal.Title>
@@ -116,6 +126,7 @@ const CreatePatientModal = () => {
                   type="date"
                   placeholder="Birthdate"
                   autoFocus
+                  max={new Date().toISOString().split("T")[0]}
                   onChange={handleChangeDate}
                 />
               </Form.Group>
@@ -125,7 +136,7 @@ const CreatePatientModal = () => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            <Button variant="primary" onClick={() => handleSubmit()}>
               Save Changes
             </Button>
           </Modal.Footer>
