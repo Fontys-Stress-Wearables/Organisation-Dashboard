@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
@@ -42,9 +42,10 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
       setDate(event.target.value);
     };
 
-    function handleUpdate(){
-      updatePatientTable(!update);
-    }
+    const handleUpdate = useCallback(event => {
+      updatePatientTable(!update)
+    }, [updatePatientTable])
+  
 
     function handleSubmit(){
       
@@ -135,7 +136,7 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => {handleSubmit(); handleUpdate();}}>
+            <Button variant="primary" onClick={() => handleSubmit()}>
               Save Changes
             </Button>
           </Modal.Footer>
