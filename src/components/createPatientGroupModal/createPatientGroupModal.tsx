@@ -2,9 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
-import { createPatientGroup, PatientGroupProps } from "../../utilities/api/calls";
+import { CaregiverProps, createPatientGroup, PatientGroupProps } from "../../utilities/api/calls";
 import AddIcon from "./group_add.svg";
 import { useMsal } from "@azure/msal-react";
+import Dropdown from "react-bootstrap/esm/Dropdown";
+import { callMsGraph } from "../../utilities/api/graph";
 
 interface  ICreatePatientGroupModalProps {
   update: boolean,
@@ -12,17 +14,56 @@ interface  ICreatePatientGroupModalProps {
 }
 
 const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ update, updatePatientGroupTable }) => {
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const [patientGroup, setPatientGroup] = useState<PatientGroupProps>();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const { instance, accounts } = useMsal();
+    const [caregivers, setCaregivers] = useState<CaregiverProps[]>([]);
+    const [selectedCaregivers, setSelectedCaregivers] = useState([]);
 
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
       account: accounts[0]
     };
+    
+    useEffect(() => {
+      requestCaregivers()
+    }, [error]);
+
+    const requestCaregivers = () => {
+      const graphRequest = {
+        scopes: ["User.Read"],
+        account: accounts[0],
+      }
+  
+      instance.acquireTokenSilent(graphRequest).then((response: any) => {
+        callMsGraph(response.accessToken).then((response: any) => {
+          if(response.error){
+            setError(true)
+          } else {
+            const resCaregivers = response.response
+            setError(false)
+            setCaregivers(resCaregivers)
+            console.log(caregivers)
+          }
+          console.log(response)
+        })
+      }).catch((e: any) => {
+        instance.acquireTokenPopup(graphRequest).then((response: any) => {
+          callMsGraph(response.accessToken).then((response: any) => {
+            if(response.error){
+              setError(true)
+            } else {
+              const resCaregivers = response.response
+              setError(false)
+              setCaregivers(resCaregivers)
+            }
+          })
+        });
+      });
+    }
 
     const [groupName, setGroupName] = useState("");
 
@@ -96,7 +137,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3" controlId="create-patient-group.groupName">
                 <Form.Label>Group name</Form.Label>
                 <Form.Control
                   type="string"
@@ -105,7 +146,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
                   onChange={handleChangeGroupName}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Group className="mb-3" controlId="create-patient-group.description">
                 <Form.Label>Description</Form.Label>
                 <Form.Control
                   type="string"
@@ -113,6 +154,20 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
                   autoFocus
                   onChange={handleChangeDescription}
                 />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="create-patient-group.caregiver">
+                <Form.Label>Caregiver</Form.Label>
+                    <Dropdown>
+                      <Dropdown.Toggle variant="success" id="dropdown-basic">
+                        Select Caregivers
+                      </Dropdown.Toggle>
+
+                      <Dropdown.Menu>{caregivers.map((caregiver : CaregiverProps) =>(
+                        <Dropdown.Item>{caregiver.firstName}</Dropdown.Item>
+                      ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
+
               </Form.Group>
             </Form>
           </Modal.Body>
