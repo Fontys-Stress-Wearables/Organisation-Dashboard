@@ -5,12 +5,15 @@ import Button from "react-bootstrap/esm/Button"
 import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
+import EditIcon from "./edit.svg"
+import DeleteIcon from "../swsp-admin/delete_forever_white_24dp.svg"
 
 interface TablePropsArray {
+  onRemove: (id: string) => void
   patientGroups: PatientGroupProps[]
 }
 
-const BasicPgTable: React.FC<TablePropsArray> = ({patientGroups}) => {
+const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, patientGroups}) => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<PatientGroupProps[]>([])
   
@@ -19,11 +22,15 @@ const BasicPgTable: React.FC<TablePropsArray> = ({patientGroups}) => {
   }
 
   useEffect(() => {
-    const results = patientGroups.filter(p =>
-      p.groupName.toLowerCase().includes(search)
+    const results = patientGroups.filter(pg =>
+      pg.groupName.toLowerCase().includes(search.toLowerCase())
     );
     setSearchResults(results);
-  }, [search]);
+  }, [search, patientGroups]);
+
+  const onClickHandler = (patientGroup : PatientGroupProps) => {
+    if(window.confirm(`Are you sure about deleting this patient-group: ${patientGroup.groupName}?`)) onRemove(patientGroup.id ? patientGroup.id : "1")
+  }
 
   return (
     <div>
@@ -42,17 +49,26 @@ const BasicPgTable: React.FC<TablePropsArray> = ({patientGroups}) => {
       <Table responsive striped bordered hover>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Group Name</th>
             <th>Description</th>
+            <th style={{width: "10px"}}></th>
           </tr>
         </thead>
         <tbody>
           {searchResults.map((patientGroup : PatientGroupProps) => (
             <tr key={patientGroup.id}>
-              <td>{patientGroup.id}</td>
               <td>{patientGroup.groupName}</td>
               <td>{patientGroup.description}</td>
+              <td> 
+                <Button onClick={() => onClickHandler(patientGroup)} variant="danger">
+                  <img src={DeleteIcon}></img>
+                </Button>
+              </td>
+              <td> 
+                <Button>
+                  <img src={EditIcon}></img>
+                </Button>
+              </td>
             </tr>
             ))}
         </tbody>

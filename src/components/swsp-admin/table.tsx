@@ -27,6 +27,10 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({onRemove, organiza
     setSearchResults(results);
   }, [search, organizations]);
 
+  const onClickHandler = (organization : OrganizationProps) => {
+    if(window.confirm(`Are you sure about deleting this organization: ${organization.name}?`)) onRemove(organization.id)
+  }
+
   return (
     <div>
       <div>
@@ -54,7 +58,7 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({onRemove, organiza
             <tr key={organization.id}>
               <td>{organization.name}</td>
               <td>{organization.id}</td>
-              <td style={{display: "flex"}}><Button onClick={() => onRemove(organization.id)} variant="danger" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img style={{margin: "auto"}} src={DeleteIcon}></img></Button></td>
+              <td style={{display: "flex"}}><Button onClick={() => onClickHandler(organization)} variant="danger" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img style={{margin: "auto"}} src={DeleteIcon}></img></Button></td>
             </tr>
             ))}
         </tbody>

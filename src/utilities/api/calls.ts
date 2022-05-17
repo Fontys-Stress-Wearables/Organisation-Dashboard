@@ -1,4 +1,5 @@
 import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
+import { access } from 'fs'
 import { idText } from 'typescript'
 import { API_URL, ORGANIZATION_API_URL } from '../environment'
 
@@ -7,7 +8,7 @@ interface ApiCalls {
     apiUrl?: String
     path: String
     method: 'POST' | 'GET' | 'PUT' | 'DELETE'
-    body?: string | PatientProps | OrganizationProps
+    body?: string | PatientProps | OrganizationProps | PatientGroupProps
 }
 
 interface BaseApiResponse {
@@ -148,11 +149,15 @@ export const removeOrganization = (accessToken: string, id: string): Promise<Org
 // }
 
 export const getPatientGroups = (accessToken: string) : Promise<PatientGroupsPropsResponse> =>{
-    return callApi({path: 'patient-groups', method: 'GET'})
+    return callApi({token: accessToken, path: 'patient-groups', method: 'GET'})
 }
 
 export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
-    return callApi({path: 'patient-groups', method: 'POST'})
+    return callApi({token: accessToken, path: 'patient-groups', method: 'POST', body: patientGroupProps})
+}
+
+export const removePatientGroup = (accessToken: string, id: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${id}`, method: 'DELETE', body: id})
 }
 
 // export const getPatientGroup = () : Promise<> =>{

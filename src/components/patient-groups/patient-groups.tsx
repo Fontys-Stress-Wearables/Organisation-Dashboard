@@ -1,6 +1,6 @@
 import { useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
-import { getPatientGroups, PatientGroupProps } from "../../utilities/api/calls";
+import { getPatientGroups, PatientGroupProps, removePatientGroup } from "../../utilities/api/calls";
 import styles from "./patient-groups.module.scss"
 import Alert from "react-bootstrap/esm/Alert";
 import BasicPgTable from "./table";
@@ -21,8 +21,43 @@ const PatientGroups: React.FC = () => {
         account: accounts[0]
     };
 
-    useEffect(() => {
-        instance.acquireTokenSilent(request).then((res: any) => {
+    const onRemove = (id: string) => {
+      instance.acquireTokenSilent(request).then((res: any) => {
+        removePatientGroup(res.accessToken, id).then(() => {
+          fetchPatientGroups()
+        }).catch((err) => {
+          console.error('Error occured while removing patient-group', err)
+          setError(true)
+        })
+      }).catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          removePatientGroup(res.accessToken, id).then(() => {
+            fetchPatientGroups()
+          }).catch((err) => {
+            console.error('Error occured while removing patient-group', err)
+            setError(true)
+          })
+        });
+      });
+    }
+    
+
+    const fetchPatientGroups = () => {
+      instance.acquireTokenSilent(request).then((res: any) => {
+        getPatientGroups(res.accessToken).then((response) => {
+          if(response.error){
+            setError(true)
+          } else {
+            const foundPatientGroups = response.response
+            setError(false)
+            setPatientGroups(foundPatientGroups)
+          }
+        }).catch((err) => {
+          console.error('Error occured while fetching patient groups', err)
+          setError(true)
+        })
+      }).catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
           getPatientGroups(res.accessToken).then((response) => {
             if(response.error){
               setError(true)
@@ -30,29 +65,18 @@ const PatientGroups: React.FC = () => {
               const foundPatientGroups = response.response
               setError(false)
               setPatientGroups(foundPatientGroups)
-              console.log(foundPatientGroups)
             }
           }).catch((err) => {
             console.error('Error occured while fetching patient groups', err)
             setError(true)
           })
-        }).catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            getPatientGroups(res.accessToken).then((response) => {
-              if(response.error){
-                setError(true)
-              } else {
-                const foundPatientGroups = response.response
-                setError(false)
-                setPatientGroups(foundPatientGroups)
-              }
-            }).catch((err) => {
-              console.error('Error occured while fetching patient groups', err)
-              setError(true)
-            })
-          });
-        });  
-      }, [updateTable]);
+        });
+      });
+    }
+
+    useEffect(() => {
+      fetchPatientGroups()
+    }, [updateTable]);
 
     return(
         <div className={styles.container}>
@@ -61,7 +85,7 @@ const PatientGroups: React.FC = () => {
               </div>
             <div className={styles.Table}>
               {patientGroups && patientGroups.length ?(
-                <BasicPgTable patientGroups={patientGroups}/>
+                <BasicPgTable onRemove={onRemove} patientGroups={patientGroups}/>
             ) : (
               <div>
                 <Alert variant="primary">No patients found</Alert>
