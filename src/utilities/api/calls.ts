@@ -35,11 +35,11 @@ export type CaregiverProps = {
 }
 
 export type PatientGroupProps = {
-    id: string,
+    id?: string,
     groupName: string,
     description: string,
-    caregivers: CaregiverProps[],
-    patients: PatientProps[],
+    caregivers?: CaregiverProps[],
+    patients?: PatientProps[],
 }
 
 interface PatientsPropsResponse extends BaseApiResponse {
@@ -58,21 +58,16 @@ interface CaregiverPropsResponse extends BaseApiResponse {
     response: CaregiverProps
 }
 
-interface PatientGroupPropsResponse extends BaseApiResponse {
-    response: PatientGroupProps
-}
-
 interface PatientGroupsPropsResponse extends BaseApiResponse {
     response: PatientGroupProps[]
 }
 
+interface PatientGroupPropsResponse extends BaseApiResponse {
+    response: PatientGroupProps
+}
+
 const callApi = async ({ token, path, method, body }: ApiCalls) => {
     const url = `${API_URL}/${path}`
-    // const { instance, accounts } = useMsal();
-    // const request = {
-    //   scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
-    //   account: accounts[0]
-    // };
 
     const fetchOptions: RequestInit = {
         method,
@@ -125,13 +120,13 @@ export const getPatient = (id: string): Promise<PatientPropsResponse> => {
 //     return callApi({path: 'patients', method: 'GET'})
 // }
 
-// export const getPatientGroups = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'GET'})
-// }
+export const getPatientGroups = (accessToken: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({path: 'patient-groups', method: 'GET'})
+}
 
-// export const createPatientGroup = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'POST'})
-// }
+export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
+    return callApi({path: 'patient-groups', method: 'POST'})
+}
 
 // export const getPatientGroup = () : Promise<> =>{
 //     return callApi({path: 'patient-groups', method: 'GET'})
