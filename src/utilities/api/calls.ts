@@ -20,7 +20,7 @@ export type PatientProps = {
     lastName: string,
     birthdate: string,
     isActive?: boolean,
-    patientGroups?: PatientGroup[]
+    patientGroups?: PatientGroupProps[]
 }
 
 export type CaregiverProps = {
@@ -31,10 +31,10 @@ export type CaregiverProps = {
     isActive: boolean,
     isGuest: boolean,
     role: string,
-    patientGroups: PatientGroup[]
+    patientGroups: PatientGroupProps[]
 }
 
-export type PatientGroup = {
+export type PatientGroupProps = {
     id: string,
     groupName: string,
     description: string,
@@ -48,6 +48,22 @@ interface PatientsPropsResponse extends BaseApiResponse {
 
 interface PatientPropsResponse extends BaseApiResponse {
     response: PatientProps
+}
+
+interface CaregiversPropsResponse extends BaseApiResponse {
+    response: CaregiverProps[]
+}
+
+interface CaregiverPropsResponse extends BaseApiResponse {
+    response: CaregiverProps
+}
+
+interface PatientGroupPropsResponse extends BaseApiResponse {
+    response: PatientGroupProps
+}
+
+interface PatientGroupsPropsResponse extends BaseApiResponse {
+    response: PatientGroupProps[]
 }
 
 const callApi = async ({ token, path, method, body }: ApiCalls) => {

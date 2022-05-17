@@ -21,7 +21,6 @@ const Patients: React.FC = () => {
       account: accounts[0]
     };
   
-
     useEffect(() => {
       instance.acquireTokenSilent(request).then((res: any) => {
         getPatients(res.accessToken).then((response) => {

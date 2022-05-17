@@ -6,11 +6,11 @@ import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
 
-interface PatientPropsArray {
+interface TablePropsArray {
   patients: PatientProps[]
 }
 
-const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
+const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
   const formatDate = (birthdate : string) =>{
     var date = new Date(birthdate);
     return date.toLocaleDateString()
