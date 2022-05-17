@@ -4,6 +4,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import { useIsAuthenticated } from "@azure/msal-react";
+import { callMsGraph } from "../../utilities/api/graph";
 
 function handleLogin(instance: any) {
   instance.loginPopup(loginRequest).catch(
@@ -24,15 +25,33 @@ const SWSPHeader = () => {
   const requestToken = () => {
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
-      account: accounts[0]
+      account: accounts[0],
     };
 
     instance.acquireTokenSilent(request).then((response: any) => {
       console.log(response.accessToken);
     }).catch((e: any) => {
-      console.log(e)
       instance.acquireTokenPopup(request).then((response: any) => {
         console.log(response.accessToken);
+      });
+    });
+  }
+
+  const requestCaregivers = () => {
+    const graphRequest = {
+      scopes: ["User.Read"],
+      account: accounts[0],
+    }
+
+    instance.acquireTokenSilent(graphRequest).then((response: any) => {
+      callMsGraph(response.accessToken).then((response: any) => {
+        console.log(response)
+      })
+    }).catch((e: any) => {
+      instance.acquireTokenPopup(graphRequest).then((response: any) => {
+        callMsGraph(response.accessToken).then((response: any) => {
+          console.log(response)
+        })
       });
     });
   }
@@ -45,7 +64,7 @@ const SWSPHeader = () => {
           {
             isAuthenticated ?
               <>
-                <Nav.Link className="justify-content-end" onClick={() => requestToken()} >{accounts[0] && accounts[0].name}</Nav.Link>
+                <Nav.Link className="justify-content-end" onClick={() => requestCaregivers()} >{accounts[0] && accounts[0].name}</Nav.Link>
                 <Nav.Link className="justify-content-end" onClick={() => handleLogout(instance)} >Logout</Nav.Link>
               </>
               :
