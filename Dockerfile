@@ -20,5 +20,7 @@ RUN npm run build
 #add a second step based on nginx
 FROM nginx:alpine
 
+COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+
 #copy the build output from the build step to the hosting folder of nginx
 COPY --from=build /app/build /usr/share/nginx/html
