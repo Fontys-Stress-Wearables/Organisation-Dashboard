@@ -1,10 +1,13 @@
 import { useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
+import SWSPApp from "./swspAdminApp";
+import App from "./App";
 
 export const AppGuard = (props) => {
 
     const { instance } = useMsal();
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isSwsp, setIsSwsp] = useState(false);
 
     const onLoad = async () => {
         const accounts = instance.getAllAccounts();
@@ -14,9 +17,11 @@ export const AppGuard = (props) => {
         }
 
         const currentAccount = instance.getActiveAccount()
-        console.log(currentAccount)
 
-        if (currentAccount && currentAccount.idTokenClaims['roles']) {
+        if (currentAccount && currentAccount.tenantId == "acdb33d3-0c54-4037-804d-768f633cbb6c") {
+            setIsSwsp(true);
+        }
+        else if (currentAccount && currentAccount.idTokenClaims['roles']) {
             let intersection = props.roles
                 .filter(role => currentAccount.idTokenClaims['roles'].includes(role));
 
@@ -28,9 +33,9 @@ export const AppGuard = (props) => {
 
     const handleLogout = () => {
         instance.logoutRedirect().catch(
-          console.error
+            console.error
         );
-      }
+    }
 
     useEffect(() => {
         onLoad();
@@ -39,17 +44,19 @@ export const AppGuard = (props) => {
     return (
         <>
             {
-                isAuthorized
-                    ?
-                        props.children
+                isSwsp ?
+                    <SWSPApp/>
                     :
-                    <div>
-                        <p>
-                            You are not authorized to view this page. Please contact your administrator.
-                        </p>
-                        <button onClick={handleLogout}>
-                            logout
-                        </button>
+                    isAuthorized ?
+                        <App/>
+                        :
+                        <div>
+                            <p>
+                                You are not authorized to view this page. Please contact your administrator.
+                            </p>
+                            <button onClick={handleLogout}>
+                                logout
+                            </button>
                         </div>
 
             }
