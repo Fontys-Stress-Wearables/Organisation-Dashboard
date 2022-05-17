@@ -43,43 +43,6 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
       updatePatientGroupTable(!update)
     }, [updatePatientGroupTable])
   
-    // const requestCaregivers = () => {
-    //   const graphRequest = {
-    //     scopes: ["User.Read"],
-    //     account: accounts[0],
-    //   }
-  
-    //   instance.acquireTokenSilent(graphRequest).then((response: any) => {
-    //     callMsGraph(response.accessToken).then((response: any) => {
-    //       if(response.error){
-    //         setError(true)
-    //       } else {
-    //         const resCaregivers = response
-    //         setError(false)
-    //         setCaregivers(resCaregivers)
-    //         console.log(resCaregivers)
-    //       }
-    //     })
-    //   }).catch((e: any) => {
-    //     instance.acquireTokenPopup(graphRequest).then((response: any) => {
-    //       callMsGraph(response.accessToken).then((response: any) => {
-    //         if(response.error){
-    //           setError(true)
-    //         } else {
-    //           const resCaregivers = response.response
-    //           setError(false)
-    //           setCaregivers(resCaregivers)
-    //           console.log(caregivers)
-    //         }
-    //       })
-    //     });
-    //   });
-    // }
-
-    // useEffect(() => {
-    //   requestCaregivers();
-    // }, [show]);
-
     function handleSubmit(){
       
       const handlePatientGroup: PatientGroupProps = {
