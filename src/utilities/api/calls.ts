@@ -1,6 +1,6 @@
 import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
 import { idText } from 'typescript'
-import { API_URL } from '../environment'
+import { API_URL, ORGANIZATION_API_URL } from '../environment'
 
 interface ApiCalls {
     token?: String
@@ -108,15 +108,15 @@ export const getPatient = (id: string): Promise<PatientPropsResponse> => {
 }
 
 export const createOrganization = (accesToken: string, organizationProps: OrganizationProps): Promise<OrganizationPropsResponse> => {
-    return callApi({ apiUrl: "https://localhost:44357", token: accesToken, path: 'organizations', method: 'POST', body: organizationProps })
+    return callApi({ apiUrl: ORGANIZATION_API_URL, token: accesToken, path: 'organizations', method: 'POST', body: organizationProps })
 }
 
 export const getOrganizations = (accessToken: string): Promise<OrganizationsPropsResponse> => {
-    return callApi({ apiUrl: "https://localhost:44357", token: accessToken, path: 'organizations', method: 'GET' })
+    return callApi({ apiUrl: ORGANIZATION_API_URL, token: accessToken, path: 'organizations', method: 'GET' })
 }
 
 export const removeOrganization = (accessToken: string, id: string): Promise<OrganizationsPropsResponse> => {
-    return callApi({ apiUrl: "https://localhost:44357", token: accessToken, path: `organizations/${id}`, method: 'DELETE' })
+    return callApi({ apiUrl: ORGANIZATION_API_URL, token: accessToken, path: `organizations/${id}`, method: 'DELETE' })
 }
 
 // export const getCaregivers = () : Promise<> =>{
