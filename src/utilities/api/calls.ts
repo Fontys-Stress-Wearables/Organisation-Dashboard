@@ -1,11 +1,13 @@
 import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
+import { idText } from 'typescript'
 import { API_URL } from '../environment'
 
 interface ApiCalls {
     token?: String
+    apiUrl?: String
     path: String
     method: 'POST' | 'GET' | 'PUT' | 'DELETE'
-    body?: string | PatientProps
+    body?: string | PatientProps | OrganizationProps
 }
 
 interface BaseApiResponse {
@@ -42,6 +44,15 @@ export type PatientGroup = {
     patients: PatientProps[],
 }
 
+export type OrganizationProps = {
+    id: string,
+    name: string,
+}
+
+interface OrganizationsPropsResponse extends BaseApiResponse {
+    response: OrganizationProps[]
+}
+
 interface PatientsPropsResponse extends BaseApiResponse {
     response: PatientProps[]
 }
@@ -50,13 +61,12 @@ interface PatientPropsResponse extends BaseApiResponse {
     response: PatientProps
 }
 
-const callApi = async ({ token, path, method, body }: ApiCalls) => {
-    const url = `${API_URL}/${path}`
-    // const { instance, accounts } = useMsal();
-    // const request = {
-    //   scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
-    //   account: accounts[0]
-    // };
+interface OrganizationPropsResponse extends BaseApiResponse {
+    response: OrganizationProps
+}
+
+const callApi = async ({ token,apiUrl, path, method, body }: ApiCalls) => {
+    const url = `${apiUrl ? apiUrl : API_URL}/${path}`
 
     const fetchOptions: RequestInit = {
         method,
@@ -95,6 +105,18 @@ export const createPatient = (accesToken: string, patientProps: PatientProps): P
 
 export const getPatient = (id: string): Promise<PatientPropsResponse> => {
     return callApi({ path: 'patients', method: 'POST', body: id })
+}
+
+export const createOrganization = (accesToken: string, organizationProps: OrganizationProps): Promise<OrganizationPropsResponse> => {
+    return callApi({ apiUrl: "https://localhost:44357", token: accesToken, path: 'organizations', method: 'POST', body: organizationProps })
+}
+
+export const getOrganizations = (accessToken: string): Promise<OrganizationsPropsResponse> => {
+    return callApi({ apiUrl: "https://localhost:44357", token: accessToken, path: 'organizations', method: 'GET' })
+}
+
+export const removeOrganization = (accessToken: string, id: string): Promise<OrganizationsPropsResponse> => {
+    return callApi({ apiUrl: "https://localhost:44357", token: accessToken, path: `organizations/${id}`, method: 'DELETE' })
 }
 
 // export const getCaregivers = () : Promise<> =>{

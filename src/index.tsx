@@ -17,9 +17,7 @@ ReactDOM.render(
         interactionType={InteractionType.Redirect}
         loadingComponent={Loading}
       >
-        <AppGuard exact roles={[appRoles.Admin]}>
-          <App/>
-        </AppGuard>
+        <AppGuard exact roles={[appRoles.Admin]}/>
       </MsalAuthenticationTemplate>
     </MsalProvider>
   </BrowserRouter>,
