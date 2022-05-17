@@ -117,7 +117,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
               setPatientGroup(resPatientGroup)
             }
           }).catch((err) => {
-            console.error('Error occured while fetching patients', err)
+            console.error('Error occured while creating patient group', err)
             setError(true)
           })
         });
