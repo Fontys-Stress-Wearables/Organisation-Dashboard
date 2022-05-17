@@ -1,6 +1,3 @@
-import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
-import { access } from 'fs'
-import { idText } from 'typescript'
 import { API_URL, ORGANIZATION_API_URL } from '../environment'
 
 interface ApiCalls {
@@ -35,6 +32,20 @@ export type CaregiverProps = {
     isGuest: boolean,
     role: string,
     patientGroups: PatientGroupProps[]
+}
+
+export type CaregiverGraphProps = {
+    displayName: string,
+    givenName: string,
+    id: string,
+    jobTitle: string,
+    mail: string | null,
+    mobilePhone: string | null,
+    officeLocation: string | null,
+    preferrendLanguage: string | null,
+    surname: string,
+    userPrincipalName: string
+
 }
 
 export type PatientGroupProps = {
