@@ -58,9 +58,9 @@ const Patients: React.FC = () => {
     }
 
     return(
-      <div className={styles.container}>
+      <div>
         {!error ? (
-          <div>
+          <div className={styles.container}>
             <div className={styles.createPatientModal}>
               <CreatePatientModal update={updateTable} updateTable={updatePatientTable}/>
             </div>

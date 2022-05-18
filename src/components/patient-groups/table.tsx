@@ -47,7 +47,7 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
             onChange={handleSearch}
           />
           <Button>
-            <img src={SearchIcon}></img>
+            <img alt="searchicon" src={SearchIcon}></img>
           </Button>
         </InputGroup>
       </div>
@@ -66,12 +66,12 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
               <td>{patientGroup.description}</td>
               <td> 
                 <Button onClick={() => onDeleteClickHandler(patientGroup)} variant="danger">
-                  <img src={DeleteIcon}></img>
+                  <img alt="deleteicon" src={DeleteIcon}></img>
                 </Button>
               </td>
               <td> 
                 <Button onClick={() => onClickHandler(patientGroup)}>
-                  <img src={EditIcon}></img>
+                  <img alt="editicon" src={EditIcon}></img>
                 </Button>
               </td>
             </tr>

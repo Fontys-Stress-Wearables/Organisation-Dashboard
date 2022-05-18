@@ -6,7 +6,6 @@ import Alert from "react-bootstrap/esm/Alert";
 import BasicPgTable from "./table";
 import { CreatePatientGroupModal } from "../createPatientGroupModal";
 import { callMsGraph } from "../../utilities/api/graph";
-import PatientGroup from "../patient-group/patient-group";
 
 const PatientGroups: React.FC = () => {
     const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([])
@@ -122,27 +121,27 @@ const PatientGroups: React.FC = () => {
     }, [updateTable]);
 
     return(
-        <div className={styles.container}>
+      <div>
+        {!error ? (
+          <div className={styles.container}>
             <div className={styles.createPatientGroupModal}>
               <CreatePatientGroupModal update={updateTable} updatePatientGroupTable={updatePatientGroupTable} caregivers={caregivers}/>
             </div>
             <div className={styles.Table}>
               {patientGroups && patientGroups.length ?(
                 <BasicPgTable onEdit={onEdit} onRemove={onRemove} patientGroups={patientGroups}/>
-            ) : (
-              <div>
-                <Alert variant="primary">No patient-groups found</Alert>
-              </div>
+              ) : (
+                <div>
+                  <Alert variant="primary">No patient-groups found</Alert>
+                </div>
               )}             
             </div>
-            {/* <div>
-              {edit && patientGroupToEdit? (
-                <PatientGroup patientGroup={patientGroupToEdit}/>
-              ) : (
-                <div/>
-              )}
-            </div> */}
-        </div> 
+          </div>
+         ) : (
+            <h2>ERROR PLEASE RELOAD PAGE</h2>
+         ) 
+        }
+      </div> 
     );
 }
 
