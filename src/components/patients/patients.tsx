@@ -58,22 +58,27 @@ const Patients: React.FC = () => {
     }
 
     return(
-
-       <div className={styles.container}>
-         {console.log("render")}
-              <div className={styles.createPatientModal}>
-                <CreatePatientModal update={updateTable} updateTable={updatePatientTable}/>
-              </div>
+      <div className={styles.container}>
+        {!error ? (
+          <div>
+            <div className={styles.createPatientModal}>
+              <CreatePatientModal update={updateTable} updateTable={updatePatientTable}/>
+            </div>
             <div className={styles.Table}>
               {patients && patients.length ?(
-                <BasicTable patients={patients}/>
-            ) : (
-              <div>
-                <Alert variant="primary">No patients found</Alert>
-              </div>
+             <BasicTable patients={patients}/>
+              ) : (
+                <div>
+                  <Alert variant="primary">No patients found</Alert>
+                </div>
               )}            
             </div>
           </div> 
+        ) :(
+          <h2> ERROR PLEASE RELOAD PAGE</h2>
+        )}
+
+      </div> 
     );
 }
 

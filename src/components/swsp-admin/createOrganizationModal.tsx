@@ -87,7 +87,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
           {!error ? (
         <div>    
           <Button variant="success" onClick={handleShow}>
-            Add organization <img src={AddIcon}></img> 
+            Add organization <img alt="addicon" src={AddIcon}></img> 
           </Button>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -126,7 +126,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
           </Modal>
         </div>
         ) : (
-            <h2> ERROR PLEASE RELOUD PAGE</h2>
+            <h2> ERROR PLEASE RELOAD PAGE</h2>
         )}
       </div>
     );
