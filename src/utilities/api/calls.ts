@@ -73,14 +73,6 @@ interface PatientPropsResponse extends BaseApiResponse {
     response: PatientProps
 }
 
-interface CaregiversPropsResponse extends BaseApiResponse {
-    response: CaregiverProps[]
-}
-
-interface CaregiverPropsResponse extends BaseApiResponse {
-    response: CaregiverProps
-}
-
 interface PatientGroupsPropsResponse extends BaseApiResponse {
     response: PatientGroupProps[]
 }

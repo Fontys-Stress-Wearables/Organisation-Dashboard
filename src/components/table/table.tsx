@@ -40,7 +40,7 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
             onChange={handleSearch}
           />
           <Button>
-            <img src={SearchIcon}></img>
+            <img alt="searchicon" src={SearchIcon}></img>
           </Button>
         </InputGroup>
       </div>

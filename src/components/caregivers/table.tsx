@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Table from 'react-bootstrap/Table'
-import { CaregiverGraphProps, OrganizationProps } from "../../utilities/api/calls";
+import { CaregiverGraphProps } from "../../utilities/api/calls";
 import Button from "react-bootstrap/esm/Button"
 import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"

@@ -9,7 +9,7 @@ import { IModalProps } from "../createCaregiverModal/createCaregiverModal";
 
 
 const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const [patient, setPatient] = useState<PatientProps>();
     const handleClose = () => setShow(false);
@@ -44,8 +44,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     }, [updateTable])
   
 
-    function handleSubmit(){
-      
+    function handleSubmit(event: React.FormEvent<HTMLInputElement>){
       const handlePatient: PatientProps = {
         firstName: firstname,
         lastName: lastname,
@@ -135,8 +134,8 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => handleSubmit()}>
-              Save Changes
+            <Button variant="primary" onClick={() => handleSubmit}>
+              Submit Patient
             </Button>
           </Modal.Footer>
         </Modal>

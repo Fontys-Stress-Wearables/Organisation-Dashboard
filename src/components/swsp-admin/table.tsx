@@ -41,7 +41,7 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({onRemove, organiza
             onChange={handleSearch}
           />
           <Button>
-            <img src={SearchIcon}></img>
+            <img alt="searchicon" src={SearchIcon}></img>
           </Button>
         </InputGroup>
       </div>
@@ -58,7 +58,7 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({onRemove, organiza
             <tr key={organization.id}>
               <td>{organization.name}</td>
               <td>{organization.id}</td>
-              <td style={{display: "flex"}}><Button onClick={() => onClickHandler(organization)} variant="danger" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img style={{margin: "auto"}} src={DeleteIcon}></img></Button></td>
+              <td style={{display: "flex"}}><Button onClick={() => onClickHandler(organization)} variant="danger" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img alt="deleteicon" style={{margin: "auto"}} src={DeleteIcon}></img></Button></td>
             </tr>
             ))}
         </tbody>

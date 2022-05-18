@@ -11,43 +11,8 @@ export interface IModalProps {
 
 const CreateCaregiverModal: React.FC<IModalProps> = (update, updateTable) => {
     const [show, setShow] = useState(false);
-    const [validated, setValidated] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
-    const handleSubmit = (event: React.FormEvent<HTMLInputElement>) => {
-      const form = event.currentTarget;
-      if(form.checkValidity() === false){
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      setValidated(true);
-
-    }
-
-    const [firstname, setFirstname] = useState("");
-
-    const handleChangeFirstname = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setFirstname(event.target.value);
-    };
-
-    const [lastname, setLastname] = useState("");
-
-    const handleChangeLastname = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setLastname(event.target.value);
-    };
-
-    const [email, setEmail] = useState("");
-
-    const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
-    };
-
-    const [jobtitle, setJobtilte] = useState("");
-
-    const handleChangeJobtitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setJobtilte(event.target.value);
-    };
   
     return (
       <>
@@ -67,7 +32,6 @@ const CreateCaregiverModal: React.FC<IModalProps> = (update, updateTable) => {
                   type="text"
                   placeholder="First name"
                   autoFocus
-                  onChange={handleChangeFirstname}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please type a First name
@@ -79,7 +43,6 @@ const CreateCaregiverModal: React.FC<IModalProps> = (update, updateTable) => {
                   type="text"
                   placeholder="Last name"
                   autoFocus
-                  onChange={handleChangeLastname}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please type a Last name
@@ -91,7 +54,6 @@ const CreateCaregiverModal: React.FC<IModalProps> = (update, updateTable) => {
                   type="email"
                   placeholder="E-mail"
                   autoFocus
-                  onChange={handleChangeEmail}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please type a valid email address
@@ -103,7 +65,6 @@ const CreateCaregiverModal: React.FC<IModalProps> = (update, updateTable) => {
                   type="text"
                   placeholder="type your job title"
                   autoFocus
-                  onChange={handleChangeJobtitle}
                 />
                 <Form.Control.Feedback type="invalid">
                   Please type a job title

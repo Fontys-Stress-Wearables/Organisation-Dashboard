@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import App from './App';
 import { PUBLIC_URL } from './utilities/environment'
 import { PublicClientApplication, InteractionType } from "@azure/msal-browser";
 import { MsalProvider, MsalAuthenticationTemplate } from "@azure/msal-react";

@@ -43,9 +43,6 @@ const Caregivers = () => {
 
     return(
      <div className={styles.container}>
-       <div className={styles.createPatientModal}>
-         <CreateCaregiverModal update={updateTable} updateTable={updateCaregiverTable}/>
-       </div>
        <div className={styles.Table}>
           {caregivers && caregivers.length ? (
             <CaregiverTable caregivers={caregivers}/>
