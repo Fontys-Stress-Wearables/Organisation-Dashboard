@@ -153,12 +153,12 @@ export const updatePatientGroup = (accesToken: string, patientgroup: PatientGrou
     return callApi({token: accesToken, path: `patient-groups/${patientgroup.id}`, method: 'PUT', body: patientgroup})
 }
 
-export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
-    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
-}
-
 export const removePatientGroup = (accessToken: string, id: string) => {
     return callApi({token: accessToken, path: `patient-groups/${id}`, method: 'DELETE', body: id})
+}
+
+export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
 }
 
 export const caregiverLeaveGroup = (accessToken: string, groupId: string, caregiverId: string) => {
@@ -169,15 +169,14 @@ export const caregiverJoinGroup = (accessToken: string, groupId: string, caregiv
       return callApi({token: accessToken, path: `patient-groups/${groupId}/caregivers`, method: 'POST', body: `"${caregiverId}"`})
 }
 
-// export const getPatientGroup = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'GET'})
-// }
+export const getPatientPatientGroups = (accessToken: string, patientId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/patients/${patientId}`, method: 'GET'})
+}
 
-// export const addPatient = (id) : Promise<> =>{
-//     return callApi({path: `patient-groups/${id}/patient`, method: 'POST'})
-// }
+export const patientLeaveGroup = (accessToken: string, groupId: string, patientId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/patient`, method: 'DELETE', body: `"${patientId}"`})
+}
 
-// export const addCaregiver = (id) : Promise<> =>{
-//     return callApi({path: `groups/${id}/caregiver`, method: 'POST'})
-// }
-
+export const patientJoinGroup = (accessToken: string, groupId: string, patientId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/patients`, method: 'POST', body: `"${patientId}"`})
+}
