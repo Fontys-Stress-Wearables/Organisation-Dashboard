@@ -15,7 +15,6 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
     const [show, setShow] = useState(false);
     const [selectedCaregivers, setSelectedCaregivers] = useState();
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const { instance, accounts } = useMsal();
 
     const request = {
@@ -35,13 +34,23 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
       setDescription(event.target.value);
     };
 
-    // const handleUpdate = useCallback(event => {
-    //     updatePatientGroupTable(!update)
-    // }, [updatePatientGroupTable])
+    const handleShow = () => {
+        if(show){
+            setShow(false);
+        }
+        setGroupName(patientGroup.groupName)
+        setDescription(patientGroup.description)
+        setShow(true);
+    }
+    
+    const handleUpdate = useCallback(event => {
+        updatePatientGroupTable(!update)
+    }, [updatePatientGroupTable])
     
     function handleSubmit(){
       
       const handlePatientGroup: PatientGroupProps = {
+        id: patientGroup.id,
         groupName: groupName,
         description: description
       }
