@@ -125,7 +125,7 @@ const PatientGroups: React.FC = () => {
         {!error ? (
           <div className={styles.container}>
             <div className={styles.createPatientGroupModal}>
-              <CreatePatientGroupModal update={updateTable} updatePatientGroupTable={updatePatientGroupTable} caregivers={caregivers}/>
+              <CreatePatientGroupModal update={updateTable} updatePatientGroupTable={updatePatientGroupTable}/>
             </div>
             <div className={styles.Table}>
               {patientGroups && patientGroups.length ?(

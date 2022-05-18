@@ -141,28 +141,20 @@ export const removeOrganization = (accessToken: string, id: string): Promise<Org
     return callApi({ apiUrl: ORGANIZATION_API_URL, token: accessToken, path: `organizations/${id}`, method: 'DELETE' })
 }
 
-// export const getCaregivers = () : Promise<> =>{
-//     return callApi({path: 'caregivers', method: 'GET'})
-// }
-
-// export const createCaregivers = () : Promise<> =>{
-//     return callApi({path: 'caregivers', method: 'POST'})
-// }
-
-// export const getCaregiver = (id) : Promise<> =>{
-//     return callApi({path: 'patients', method: 'GET'})
-// }
+export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups`, method: 'POST', body: patientGroupProps})
+}
 
 export const getPatientGroups = (accessToken: string) : Promise<PatientGroupsPropsResponse> =>{
     return callApi({token: accessToken, path: 'patient-groups', method: 'GET'})
 }
 
-export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
-    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
+export const updatePatientGroup = (accesToken: string, patientgroup: PatientGroupProps) : Promise<PatientGroupPropsResponse> => {
+    return callApi({token: accesToken, path: `patient-groups/${patientgroup.id}`, method: 'PUT', body: patientgroup})
 }
 
-export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
-    return callApi({token: accessToken, path: 'patient-groups', method: 'POST', body: patientGroupProps})
+export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
 }
 
 export const removePatientGroup = (accessToken: string, id: string) => {

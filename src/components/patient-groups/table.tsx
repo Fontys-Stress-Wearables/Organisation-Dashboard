@@ -5,8 +5,8 @@ import Button from "react-bootstrap/esm/Button"
 import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
-import EditIcon from "./edit.svg"
 import DeleteIcon from "../swsp-admin/delete_forever_white_24dp.svg"
+import { UpdatePatientGroupModal } from '../updatePatientGroupModal';
 
 interface TablePropsArray {
   onRemove: (id: string) => void
@@ -70,9 +70,7 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
                 </Button>
               </td>
               <td> 
-                <Button onClick={() => onClickHandler(patientGroup)}>
-                  <img alt="editicon" src={EditIcon}></img>
-                </Button>
+                <UpdatePatientGroupModal patientGroup={patientGroup}/>
               </td>
             </tr>
             ))}
