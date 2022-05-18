@@ -137,6 +137,10 @@ export const getPatient = (id: string): Promise<PatientPropsResponse> => {
     return callApi({ path: 'patients', method: 'POST', body: id })
 }
 
+export const updatePatient = (accesToken: string, patient: PatientProps) : Promise<PatientPropsResponse> => {
+    return callApi({token: accesToken, path: `patients/${patient.id}`, method: 'PUT', body: patient})
+}
+
 export const createOrganization = (accesToken: string, organizationProps: OrganizationProps): Promise<OrganizationPropsResponse> => {
     return callApi({ apiUrl: ORGANIZATION_API_URL, token: accesToken, path: 'organizations', method: 'POST', body: organizationProps })
 }

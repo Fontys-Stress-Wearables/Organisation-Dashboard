@@ -3,14 +3,14 @@ import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import EditIcon from "./edit.svg"
-import { PatientGroupProps, updatePatientGroup } from "../../utilities/api/calls";
+import { PatientGroupProps, PatientProps, updatePatient, updatePatientGroup } from "../../utilities/api/calls";
 import Form from "react-bootstrap/esm/Form";
 
-interface IUpdatePatientGroupModal {
-    patientGroup: PatientGroupProps
+interface IUpdatePatientModal {
+    patient: PatientProps
 }
 
-const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGroup}) => {
+const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -21,24 +21,31 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
       account: accounts[0]
     };
 
-    const [groupName, setGroupName] = useState("");
+    const [firstname, setFirstname] = useState("");
 
-    const handleChangeGroupName = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setGroupName(event.target.value);
+    const handleChangeFirstname = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFirstname(event.target.value);
     };
 
-    const [description, setDescription] = useState("");
+    const [lastname, setLastname] = useState("");
 
-    const handleChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setDescription(event.target.value);
+    const handleChangeLastname = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setLastname(event.target.value);
+    };
+
+    const [date, setDate] = useState("");
+
+    const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setDate(event.target.value);
     };
 
     const handleShow = () => {
         if(show){
             setShow(false);
         }
-        setGroupName(patientGroup.groupName)
-        setDescription(patientGroup.description)
+        setFirstname(patient.firstName)
+        setLastname(patient.lastName)
+        setDate(patient.birthdate)
         setShow(true);
     }
 
@@ -48,37 +55,38 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
     
     function handleSubmit(){
       
-      const handlePatientGroup: PatientGroupProps = {
-        id: patientGroup.id,
-        groupName: groupName,
-        description: description
+      const handlePatient: PatientProps = {
+        id: patient.id,
+        firstName: firstname,
+        lastName: lastname,
+        birthdate: date
       }
 
 
       instance.acquireTokenSilent(request).then((res: any) => {
-        updatePatientGroup(res.accessToken, handlePatientGroup).then((response) => {
+        updatePatient(res.accessToken, handlePatient).then((response) => {
           if(response.error){
             setError(true)
           } else {
-            const resPatientGroup = response.response
+            const resPatient = response.response
             setError(false)
             // updatePatientGroupTable(true)
           }
         }).catch((err) => {
-          console.error('Error occured while creating patient group', err)
+          console.error('Error occured while updating patient', err)
           setError(true)
         })
       }).catch((error) => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          updatePatientGroup(res.accessToken, handlePatientGroup).then((response) => {
+          updatePatient(res.accessToken, handlePatient).then((response) => {
             if(response.error){
               setError(true)
             } else {
-              const resPatientGroup = response.response
+              const resPatient = response.response
               setError(false)
             }
           }).catch((err) => {
-            console.error('Error occured while creating patient group', err)
+            console.error('Error occured while updating patient', err)
             setError(true)
             // updatePatientGroupTable(true)
           })
@@ -95,26 +103,36 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
         </Button>
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Update patient-group:{patientGroup.groupName}</Modal.Title>
+            <Modal.Title>Update patient:{patient.firstName && patient.lastName} </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
-              <Form.Group className="mb-3" controlId="create-patient-group.groupName">
-                <Form.Label>Group name</Form.Label>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>First name</Form.Label>
                 <Form.Control
                   type="string"
-                  placeholder={patientGroup.groupName}
+                  placeholder="First name"
                   autoFocus
-                  onChange={handleChangeGroupName}
+                  onChange={handleChangeFirstname}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="create-patient-group.description">
-                <Form.Label>Description</Form.Label>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Last name</Form.Label>
                 <Form.Control
                   type="string"
-                  placeholder={patientGroup.description}
+                  placeholder="Last name"
                   autoFocus
-                  onChange={handleChangeDescription}
+                  onChange={handleChangeLastname}
+                />
+              </Form.Group>
+              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Label>Birthdate</Form.Label>
+                <Form.Control
+                  type="date"
+                  placeholder="Birthdate"
+                  autoFocus
+                  max={new Date().toISOString().split("T")[0]}
+                  onChange={handleChangeDate}
                 />
               </Form.Group>
             </Form>
@@ -132,4 +150,4 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
     );
 }
 
-export default UpdatePatientGroupModal
+export default UpdatePatientModal

@@ -8,6 +8,7 @@ import SearchIcon from "./search_white_48dp.svg"
 import GroupIcon from  "./groups_white_24dp.svg"
 import styles from "../caregivers/caregivers.module.scss";
 import { PatientPatientGroupModal } from '../patientPatientGroupModal';
+import { UpdatePatientModal } from '../updatePatientModal';
 
 interface TablePropsArray {
   patients: PatientProps[]
@@ -65,6 +66,7 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
             <th>Last Name</th>
             <th>Birthdate</th>
             <th style={{width: "10px"}}/>
+            <th style={{width: "10px"}}/>
           </tr>
         </thead>
         <tbody>
@@ -74,6 +76,9 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
               <td>{patient.lastName}</td>
               <td>{formatDate(patient.birthdate)}</td>
               <td><Button onClick={() => openPatientGroups(patient)} variant="success" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img alt="groupicon" style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
+              <td> 
+                <UpdatePatientModal patient={patient}/>
+              </td>
             </tr>
             ))}
         </tbody>
