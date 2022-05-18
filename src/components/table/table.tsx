@@ -6,7 +6,8 @@ import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
 import GroupIcon from  "./groups_white_24dp.svg"
-import InfoIcon from "./info_outline_white_24dp.svg"
+import styles from "../caregivers/caregivers.module.scss";
+import { PatientPatientGroupModal } from '../patientPatientGroupModal';
 
 interface TablePropsArray {
   patients: PatientProps[]
@@ -42,6 +43,9 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
 
   return (
     <div>
+      <div className={styles.createPatientGroupModal}>
+        <PatientPatientGroupModal patient={selectedPatient} show={showPatientGroups} closeModal={() => setShowPatientGroups(false)}/>
+      </div>
       <div>
         <InputGroup className="mb-3">
           <FormControl

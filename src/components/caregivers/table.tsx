@@ -49,7 +49,7 @@ const CaregiverTable: React.FC<TablePropsArray> = ({caregivers}) => {
       <div className={styles.createPatientGroupModal}>
         <CaregiverDetailsModal caregiver={selectedCaregiver} show={showDetails} closeModal={() => setShowDetails(false)}/>
       </div>
-      <div className={styles.createPatientGroupModal}>
+      <div>
         <CaregiverPatientGroupModal caregiver={selectedCaregiver} show={showPatientGroups} closeModal={() => setShowPatientGroups(false)}/>
       </div>
       <div>

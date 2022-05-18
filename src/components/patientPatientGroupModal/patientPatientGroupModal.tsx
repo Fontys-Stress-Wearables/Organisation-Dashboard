@@ -24,7 +24,6 @@ interface PatientDetailsProps {
 
 const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show, closeModal }) => {
   const { instance, accounts } = useMsal();
-  const [patientId, setPatientId] = useState(patient?.id)
   const [search, setSearch] = useState("");
   const [searchAllResults, setSearchAllResults] = useState<PatientGroupProps[]>([]);
   const [searchPatientsResults, setSearchPatientsResults] = useState<PatientGroupProps[]>([]);
@@ -50,8 +49,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
   }, [search, patientGroups, patientsGroups]);
 
   useEffect(() => {
-    if(patientId !== undefined){
-      fetchPatientPatientGroups(patientId);
+    if(patient?.id){
+      fetchPatientPatientGroups(patient.id);
       fetchPatientGroups();
     }
   }, [patient]);
@@ -113,8 +112,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
     instance.acquireTokenSilent(request).then((res: any) => {
       if (group.id != null && patient?.id != null) {
         patientJoinGroup(res.accessToken, group.id, patient.id).then((response) => {
-          if (!response.error && patientId !== undefined) {
-            fetchPatientPatientGroups(patientId);
+          if (!response.error && patient?.id) {
+            fetchPatientPatientGroups(patient.id);
             fetchPatientGroups();
           }
         }).catch((err) => {
@@ -142,8 +141,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
         instance.acquireTokenSilent(request).then((res: any) => {
           if (group.id != null && patient?.id != null) {
             patientLeaveGroup(res.accessToken, group.id, patient?.id).then((response) => {
-              if (!response.error && patientId !== undefined) {
-                fetchPatientPatientGroups(patientId);
+              if (!response.error) {
+                fetchPatientPatientGroups(patient.id? patient.id : "1");
                 fetchPatientGroups();
               }
             }).catch((err) => {
@@ -154,8 +153,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
           instance.acquireTokenPopup(request).then((res: any) => {
             if (group.id != null && patient?.id != null) {
               patientLeaveGroup(res.accessToken, group.id, patient?.id).then((response) => {
-                if (!response.error && patientId !== undefined) {
-                  fetchPatientPatientGroups(patientId);
+                if (!response.error) {
+                  fetchPatientPatientGroups(patient.id? patient.id : "1");
                   fetchPatientGroups();
                 }
               }).catch((err) => {

@@ -23,6 +23,15 @@ export type PatientProps = {
     patientGroups?: PatientGroupProps[]
 }
 
+export type XPatientProps = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    birthdate: string,
+    isActive?: boolean,
+    patientGroups?: PatientGroupProps[]
+}
+
 export type CaregiverProps = {
     id: string,
     firstName: string,
@@ -45,7 +54,6 @@ export type CaregiverGraphProps = {
     preferrendLanguage: string | null,
     surname: string,
     userPrincipalName: string
-
 }
 
 export type PatientGroupProps = {
