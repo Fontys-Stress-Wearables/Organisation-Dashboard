@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useState } from "react";
-import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/esm/Form";
-import Modal from "react-bootstrap/esm/Modal";
+import React, { FormEvent, useCallback, useState } from "react";
 import { CaregiverGraphProps, createPatientGroup, PatientGroupProps } from "../../utilities/api/calls";
 import AddIcon from "./group_add.svg";
 import { useMsal } from "@azure/msal-react";
-import Dropdown from "react-bootstrap/esm/Dropdown";
-import { callMsGraph } from "../../utilities/api/graph";
+import Col from "react-bootstrap/esm/Col";
+import FormControl, { FormControlProps } from "react-bootstrap/esm/FormControl";
+import Modal from "react-bootstrap/esm/Modal";
+import Form from "react-bootstrap/esm/Form";
+import Button from "react-bootstrap/esm/Button";
 
-interface  ICreatePatientGroupModalProps {
+interface ICreatePatientGroupModalProps {
   update: boolean,
   updatePatientGroupTable: (arg: boolean) => void
   caregivers: CaregiverGraphProps[]
@@ -18,10 +18,11 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const [patientGroup, setPatientGroup] = useState<PatientGroupProps>();
+    const [selectedCaregivers, setSelectedCaregivers] = useState();
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const { instance, accounts } = useMsal();
-  
+
     const request = {
       scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
       account: accounts[0]
@@ -39,6 +40,12 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
       setDescription(event.target.value);
     };
 
+    const [assignedCaregivers, setAssignedCaregivers] = useState<CaregiverGraphProps>();
+
+    // const onSelectedOptionsChange = (e: React.FormEvent<FormControlProps & typeof FormControl>) => {
+    //   console.log(e.target.selectedOptions);
+    // };
+
     const handleUpdate = useCallback(event => {
       updatePatientGroupTable(!update)
     }, [updatePatientGroupTable])
@@ -53,7 +60,6 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
       setPatientGroup(handlePatientGroup);
 
       instance.acquireTokenSilent(request).then((res: any) => {
-        console.log(patientGroup);
         createPatientGroup(res.accessToken, handlePatientGroup).then((response) => {
           if(response.error){
             setError(true)
@@ -61,7 +67,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
             const resPatientGroup = response.response
             setError(false)
             setPatientGroup(resPatientGroup)
-            console.log(resPatientGroup)
+            
           }
         }).catch((err) => {
           console.error('Error occured while creating patient group', err)
@@ -116,21 +122,23 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
                   onChange={handleChangeDescription}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="create-patient-group.caregiver">
-                <Form.Label>Caregiver</Form.Label>
-                    <Dropdown>
-                      <Dropdown.Toggle variant="success" id="dropdown-basic">
-                        Select Caregivers
-                      </Dropdown.Toggle>
-
-                      <Dropdown.Menu>
-                      {caregivers? caregivers.map((caregiver : CaregiverGraphProps) =>(
-                        <Dropdown.Item key={caregiver.id}>{caregiver.displayName}</Dropdown.Item>
-                      )) : (<Dropdown.Item>fail</Dropdown.Item>)}
-                      </Dropdown.Menu>
-                    </Dropdown>
-
+              <Form.Group as={Col} controlId="my_multiselect_field">
+                <Form.Label>My multiselect</Form.Label>
+                <Form.Control as="select" multiple>
+                  {caregivers.map(c => (
+                    <option key={c.id} value={c.displayName}>
+                      {c.displayName}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
+              {/* <Form.Group className="mb-3" controlId="create-patient-group.caregiver">
+                <Form.Label>Caregivers</Form.Label>
+                  <Form.Select onChange={handleSelectedCaregiver} aria-label="Default select example">
+                    <option>Select a cargiver</option>
+                    {options}
+                  </Form.Select>
+              </Form.Group> */}
             </Form>
           </Modal.Body>
           <Modal.Footer>

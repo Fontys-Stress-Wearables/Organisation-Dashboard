@@ -10,10 +10,11 @@ import DeleteIcon from "../swsp-admin/delete_forever_white_24dp.svg"
 
 interface TablePropsArray {
   onRemove: (id: string) => void
+  onEdit: (patientGroup: PatientGroupProps) => void
   patientGroups: PatientGroupProps[]
 }
 
-const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, patientGroups}) => {
+const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroups}) => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<PatientGroupProps[]>([])
   
@@ -28,8 +29,12 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, patientGroups}) => {
     setSearchResults(results);
   }, [search, patientGroups]);
 
-  const onClickHandler = (patientGroup : PatientGroupProps) => {
+  const onDeleteClickHandler = (patientGroup : PatientGroupProps) => {
     if(window.confirm(`Are you sure about deleting this patient-group: ${patientGroup.groupName}?`)) onRemove(patientGroup.id ? patientGroup.id : "1")
+  }
+
+  const onClickHandler = (patientGroup : PatientGroupProps) => {
+    onEdit(patientGroup);
   }
 
   return (
@@ -60,12 +65,12 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, patientGroups}) => {
               <td>{patientGroup.groupName}</td>
               <td>{patientGroup.description}</td>
               <td> 
-                <Button onClick={() => onClickHandler(patientGroup)} variant="danger">
+                <Button onClick={() => onDeleteClickHandler(patientGroup)} variant="danger">
                   <img src={DeleteIcon}></img>
                 </Button>
               </td>
               <td> 
-                <Button>
+                <Button onClick={() => onClickHandler(patientGroup)}>
                   <img src={EditIcon}></img>
                 </Button>
               </td>

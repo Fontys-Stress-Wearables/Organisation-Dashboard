@@ -6,6 +6,7 @@ import Alert from "react-bootstrap/esm/Alert";
 import BasicPgTable from "./table";
 import { CreatePatientGroupModal } from "../createPatientGroupModal";
 import { callMsGraph } from "../../utilities/api/graph";
+import PatientGroup from "../patient-group/patient-group";
 
 const PatientGroups: React.FC = () => {
     const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([])
@@ -13,6 +14,8 @@ const PatientGroups: React.FC = () => {
     const [error, setError] = useState(false);
     const [updateTable, setUpdateTable] = useState(false);
     const { instance, accounts } = useMsal();
+    const [edit, setEdit] = useState(false);
+    const [patientGroupToEdit, setPatientGroupToEdit] = useState<PatientGroupProps>()
 
     const updatePatientGroupTable = (update: boolean):void => {
       setUpdateTable(update);
@@ -53,6 +56,11 @@ const PatientGroups: React.FC = () => {
           })
         });
       });
+    }
+
+    const onEdit = (patientGroup : PatientGroupProps) => {
+      setEdit(true);
+      setPatientGroupToEdit(patientGroup);
     }
 
     const onRemove = (id: string) => {
@@ -120,14 +128,21 @@ const PatientGroups: React.FC = () => {
             </div>
             <div className={styles.Table}>
               {patientGroups && patientGroups.length ?(
-                <BasicPgTable onRemove={onRemove} patientGroups={patientGroups}/>
+                <BasicPgTable onEdit={onEdit} onRemove={onRemove} patientGroups={patientGroups}/>
             ) : (
               <div>
                 <Alert variant="primary">No patient-groups found</Alert>
               </div>
-              )}            
+              )}             
             </div>
-          </div> 
+            {/* <div>
+              {edit && patientGroupToEdit? (
+                <PatientGroup patientGroup={patientGroupToEdit}/>
+              ) : (
+                <div/>
+              )}
+            </div> */}
+        </div> 
     );
 }
 

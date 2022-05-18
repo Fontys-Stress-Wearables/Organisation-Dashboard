@@ -35,11 +35,6 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
       setTenantId(event.target.value);
     };
 
-    const handleUpdate = useCallback(event => {
-      updateOrganizationTable(!update)
-    }, [updateOrganizationTable])
-  
-
     function handleSubmit(){
       
       const handleOrganization: OrganizationProps = {
