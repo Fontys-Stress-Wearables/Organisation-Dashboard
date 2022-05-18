@@ -42,10 +42,10 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
         setDescription(patientGroup.description)
         setShow(true);
     }
-    
-    const handleUpdate = useCallback(event => {
-        updatePatientGroupTable(!update)
-    }, [updatePatientGroupTable])
+
+    // const handleUpdate = useCallback(event => {
+    //     updatePatientGroupTable(!update)
+    // }, [updatePatientGroupTable])
     
     function handleSubmit(){
       
