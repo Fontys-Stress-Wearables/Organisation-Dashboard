@@ -106,6 +106,8 @@ const callApi = async ({ token, apiUrl, path, method, body }: ApiCalls) => {
 
     if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
 
+    console.log(body)
+
     try {
         const response = await fetch(url, fetchOptions);
         if (!response.ok)
@@ -163,12 +165,24 @@ export const getPatientGroups = (accessToken: string) : Promise<PatientGroupsPro
     return callApi({token: accessToken, path: 'patient-groups', method: 'GET'})
 }
 
+export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
+}
+
 export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
     return callApi({token: accessToken, path: 'patient-groups', method: 'POST', body: patientGroupProps})
 }
 
 export const removePatientGroup = (accessToken: string, id: string) => {
     return callApi({token: accessToken, path: `patient-groups/${id}`, method: 'DELETE', body: id})
+}
+
+export const caregiverLeaveGroup = (accessToken: string, groupId: string, caregiverId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/caregiver`, method: 'DELETE', body: `"${caregiverId}"`})
+}
+
+export const caregiverJoinGroup = (accessToken: string, groupId: string, caregiverId: string) => {
+      return callApi({token: accessToken, path: `patient-groups/${groupId}/caregivers`, method: 'POST', body: `"${caregiverId}"`})
 }
 
 // export const getPatientGroup = () : Promise<> =>{

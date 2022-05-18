@@ -1,13 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accordion from "react-bootstrap/esm/Accordion";
 import Alert from "react-bootstrap/esm/Alert";
-import { CaregiverProps } from "../../utilities/api/calls";
+import { CaregiverGraphProps, CaregiverProps } from "../../utilities/api/calls";
 import { Searchbar } from "../searchbar";
 import styles from "./caregivers.module.scss"
+import { callMsGraph } from "../../utilities/api/graph";
+import { useIsAuthenticated, useMsal } from "@azure/msal-react";
+import CaregiverTable from "./table";
+import { CreatePatientGroupModal } from "../createPatientGroupModal";
+import CaregiverDetailsModal from "../caregiverDetailsModal/caregiverDetailsModal";
 
 const Caregivers = () => {
-    const [caregiver, setCaregiver] = useState<CaregiverProps>();
-    const [caregivers, setCaregivers] = useState<CaregiverProps[]>([]);
+  const { instance, accounts } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
+
+    const [caregiver, setCaregiver] = useState<CaregiverGraphProps>();
+    const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([]);
+
+  useEffect(() => {
+    requestCaregivers()
+  }, []);
+
+  const requestCaregivers = () => {
+    const graphRequest = {
+      scopes: ["User.Read"],
+      account: accounts[0],
+    }
+
+    instance.acquireTokenSilent(graphRequest).then((response: any) => {
+      callMsGraph(response.accessToken).then((response: CaregiverGraphProps[]) => {
+        setCaregivers(response)
+      })
+    }).catch((e: any) => {
+      instance.acquireTokenPopup(graphRequest).then((response: any) => {
+        callMsGraph(response.accessToken).then((response: any) => {
+          setCaregivers(response)
+        })
+      });
+    });
+  }
 
     return(
         <div className={styles.container}>
@@ -15,15 +46,7 @@ const Caregivers = () => {
                 <div className={styles.accordion}>
                     <Accordion defaultActiveKey="0">
                     {caregivers && caregivers.length ? (
-                        caregivers.map((c, index) =>(
-                        <Accordion.Item eventKey={index.toString()}>
-                            <Accordion.Header> {c.firstName} </Accordion.Header>
-                            <Accordion.Body>
-                            The caregiver is part of the following patient-groups: {c.patientGroups}. 
-                            Do you wish to edit the patientdata: {c.emailAddress}, {c.lastName}, {c.isGuest}
-                            </Accordion.Body>
-                        </Accordion.Item>
-                        ))
+                        <CaregiverTable caregivers={caregivers}/>
                     ) : (
                         <div>
                         <Alert variant="primary">No caregivers found</Alert>
