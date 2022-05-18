@@ -1,25 +1,26 @@
 import { useEffect, useState } from "react";
-import Accordion from "react-bootstrap/esm/Accordion";
 import Alert from "react-bootstrap/esm/Alert";
-import { CaregiverGraphProps, CaregiverProps } from "../../utilities/api/calls";
+import { CaregiverGraphProps } from "../../utilities/api/calls";
 import { Searchbar } from "../searchbar";
 import styles from "./caregivers.module.scss"
 import { callMsGraph } from "../../utilities/api/graph";
-import { useIsAuthenticated, useMsal } from "@azure/msal-react";
 import CaregiverTable from "./table";
-import { CreatePatientGroupModal } from "../createPatientGroupModal";
-import CaregiverDetailsModal from "../caregiverDetailsModal/caregiverDetailsModal";
+import { useMsal } from "@azure/msal-react";
+import { CreateCaregiverModal } from "../createCaregiverModal";
 
 const Caregivers = () => {
   const { instance, accounts } = useMsal();
-  const isAuthenticated = useIsAuthenticated();
+  const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([]);
+  const [updateTable, setUpdateTable] = useState(false);
 
-    const [caregiver, setCaregiver] = useState<CaregiverGraphProps>();
-    const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([]);
+  const updateCaregiverTable = (update: boolean):void => {
+    // setUpdateTable(true)
+    requestCaregivers()
+  }
 
   useEffect(() => {
     requestCaregivers()
-  }, []);
+  }, [updateTable]);
 
   const requestCaregivers = () => {
     const graphRequest = {
@@ -41,21 +42,21 @@ const Caregivers = () => {
   }
 
     return(
-        <div className={styles.container}>
+     <div className={styles.container}>
+       <div className={styles.createPatientModal}>
+         <CreateCaregiverModal update={updateTable} updateTable={updateCaregiverTable}/>
+       </div>
+       <div className={styles.Table}>
+          {caregivers && caregivers.length ? (
+            <CaregiverTable caregivers={caregivers}/>
+          ) : (
             <div>
-                <div className={styles.accordion}>
-                    <Accordion defaultActiveKey="0">
-                    {caregivers && caregivers.length ? (
-                        <CaregiverTable caregivers={caregivers}/>
-                    ) : (
-                        <div>
-                        <Alert variant="primary">No caregivers found</Alert>
-                        </div>
-                    )}
-                    </Accordion>
-                </div>
-            </div> 
-     </div>
+              <Alert variant="primary">No caregivers found</Alert>
+            </div>
+          )}
+
+        </div>
+       </div> 
     );
 }
 

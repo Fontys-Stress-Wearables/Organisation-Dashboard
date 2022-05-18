@@ -62,7 +62,7 @@ const Patients: React.FC = () => {
        <div className={styles.container}>
          {console.log("render")}
               <div className={styles.createPatientModal}>
-                <CreatePatientModal update={updateTable} updatePatientTable={updatePatientTable}/>
+                <CreatePatientModal update={updateTable} updateTable={updatePatientTable}/>
               </div>
             <div className={styles.Table}>
               {patients && patients.length ?(

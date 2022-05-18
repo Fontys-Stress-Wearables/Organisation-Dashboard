@@ -123,23 +123,6 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
                   onChange={handleChangeDescription}
                 />
               </Form.Group>
-              <Form.Group as={Col} controlId="my_multiselect_field">
-                <Form.Label>My multiselect</Form.Label>
-                <Form.Control as="select" multiple>
-                  {caregivers.map(c => (
-                    <option key={c.id} value={c.displayName}>
-                      {c.displayName}
-                    </option>
-                  ))}
-                </Form.Control>
-              </Form.Group>
-              {/* <Form.Group className="mb-3" controlId="create-patient-group.caregiver">
-                <Form.Label>Caregivers</Form.Label>
-                  <Form.Select onChange={handleSelectedCaregiver} aria-label="Default select example">
-                    <option>Select a cargiver</option>
-                    {options}
-                  </Form.Select>
-              </Form.Group> */}
             </Form>
           </Modal.Body>
           <Modal.Footer>

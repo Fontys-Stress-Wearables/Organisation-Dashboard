@@ -5,13 +5,10 @@ import Modal from "react-bootstrap/esm/Modal";
 import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
+import { IModalProps } from "../createCaregiverModal/createCaregiverModal";
 
-interface  ICreatePatinetModalProps {
-  update: boolean,
-  updatePatientTable: (arg: boolean) => void
-}
 
-const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, updatePatientTable }) => {
+const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     const [error, setError] = useState(false)
     const [show, setShow] = useState(false);
     const [patient, setPatient] = useState<PatientProps>();
@@ -43,8 +40,8 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
     };
 
     const handleUpdate = useCallback(event => {
-      updatePatientTable(!update)
-    }, [updatePatientTable])
+      updateTable(!update)
+    }, [updateTable])
   
 
     function handleSubmit(){
@@ -66,7 +63,7 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
             const resPatient = response.response
             setError(false)
             setPatient(resPatient)
-            updatePatientTable(true)
+            updateTable(true)
           }
         }).catch((err) => {
           console.error('Error occured while fetching patients', err)
@@ -81,7 +78,7 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
               const resPatient = response.response
               setError(false)
               setPatient(resPatient)
-              updatePatientTable(true)
+              updateTable(true)
             }
           }).catch((err) => {
             console.error('Error occured while fetching patients', err)
