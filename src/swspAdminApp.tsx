@@ -51,7 +51,7 @@ const SWSPApp: React.FC = () => {
           } else {
             const foundOrganizations = response.response
             setError(false)
-            setOrganizations(foundOrganizations)
+            setOrganizations([...foundOrganizations])
           }
         }).catch((err) => {
           console.error('Error occured while fetching organizations', err)

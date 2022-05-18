@@ -28,7 +28,7 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
       p.firstName.toLowerCase().includes(search)
     );
     setSearchResults(results);
-  }, [search]);
+  }, [search, patients]);
 
   return (
     <div>

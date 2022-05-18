@@ -66,6 +66,7 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
             const resPatient = response.response
             setError(false)
             setPatient(resPatient)
+            updatePatientTable(true)
           }
         }).catch((err) => {
           console.error('Error occured while fetching patients', err)
@@ -80,6 +81,7 @@ const CreatePatientModal: React.FC<ICreatePatinetModalProps> = ({ update, update
               const resPatient = response.response
               setError(false)
               setPatient(resPatient)
+              updatePatientTable(true)
             }
           }).catch((err) => {
             console.error('Error occured while fetching patients', err)

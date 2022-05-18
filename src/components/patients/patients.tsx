@@ -13,7 +13,7 @@ const Patients: React.FC = () => {
     const { instance, accounts } = useMsal();
     
     const updatePatientTable = (update: boolean):void => {
-      setUpdateTable(update);
+      fetchPatients()
     }
 
     const request = {
@@ -22,6 +22,10 @@ const Patients: React.FC = () => {
     };
   
     useEffect(() => {
+      fetchPatients()
+    }, [updateTable]);
+
+    const fetchPatients = () => {
       instance.acquireTokenSilent(request).then((res: any) => {
         getPatients(res.accessToken).then((response) => {
           if(response.error){
@@ -50,11 +54,13 @@ const Patients: React.FC = () => {
             setError(true)
           })
         });
-      });  
-    }, [updateTable]);
+      });
+    }
 
     return(
+
        <div className={styles.container}>
+         {console.log("render")}
               <div className={styles.createPatientModal}>
                 <CreatePatientModal update={updateTable} updatePatientTable={updatePatientTable}/>
               </div>

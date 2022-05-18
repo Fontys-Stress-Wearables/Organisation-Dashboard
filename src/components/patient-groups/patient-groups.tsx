@@ -18,7 +18,7 @@ const PatientGroups: React.FC = () => {
     const [patientGroupToEdit, setPatientGroupToEdit] = useState<PatientGroupProps>()
 
     const updatePatientGroupTable = (update: boolean):void => {
-      setUpdateTable(update);
+      fetchPatientGroups()
     };
   
     const request = {

@@ -67,7 +67,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
             const resPatientGroup = response.response
             setError(false)
             setPatientGroup(resPatientGroup)
-            
+            updatePatientGroupTable(true)
           }
         }).catch((err) => {
           console.error('Error occured while creating patient group', err)
@@ -86,6 +86,7 @@ const CreatePatientGroupModal: React.FC<ICreatePatientGroupModalProps> = ({ upda
           }).catch((err) => {
             console.error('Error occured while creating patient group', err)
             setError(true)
+            updatePatientGroupTable(true)
           })
         });
       });  
