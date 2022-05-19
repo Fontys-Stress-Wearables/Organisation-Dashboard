@@ -8,9 +8,10 @@ import Form from "react-bootstrap/esm/Form";
 
 interface IUpdatePatientModal {
     patient: PatientProps
+  update: () => void
 }
 
-const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
+const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => {
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -71,9 +72,10 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
             const resPatient = response.response
             setError(false)
             // updatePatientGroupTable(true)
+            update()
           }
         }).catch((err) => {
-          console.error('Error occured while updating patient', err)
+          console.error('Error occurred while updating patient', err)
           setError(true)
         })
       }).catch((error) => {
@@ -86,9 +88,10 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
               setError(false)
             }
           }).catch((err) => {
-            console.error('Error occured while updating patient', err)
+            console.error('Error occurred while updating patient', err)
             setError(true)
             // updatePatientGroupTable(true)
+            update()
           })
         });
       });  
@@ -98,7 +101,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
 
     return (
       <div>
-        <Button variant="success" onClick={handleShow}>
+        <Button style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}} variant="success" onClick={handleShow}>
             <img alt="editicon" src={EditIcon}></img>
         </Button>
         <Modal show={show} onHide={handleClose}>

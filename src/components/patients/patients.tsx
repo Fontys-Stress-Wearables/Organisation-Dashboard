@@ -36,7 +36,7 @@ const Patients: React.FC = () => {
             setPatients(foundPatients)
           }
         }).catch((err) => {
-          console.error('Error occured while fetching patients', err)
+          console.error('Error occurred while fetching patients', err)
           setError(true)
         })
       }).catch((e: any) => {
@@ -50,7 +50,7 @@ const Patients: React.FC = () => {
               setPatients(foundPatients)
             }
           }).catch((err) => {
-            console.error('Error occured while fetching patients', err)
+            console.error('Error occurred while fetching patients', err)
             setError(true)
           })
         });
@@ -66,7 +66,7 @@ const Patients: React.FC = () => {
             </div>
             <div className={styles.Table}>
               {patients && patients.length ?(
-             <BasicTable patients={patients}/>
+             <BasicTable patients={patients} update={fetchPatients}/>
               ) : (
                 <div>
                   <Alert variant="primary">No patients found</Alert>

@@ -7,10 +7,11 @@ import { PatientGroupProps, updatePatientGroup } from "../../utilities/api/calls
 import Form from "react-bootstrap/esm/Form";
 
 interface IUpdatePatientGroupModal {
-    patientGroup: PatientGroupProps
+    patientGroup: PatientGroupProps,
+    update: () => void
 }
 
-const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGroup}) => {
+const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGroup, update}) => {
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -62,10 +63,12 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
           } else {
             const resPatientGroup = response.response
             setError(false)
+
+            update()
             // updatePatientGroupTable(true)
           }
         }).catch((err) => {
-          console.error('Error occured while creating patient group', err)
+          console.error('Error occurred while creating patient group', err)
           setError(true)
         })
       }).catch((error) => {
@@ -76,9 +79,11 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
             } else {
               const resPatientGroup = response.response
               setError(false)
+
+              update()
             }
           }).catch((err) => {
-            console.error('Error occured while creating patient group', err)
+            console.error('Error occurred while creating patient group', err)
             setError(true)
             // updatePatientGroupTable(true)
           })
@@ -90,7 +95,7 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
 
     return (
       <div>
-        <Button variant="success" onClick={handleShow}>
+        <Button style={{display: "flex", width: "36px", justifyContent: "center"}} variant="success" onClick={handleShow}>
             <img alt="editicon" src={EditIcon}></img>
         </Button>
         <Modal show={show} onHide={handleClose}>

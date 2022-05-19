@@ -7,16 +7,22 @@ import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
 import DeleteIcon from "../swsp-admin/delete_forever_white_24dp.svg"
 import { UpdatePatientGroupModal } from '../updatePatientGroupModal';
+import GroupIcon from "../caregivers/groups_white_24dp.svg";
+import PatientGroupModal from "../patientGroupModal/patientGroupModal";
 
 interface TablePropsArray {
   onRemove: (id: string) => void
   onEdit: (patientGroup: PatientGroupProps) => void
+  update: () => void
   patientGroups: PatientGroupProps[]
 }
 
-const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroups}) => {
+const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroups, update}) => {
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<PatientGroupProps[]>([])
+
+  const [showPatientGroupModal, setShowPatientGroupModal] = useState(false);
+  const [selectedGroup , setSelectedGroup] = useState<PatientGroupProps>();
   
   const handleSearch = (event : React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
@@ -37,8 +43,19 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
     onEdit(patientGroup);
   }
 
+  const openPatientGroup = (patientGroup : PatientGroupProps) => {
+    setSelectedGroup(patientGroup);
+    setShowPatientGroupModal(true);
+  }
+
+  const closePatientGroup = () => {
+    setSelectedGroup(undefined);
+    setShowPatientGroupModal(false);
+  }
+
   return (
     <div>
+      <PatientGroupModal closeModal={closePatientGroup} show={showPatientGroupModal} patientGroup={selectedGroup}/>
       <div>
         <InputGroup className="mb-3">
           <FormControl
@@ -57,6 +74,8 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
             <th>Group Name</th>
             <th>Description</th>
             <th style={{width: "10px"}}></th>
+            <th style={{width: "10px"}}></th>
+            <th style={{width: "10px"}}></th>
           </tr>
         </thead>
         <tbody>
@@ -64,13 +83,14 @@ const BasicPgTable: React.FC<TablePropsArray> = ({onRemove, onEdit, patientGroup
             <tr key={patientGroup.id}>
               <td>{patientGroup.groupName}</td>
               <td>{patientGroup.description}</td>
+              <td><Button onClick={() => openPatientGroup(patientGroup)} variant="success" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
               <td> 
-                <Button onClick={() => onDeleteClickHandler(patientGroup)} variant="danger">
+                <UpdatePatientGroupModal patientGroup={patientGroup} update={update}/>
+              </td>
+              <td>
+                <Button style={{display: "flex", width: "36px", justifyContent: "center"}} onClick={() => onDeleteClickHandler(patientGroup)} variant="danger">
                   <img alt="deleteicon" src={DeleteIcon}></img>
                 </Button>
-              </td>
-              <td> 
-                <UpdatePatientGroupModal patientGroup={patientGroup}/>
               </td>
             </tr>
             ))}
