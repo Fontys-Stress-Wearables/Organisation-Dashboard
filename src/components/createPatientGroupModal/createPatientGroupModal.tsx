@@ -39,10 +39,6 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({ update, up
 
     const [assignedCaregivers, setAssignedCaregivers] = useState<CaregiverGraphProps>();
 
-    // const onSelectedOptionsChange = (e: React.FormEvent<FormControlProps & typeof FormControl>) => {
-    //   console.log(e.target.selectedOptions);
-    // };
-
     const handleUpdate = useCallback(event => {
       updatePatientGroupTable(!update)
     }, [updatePatientGroupTable])
