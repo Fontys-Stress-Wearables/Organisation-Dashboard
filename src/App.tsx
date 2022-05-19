@@ -1,5 +1,5 @@
 import './App.css';
-import {Routes, Route} from "react-router-dom";
+import {Routes, Route, Navigate} from "react-router-dom";
 import {Header} from './components/header';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Patients } from './components/patients';
@@ -14,6 +14,10 @@ function App() {
         <Route path="/patients" element={<Patients/>}/>
         <Route path="/caregivers" element={<Caregivers/>}/>
         <Route path="/patient-groups" element={<PatientGroups/>}/>
+        <Route
+          path="*"
+          element={<Navigate to="/patients" replace />}
+        />
       </Routes>
     </div>
   );
