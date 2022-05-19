@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
@@ -35,11 +35,6 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
       setTenantId(event.target.value);
     };
 
-    const handleUpdate = useCallback(event => {
-      updateOrganizationTable(!update)
-    }, [updateOrganizationTable])
-  
-
     function handleSubmit(){
       
       const handleOrganization: OrganizationProps = {
@@ -62,7 +57,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
             updateOrganizationTable(true);
           }
         }).catch((err) => {
-          console.error('Error occured while fetching organizations', err)
+          console.error('Error occurred while fetching organizations', err)
           setError(true)
         })
       }).catch((error) => {
@@ -78,7 +73,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
               updateOrganizationTable(true);
             }
           }).catch((err) => {
-            console.error('Error occured while fetching organizations', err)
+            console.error('Error occurred while fetching organizations', err)
             setError(true)
           })
         });
@@ -88,48 +83,54 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
     }
 
     return (
-      <>
-        <Button variant="success" onClick={handleShow}>
-           Add organization <img src={AddIcon}></img> 
-        </Button>
-        <Modal show={show} onHide={handleClose}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create a new organization in the system</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Organization name</Form.Label>
-                <Form.Control
-                  type="string"
-                  placeholder="Name"
-                  autoFocus
-                  onChange={handleChangeOrganizationname}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                <Form.Label>Tenant ID</Form.Label>
-                <Form.Control
-                  type="string"
-                  placeholder="Tenant ID"
-                  autoFocus
-                  onChange={handleChangeTenantId}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={() => handleSubmit()}>
-              Submit
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
+      <div>
+          {!error ? (
+        <div>    
+          <Button variant="success" onClick={handleShow}>
+            Add organization <img alt="addicon" src={AddIcon}></img> 
+          </Button>
+          <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Create a new organization in the system</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Label>Organization name</Form.Label>
+                  <Form.Control
+                    type="string"
+                    placeholder="Name"
+                    autoFocus
+                    onChange={handleChangeOrganizationname}
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                  <Form.Label>Tenant ID</Form.Label>
+                  <Form.Control
+                    type="string"
+                    placeholder="Tenant ID"
+                    autoFocus
+                    onChange={handleChangeTenantId}
+                  />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={() => handleSubmit()}>
+                Submit
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+        ) : (
+            <h2> ERROR PLEASE RELOAD PAGE</h2>
+        )}
+      </div>
     );
-  }
+}
   
 export default CreateOrganizationModal
 

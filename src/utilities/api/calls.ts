@@ -1,5 +1,3 @@
-import { useMsal } from '@azure/msal-react/dist/hooks/useMsal'
-import { idText } from 'typescript'
 import { API_URL, ORGANIZATION_API_URL } from '../environment'
 
 interface ApiCalls {
@@ -7,7 +5,7 @@ interface ApiCalls {
     apiUrl?: String
     path: String
     method: 'POST' | 'GET' | 'PUT' | 'DELETE'
-    body?: string | PatientProps | OrganizationProps
+    body?: string | PatientProps | OrganizationProps | PatientGroupProps
 }
 
 interface BaseApiResponse {
@@ -22,7 +20,16 @@ export type PatientProps = {
     lastName: string,
     birthdate: string,
     isActive?: boolean,
-    patientGroups?: PatientGroup[]
+    patientGroups?: PatientGroupProps[]
+}
+
+export type XPatientProps = {
+    id: string,
+    firstName: string,
+    lastName: string,
+    birthdate: string,
+    isActive?: boolean,
+    patientGroups?: PatientGroupProps[]
 }
 
 export type CaregiverProps = {
@@ -33,15 +40,29 @@ export type CaregiverProps = {
     isActive: boolean,
     isGuest: boolean,
     role: string,
-    patientGroups: PatientGroup[]
+    patientGroups: PatientGroupProps[]
+    azureId: string
 }
 
-export type PatientGroup = {
+export type CaregiverGraphProps = {
+    displayName: string,
+    givenName: string,
     id: string,
+    jobTitle: string,
+    mail: string | null,
+    mobilePhone: string | null,
+    officeLocation: string | null,
+    preferrendLanguage: string | null,
+    surname: string,
+    userPrincipalName: string
+}
+
+export type PatientGroupProps = {
+    id?: string,
     groupName: string,
     description: string,
-    caregivers: CaregiverProps[],
-    patients: PatientProps[],
+    caregivers?: CaregiverProps[],
+    patients?: PatientProps[],
 }
 
 export type OrganizationProps = {
@@ -53,6 +74,10 @@ interface OrganizationsPropsResponse extends BaseApiResponse {
     response: OrganizationProps[]
 }
 
+interface CaregiversPropsResponse extends BaseApiResponse {
+    response: CaregiverProps[]
+}
+
 interface PatientsPropsResponse extends BaseApiResponse {
     response: PatientProps[]
 }
@@ -61,11 +86,19 @@ interface PatientPropsResponse extends BaseApiResponse {
     response: PatientProps
 }
 
+interface PatientGroupsPropsResponse extends BaseApiResponse {
+    response: PatientGroupProps[]
+}
+
+interface PatientGroupPropsResponse extends BaseApiResponse {
+    response: PatientGroupProps
+}
+
 interface OrganizationPropsResponse extends BaseApiResponse {
     response: OrganizationProps
 }
 
-const callApi = async ({ token,apiUrl, path, method, body }: ApiCalls) => {
+const callApi = async ({ token, apiUrl, path, method, body }: ApiCalls) => {
     const url = `${apiUrl ? apiUrl : API_URL}/${path}`
 
     const fetchOptions: RequestInit = {
@@ -77,6 +110,8 @@ const callApi = async ({ token,apiUrl, path, method, body }: ApiCalls) => {
     }
 
     if (body) fetchOptions.body = typeof body === 'string' ? body : JSON.stringify(body)
+
+    console.log(body)
 
     try {
         const response = await fetch(url, fetchOptions);
@@ -107,6 +142,10 @@ export const getPatient = (id: string): Promise<PatientPropsResponse> => {
     return callApi({ path: 'patients', method: 'POST', body: id })
 }
 
+export const updatePatient = (accesToken: string, patient: PatientProps) : Promise<PatientPropsResponse> => {
+    return callApi({token: accesToken, path: `patients/${patient.id}`, method: 'PUT', body: patient})
+}
+
 export const createOrganization = (accesToken: string, organizationProps: OrganizationProps): Promise<OrganizationPropsResponse> => {
     return callApi({ apiUrl: ORGANIZATION_API_URL, token: accesToken, path: 'organizations', method: 'POST', body: organizationProps })
 }
@@ -119,34 +158,50 @@ export const removeOrganization = (accessToken: string, id: string): Promise<Org
     return callApi({ apiUrl: ORGANIZATION_API_URL, token: accessToken, path: `organizations/${id}`, method: 'DELETE' })
 }
 
-// export const getCaregivers = () : Promise<> =>{
-//     return callApi({path: 'caregivers', method: 'GET'})
-// }
+export const createPatientGroup = (accessToken: string, patientGroupProps: PatientGroupProps) : Promise<PatientGroupPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups`, method: 'POST', body: patientGroupProps})
+}
 
-// export const createCaregivers = () : Promise<> =>{
-//     return callApi({path: 'caregivers', method: 'POST'})
-// }
+export const getPatientGroups = (accessToken: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: 'patient-groups', method: 'GET'})
+}
 
-// export const getCaregiver = (id) : Promise<> =>{
-//     return callApi({path: 'patients', method: 'GET'})
-// }
+export const updatePatientGroup = (accesToken: string, patientgroup: PatientGroupProps) : Promise<PatientGroupPropsResponse> => {
+    return callApi({token: accesToken, path: `patient-groups/${patientgroup.id}`, method: 'PUT', body: patientgroup})
+}
 
-// export const getPatientGroups = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'GET'})
-// }
+export const removePatientGroup = (accessToken: string, id: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${id}`, method: 'DELETE', body: id})
+}
 
-// export const createPatientGroup = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'POST'})
-// }
+export const getCaregiverPatientGroups = (accessToken: string, caregiverId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
+}
 
-// export const getPatientGroup = () : Promise<> =>{
-//     return callApi({path: 'patient-groups', method: 'GET'})
-// }
+export const getPatientGroupCaregivers = (accessToken: string, patientGroupId: string) : Promise<CaregiversPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/${patientGroupId}/caregivers`, method: 'GET'})
+}
 
-// export const addPatient = (id) : Promise<> =>{
-//     return callApi({path: `patient-groups/${id}/patient`, method: 'POST'})
-// }
+export const caregiverLeaveGroup = (accessToken: string, groupId: string, caregiverId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/caregiver`, method: 'DELETE', body: `"${caregiverId}"`})
+}
 
-// export const addCaregiver = (id) : Promise<> =>{
-//     return callApi({path: `groups/${id}/caregiver`, method: 'POST'})
-// }
+export const caregiverJoinGroup = (accessToken: string, groupId: string, caregiverId: string) => {
+      return callApi({token: accessToken, path: `patient-groups/${groupId}/caregivers`, method: 'POST', body: `"${caregiverId}"`})
+}
+
+export const getPatientPatientGroups = (accessToken: string, patientId: string) : Promise<PatientGroupsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/patients/${patientId}`, method: 'GET'})
+}
+
+export const getPatientGroupPatients = (accessToken: string, patientGroupId: string) : Promise<PatientsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/${patientGroupId}/patients`, method: 'GET'})
+}
+
+export const patientLeaveGroup = (accessToken: string, groupId: string, patientId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/patient`, method: 'DELETE', body: `"${patientId}"`})
+}
+
+export const patientJoinGroup = (accessToken: string, groupId: string, patientId: string) => {
+    return callApi({token: accessToken, path: `patient-groups/${groupId}/patients`, method: 'POST', body: `"${patientId}"`})
+}

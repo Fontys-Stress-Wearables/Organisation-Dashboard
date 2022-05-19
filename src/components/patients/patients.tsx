@@ -13,7 +13,7 @@ const Patients: React.FC = () => {
     const { instance, accounts } = useMsal();
     
     const updatePatientTable = (update: boolean):void => {
-      setUpdateTable(update);
+      fetchPatients()
     }
 
     const request = {
@@ -21,8 +21,11 @@ const Patients: React.FC = () => {
       account: accounts[0]
     };
   
-
     useEffect(() => {
+      fetchPatients()
+    }, [updateTable]);
+
+    const fetchPatients = () => {
       instance.acquireTokenSilent(request).then((res: any) => {
         getPatients(res.accessToken).then((response) => {
           if(response.error){
@@ -33,7 +36,7 @@ const Patients: React.FC = () => {
             setPatients(foundPatients)
           }
         }).catch((err) => {
-          console.error('Error occured while fetching patients', err)
+          console.error('Error occurred while fetching patients', err)
           setError(true)
         })
       }).catch((e: any) => {
@@ -47,28 +50,35 @@ const Patients: React.FC = () => {
               setPatients(foundPatients)
             }
           }).catch((err) => {
-            console.error('Error occured while fetching patients', err)
+            console.error('Error occurred while fetching patients', err)
             setError(true)
           })
         });
-      });  
-    }, [updateTable]);
+      });
+    }
 
     return(
-       <div className={styles.container}>
-              <div className={styles.createPatientModal}>
-                <CreatePatientModal update={updateTable} updatePatientTable={updatePatientTable}/>
-              </div>
+      <div>
+        {!error ? (
+          <div className={styles.container}>
+            <div className={styles.createPatientModal}>
+              <CreatePatientModal update={updateTable} updateTable={updatePatientTable}/>
+            </div>
             <div className={styles.Table}>
               {patients && patients.length ?(
-                <BasicTable patients={patients}/>
-            ) : (
-              <div>
-                <Alert variant="primary">No patients found</Alert>
-              </div>
+             <BasicTable patients={patients} update={fetchPatients}/>
+              ) : (
+                <div>
+                  <Alert variant="primary">No patients found</Alert>
+                </div>
               )}            
             </div>
           </div> 
+        ) :(
+          <h2> ERROR PLEASE RELOAD PAGE</h2>
+        )}
+
+      </div> 
     );
 }
 

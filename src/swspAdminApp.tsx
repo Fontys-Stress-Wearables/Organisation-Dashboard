@@ -1,8 +1,6 @@
 import './App.css';
-import { Routes, Route } from "react-router-dom";
 import SWSPHeader from './components/swsp-admin/header';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Patients } from './components/patients';
 import OrganizationTable from './components/swsp-admin/table';
 import styles from "./components/swsp-admin/patients.module.scss";
 import { useMsal } from "@azure/msal-react";
@@ -26,7 +24,7 @@ const SWSPApp: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchOrganizations()
+    fetchOrganizations();
   }, [updateTable]);
 
   const fetchOrganizations = () => {
@@ -40,7 +38,7 @@ const SWSPApp: React.FC = () => {
           setOrganizations([...foundOrganizations])
         }
       }).catch((err) => {
-        console.error('Error occured while fetching organizations', err)
+        console.error('Error occurred while fetching organizations', err)
         setError(true)
       })
     }).catch((e: any) => {
@@ -51,10 +49,10 @@ const SWSPApp: React.FC = () => {
           } else {
             const foundOrganizations = response.response
             setError(false)
-            setOrganizations(foundOrganizations)
+            setOrganizations([...foundOrganizations])
           }
         }).catch((err) => {
-          console.error('Error occured while fetching organizations', err)
+          console.error('Error occurred while fetching organizations', err)
           setError(true)
         })
       });
@@ -67,7 +65,7 @@ const SWSPApp: React.FC = () => {
           fetchOrganizations()
         }
       ).catch((err) => {
-        console.error('Error occured while removing organization', err)
+        console.error('Error occurred while removing organization', err)
         setError(true)
       })
     }).catch((e: any) => {
@@ -75,7 +73,7 @@ const SWSPApp: React.FC = () => {
         removeOrganization(res.accessToken, id).then(() => {
           fetchOrganizations()
         }).catch((err) => {
-          console.error('Error occured while removing organization', err)
+          console.error('Error occurred while removing organization', err)
           setError(true)
         })
       });
@@ -84,17 +82,24 @@ const SWSPApp: React.FC = () => {
 
   return (
     <div className="App" >
-      <SWSPHeader />
-      <div className={styles.container}>
-
-      <div className={styles.createPatientModal}>
-                <CreateOrganizationModal update={updateTable} updateOrganizationTable={updateOrganizationTable}/>
-              </div>
-        <div className={styles.Table}>
-          <OrganizationTable onRemove={onRemove} organizations={organizations} />
+      {!error ? (
+        <div>
+          <SWSPHeader />
+          <div className={styles.container}>
+    
+          <div className={styles.createPatientModal}>
+                    <CreateOrganizationModal update={updateTable} updateOrganizationTable={updateOrganizationTable}/>
+                  </div>
+            <div className={styles.Table}>
+              <OrganizationTable onRemove={onRemove} organizations={organizations} />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ):(
+        <h2> ERROR PLEASE RELOAD THE PAGE</h2>
+      )}
+      
+    </div>    
   );
 }
 

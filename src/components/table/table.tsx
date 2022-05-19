@@ -5,12 +5,20 @@ import Button from "react-bootstrap/esm/Button"
 import FormControl from "react-bootstrap/esm/FormControl"
 import InputGroup from "react-bootstrap/esm/InputGroup"
 import SearchIcon from "./search_white_48dp.svg"
+import GroupIcon from  "./groups_white_24dp.svg"
+import styles from "../caregivers/caregivers.module.scss";
+import { PatientPatientGroupModal } from '../patientPatientGroupModal';
+import { UpdatePatientModal } from '../updatePatientModal';
 
-interface PatientPropsArray {
+interface TablePropsArray {
   patients: PatientProps[]
+  update: () => void
 }
 
-const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
+const BasicTable: React.FC<TablePropsArray> = ({patients, update}) => {
+  const [selectedPatient, setSelectedPatient] = useState<PatientProps>();
+  const [showPatientGroups , setShowPatientGroups] = useState(false);
+
   const formatDate = (birthdate : string) =>{
     var date = new Date(birthdate);
     return date.toLocaleDateString()
@@ -23,15 +31,23 @@ const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
     setSearch(event.target.value);
   }
 
+  const openPatientGroups = (patient : PatientProps) => {
+    setSelectedPatient(patient);
+    setShowPatientGroups(true)
+  }
+
   useEffect(() => {
     const results = patients.filter(p =>
       p.firstName.toLowerCase().includes(search)
     );
     setSearchResults(results);
-  }, [search]);
+  }, [search, patients]);
 
   return (
     <div>
+      <div className={styles.createPatientGroupModal}>
+        <PatientPatientGroupModal patient={selectedPatient} show={showPatientGroups} closeModal={() => setShowPatientGroups(false)}/>
+      </div>
       <div>
         <InputGroup className="mb-3">
           <FormControl
@@ -40,7 +56,7 @@ const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
             onChange={handleSearch}
           />
           <Button>
-            <img src={SearchIcon}></img>
+            <img alt="searchicon" src={SearchIcon}></img>
           </Button>
         </InputGroup>
       </div>
@@ -50,6 +66,8 @@ const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
             <th>First Name</th>
             <th>Last Name</th>
             <th>Birthdate</th>
+            <th style={{width: "10px"}}/>
+            <th style={{width: "10px"}}/>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +76,8 @@ const BasicTable: React.FC<PatientPropsArray> = ({patients}) => {
               <td>{patient.firstName}</td>
               <td>{patient.lastName}</td>
               <td>{formatDate(patient.birthdate)}</td>
+              <td><UpdatePatientModal patient={patient} update={update}/></td>
+              <td><Button onClick={() => openPatientGroups(patient)} variant="success" style={{display: "flex", width: "36px", justifyContent: "center"}}><img alt="groupicon" style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
             </tr>
             ))}
         </tbody>
