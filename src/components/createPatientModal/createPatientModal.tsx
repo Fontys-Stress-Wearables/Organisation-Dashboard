@@ -44,7 +44,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     }, [updateTable])
   
 
-    function handleSubmit(event: React.FormEvent<HTMLInputElement>){
+    function handleSubmit(){
       const handlePatient: PatientProps = {
         firstName: firstname,
         lastName: lastname,
