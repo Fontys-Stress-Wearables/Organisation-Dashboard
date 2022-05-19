@@ -36,7 +36,7 @@ const Patients: React.FC = () => {
             setPatients(foundPatients)
           }
         }).catch((err) => {
-          console.error('Error occured while fetching patients', err)
+          console.error('Error occurred while fetching patients', err)
           setError(true)
         })
       }).catch((e: any) => {
@@ -50,7 +50,7 @@ const Patients: React.FC = () => {
               setPatients(foundPatients)
             }
           }).catch((err) => {
-            console.error('Error occured while fetching patients', err)
+            console.error('Error occurred while fetching patients', err)
             setError(true)
           })
         });

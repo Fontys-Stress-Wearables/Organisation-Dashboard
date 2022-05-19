@@ -75,10 +75,8 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
               <td>{patient.firstName}</td>
               <td>{patient.lastName}</td>
               <td>{formatDate(patient.birthdate)}</td>
-              <td><Button onClick={() => openPatientGroups(patient)} variant="success" style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}}><img alt="groupicon" style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
-              <td> 
-                <UpdatePatientModal patient={patient}/>
-              </td>
+              <td><UpdatePatientModal patient={patient}/></td>
+              <td><Button onClick={() => openPatientGroups(patient)} variant="success" style={{display: "flex", width: "36px", justifyContent: "center"}}><img alt="groupicon" style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
             </tr>
             ))}
         </tbody>

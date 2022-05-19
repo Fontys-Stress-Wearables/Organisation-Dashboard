@@ -69,7 +69,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
           setPatientGroups([...foundPatientGroups]);
         }
       }).catch((err) => {
-        console.error("Error occured while fetching patient groups", err);
+        console.error("Error occurred while fetching patient groups", err);
       });
     }).catch((e: any) => {
       instance.acquireTokenPopup(request).then((res: any) => {
@@ -79,7 +79,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
             setPatientGroups([...foundPatientGroups]);
           }
         }).catch((err) => {
-          console.error("Error occured while fetching patient groups", err);
+          console.error("Error occurred while fetching patient groups", err);
         });
       });
     });
@@ -93,7 +93,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
             setCaregiversGroups(foundPatientGroups);
           }
         }).catch((err) => {
-          console.error("Error occured while fetching patient groups", err);
+          console.error("Error occurred while fetching patient groups", err);
         });
       }).catch((e: any) => {
         instance.acquireTokenPopup(request).then((res: any) => {
@@ -103,7 +103,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
               setCaregiversGroups(foundPatientGroups);
             }
           }).catch((err) => {
-            console.error("Error occured while fetching patient groups", err);
+            console.error("Error occurred while fetching patient groups", err);
           });
         });
       });
@@ -112,28 +112,25 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
   const joinGroup = (group: PatientGroupProps) => {
     instance.acquireTokenSilent(request).then((res: any) => {
       if (group.id != null && caregiver?.id != null) {
-        caregiverJoinGroup(res.accessToken, group.id, caregiver.id).then((response) => {
-          if (!response.error) {
-            fetchCaregiverPatientGroups(caregiver.id);
-            fetchPatientGroups();
-          }
-        }).catch((err) => {
-          console.error("Error occured while joining patient group", err);
-        });
+        joinGroupRequest(res.accessToken, group.id, caregiver.id);
       }
     }).catch((e: any) => {
       instance.acquireTokenPopup(request).then((res: any) => {
         if (group.id != null && caregiver?.id != null) {
-          caregiverJoinGroup(res.accessToken, group.id, caregiver.id).then((response) => {
-            if (group.id != null && caregiver?.id != null) {
-              fetchCaregiverPatientGroups(caregiver.id);
-              fetchPatientGroups();
-            }
-          }).catch((err) => {
-            console.error("Error occured while joining patient group", err);
-          });
+          joinGroupRequest(res.accessToken, group.id, caregiver.id);
         }
       });
+    });
+  }
+
+  const joinGroupRequest = (accessToken: string, groupId: string, caregiverId: string) => {
+    caregiverJoinGroup(accessToken, groupId, caregiverId).then((response) => {
+      if (!response.error) {
+        fetchCaregiverPatientGroups(caregiverId);
+        fetchPatientGroups();
+      }
+    }).catch((err) => {
+      console.error("Error occurred while joining patient group", err);
     });
   }
 
@@ -147,7 +144,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
                 fetchPatientGroups();
               }
             }).catch((err) => {
-              console.error("Error occured while leaving patient group", err);
+              console.error("Error occurred while leaving patient group", err);
             });
           }
         }).catch((e: any) => {
@@ -159,7 +156,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
                   fetchPatientGroups();
                 }
               }).catch((err) => {
-                console.error("Error occured while leaving patient group", err);
+                console.error("Error occurred while leaving patient group", err);
               });
             }
           });

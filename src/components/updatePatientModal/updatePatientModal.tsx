@@ -73,7 +73,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
             // updatePatientGroupTable(true)
           }
         }).catch((err) => {
-          console.error('Error occured while updating patient', err)
+          console.error('Error occurred while updating patient', err)
           setError(true)
         })
       }).catch((error) => {
@@ -86,7 +86,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
               setError(false)
             }
           }).catch((err) => {
-            console.error('Error occured while updating patient', err)
+            console.error('Error occurred while updating patient', err)
             setError(true)
             // updatePatientGroupTable(true)
           })
@@ -98,7 +98,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
 
     return (
       <div>
-        <Button variant="success" onClick={handleShow}>
+        <Button style={{display: "flex", marginLeft: "auto", width: "36px", justifyContent: "center"}} variant="success" onClick={handleShow}>
             <img alt="editicon" src={EditIcon}></img>
         </Button>
         <Modal show={show} onHide={handleClose}>

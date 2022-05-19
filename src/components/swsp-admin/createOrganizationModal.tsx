@@ -57,7 +57,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
             updateOrganizationTable(true);
           }
         }).catch((err) => {
-          console.error('Error occured while fetching organizations', err)
+          console.error('Error occurred while fetching organizations', err)
           setError(true)
         })
       }).catch((error) => {
@@ -73,7 +73,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
               updateOrganizationTable(true);
             }
           }).catch((err) => {
-            console.error('Error occured while fetching organizations', err)
+            console.error('Error occurred while fetching organizations', err)
             setError(true)
           })
         });

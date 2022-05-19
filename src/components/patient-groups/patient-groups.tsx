@@ -67,7 +67,7 @@ const PatientGroups: React.FC = () => {
         removePatientGroup(res.accessToken, id).then(() => {
           fetchPatientGroups()
         }).catch((err) => {
-          console.error('Error occured while removing patient-group', err)
+          console.error('Error occurred while removing patient-group', err)
           setError(true)
         })
       }).catch((e: any) => {
@@ -75,7 +75,7 @@ const PatientGroups: React.FC = () => {
           removePatientGroup(res.accessToken, id).then(() => {
             fetchPatientGroups()
           }).catch((err) => {
-            console.error('Error occured while removing patient-group', err)
+            console.error('Error occurred while removing patient-group', err)
             setError(true)
           })
         });
@@ -91,10 +91,10 @@ const PatientGroups: React.FC = () => {
           } else {
             const foundPatientGroups = response.response
             setError(false)
-            setPatientGroups(foundPatientGroups)
+            setPatientGroups([...foundPatientGroups])
           }
         }).catch((err) => {
-          console.error('Error occured while fetching patient groups', err)
+          console.error('Error occurred while fetching patient groups', err)
           setError(true)
         })
       }).catch((e: any) => {
@@ -105,10 +105,10 @@ const PatientGroups: React.FC = () => {
             } else {
               const foundPatientGroups = response.response
               setError(false)
-              setPatientGroups(foundPatientGroups)
+              setPatientGroups([...foundPatientGroups])
             }
           }).catch((err) => {
-            console.error('Error occured while fetching patient groups', err)
+            console.error('Error occurred while fetching patient groups', err)
             setError(true)
           })
         });
@@ -129,7 +129,7 @@ const PatientGroups: React.FC = () => {
             </div>
             <div className={styles.Table}>
               {patientGroups && patientGroups.length ?(
-                <BasicPgTable onEdit={onEdit} onRemove={onRemove} patientGroups={patientGroups}/>
+                <BasicPgTable onEdit={onEdit} onRemove={onRemove} patientGroups={patientGroups} update={fetchPatientGroups}/>
               ) : (
                 <div>
                   <Alert variant="primary">No patient-groups found</Alert>

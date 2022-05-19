@@ -38,7 +38,7 @@ const SWSPApp: React.FC = () => {
           setOrganizations([...foundOrganizations])
         }
       }).catch((err) => {
-        console.error('Error occured while fetching organizations', err)
+        console.error('Error occurred while fetching organizations', err)
         setError(true)
       })
     }).catch((e: any) => {
@@ -52,7 +52,7 @@ const SWSPApp: React.FC = () => {
             setOrganizations([...foundOrganizations])
           }
         }).catch((err) => {
-          console.error('Error occured while fetching organizations', err)
+          console.error('Error occurred while fetching organizations', err)
           setError(true)
         })
       });
@@ -65,7 +65,7 @@ const SWSPApp: React.FC = () => {
           fetchOrganizations()
         }
       ).catch((err) => {
-        console.error('Error occured while removing organization', err)
+        console.error('Error occurred while removing organization', err)
         setError(true)
       })
     }).catch((e: any) => {
@@ -73,7 +73,7 @@ const SWSPApp: React.FC = () => {
         removeOrganization(res.accessToken, id).then(() => {
           fetchOrganizations()
         }).catch((err) => {
-          console.error('Error occured while removing organization', err)
+          console.error('Error occurred while removing organization', err)
           setError(true)
         })
       });

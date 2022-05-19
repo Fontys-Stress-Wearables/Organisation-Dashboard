@@ -41,6 +41,7 @@ export type CaregiverProps = {
     isGuest: boolean,
     role: string,
     patientGroups: PatientGroupProps[]
+    azureId: string
 }
 
 export type CaregiverGraphProps = {
@@ -71,6 +72,10 @@ export type OrganizationProps = {
 
 interface OrganizationsPropsResponse extends BaseApiResponse {
     response: OrganizationProps[]
+}
+
+interface CaregiversPropsResponse extends BaseApiResponse {
+    response: CaregiverProps[]
 }
 
 interface PatientsPropsResponse extends BaseApiResponse {
@@ -173,6 +178,10 @@ export const getCaregiverPatientGroups = (accessToken: string, caregiverId: stri
     return callApi({token: accessToken, path: `patient-groups/caregivers/${caregiverId}`, method: 'GET'})
 }
 
+export const getPatientGroupCaregivers = (accessToken: string, patientGroupId: string) : Promise<CaregiversPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/${patientGroupId}/caregivers`, method: 'GET'})
+}
+
 export const caregiverLeaveGroup = (accessToken: string, groupId: string, caregiverId: string) => {
     return callApi({token: accessToken, path: `patient-groups/${groupId}/caregiver`, method: 'DELETE', body: `"${caregiverId}"`})
 }
@@ -183,6 +192,10 @@ export const caregiverJoinGroup = (accessToken: string, groupId: string, caregiv
 
 export const getPatientPatientGroups = (accessToken: string, patientId: string) : Promise<PatientGroupsPropsResponse> =>{
     return callApi({token: accessToken, path: `patient-groups/patients/${patientId}`, method: 'GET'})
+}
+
+export const getPatientGroupPatients = (accessToken: string, patientGroupId: string) : Promise<PatientsPropsResponse> =>{
+    return callApi({token: accessToken, path: `patient-groups/${patientGroupId}/patients`, method: 'GET'})
 }
 
 export const patientLeaveGroup = (accessToken: string, groupId: string, patientId: string) => {

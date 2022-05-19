@@ -68,7 +68,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
           setPatientGroups([...foundPatientGroups]);
         }
       }).catch((err) => {
-        console.error("Error occured while fetching patient groups", err);
+        console.error("Error occurred while fetching patient groups", err);
       });
     }).catch((e: any) => {
       instance.acquireTokenPopup(request).then((res: any) => {
@@ -78,7 +78,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
             setPatientGroups([...foundPatientGroups]);
           }
         }).catch((err) => {
-          console.error("Error occured while fetching patient groups", err);
+          console.error("Error occurred while fetching patient groups", err);
         });
       });
     });
@@ -92,7 +92,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
             setPatientsGroups(foundPatientGroups);
           }
         }).catch((err) => {
-          console.error("Error occured while fetching patient groups", err);
+          console.error("Error occurred while fetching patient groups", err);
         });
       }).catch((e: any) => {
         instance.acquireTokenPopup(request).then((res: any) => {
@@ -102,7 +102,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
               setPatientsGroups(foundPatientGroups);
             }
           }).catch((err) => {
-            console.error("Error occured while fetching patient groups", err);
+            console.error("Error occurred while fetching patient groups", err);
           });
         });
       });
@@ -117,7 +117,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
             fetchPatientGroups();
           }
         }).catch((err) => {
-          console.error("Error occured while joining patient group", err);
+          console.error("Error occurred while joining patient group", err);
         });
       }
     }).catch((e: any) => {
@@ -129,7 +129,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
               fetchPatientGroups();
             }
           }).catch((err) => {
-            console.error("Error occured while joining patient group", err);
+            console.error("Error occurred while joining patient group", err);
           });
         }
       });
@@ -146,7 +146,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
                 fetchPatientGroups();
               }
             }).catch((err) => {
-              console.error("Error occured while leaving patient group", err);
+              console.error("Error occurred while leaving patient group", err);
             });
           }
         }).catch((e: any) => {
@@ -158,7 +158,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
                   fetchPatientGroups();
                 }
               }).catch((err) => {
-                console.error("Error occured while leaving patient group", err);
+                console.error("Error occurred while leaving patient group", err);
               });
             }
           });
