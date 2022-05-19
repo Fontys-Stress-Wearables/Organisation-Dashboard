@@ -45,6 +45,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
   
 
     function handleSubmit(){
+
       const handlePatient: PatientProps = {
         firstName: firstname,
         lastName: lastname,
@@ -54,7 +55,6 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
       setPatient(handlePatient);
 
       instance.acquireTokenSilent(request).then((res: any) => {
-        console.log(patient);
         createPatient(res.accessToken, handlePatient).then((response) => {
           if(response.error){
             setError(true)
@@ -134,7 +134,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
-            <Button variant="primary" onClick={() => handleSubmit}>
+            <Button variant="primary" onClick={() => handleSubmit()}>
               Submit Patient
             </Button>
           </Modal.Footer>
