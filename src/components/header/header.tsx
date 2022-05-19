@@ -4,7 +4,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import { useIsAuthenticated } from "@azure/msal-react";
-import { PUBLIC_URL } from '../../utilities/environment'
 
 function handleLogin(instance: any) {
   instance.loginPopup(loginRequest).catch(
@@ -43,10 +42,10 @@ const Header = () => {
       <Container fluid>
         <Navbar.Brand href="#home">SWSP Organization Management</Navbar.Brand>
         <Nav className="me-auto">
-          <Nav.Link href={PUBLIC_URL + 'home'}>Home</Nav.Link>
-          <Nav.Link href={PUBLIC_URL + 'patients'}>Patients</Nav.Link>
-          <Nav.Link href={PUBLIC_URL + 'caregivers'}>Caregivers</Nav.Link>
-          <Nav.Link href={PUBLIC_URL + 'patient-groups'}>Patient-groups</Nav.Link>
+          <Nav.Link href="home">Home</Nav.Link>
+          <Nav.Link href="patients">Patients</Nav.Link>
+          <Nav.Link href="caregivers">Caregivers</Nav.Link>
+          <Nav.Link href="patient-groups">Patient-groups</Nav.Link>
         </Nav>
         <Nav>
           {
