@@ -66,7 +66,7 @@ const Patients: React.FC = () => {
             </div>
             <div className={styles.Table}>
               {patients && patients.length ?(
-             <BasicTable patients={patients}/>
+             <BasicTable patients={patients} update={fetchPatients}/>
               ) : (
                 <div>
                   <Alert variant="primary">No patients found</Alert>

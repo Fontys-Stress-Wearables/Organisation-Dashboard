@@ -12,9 +12,10 @@ import { UpdatePatientModal } from '../updatePatientModal';
 
 interface TablePropsArray {
   patients: PatientProps[]
+  update: () => void
 }
 
-const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
+const BasicTable: React.FC<TablePropsArray> = ({patients, update}) => {
   const [selectedPatient, setSelectedPatient] = useState<PatientProps>();
   const [showPatientGroups , setShowPatientGroups] = useState(false);
 
@@ -75,7 +76,7 @@ const BasicTable: React.FC<TablePropsArray> = ({patients}) => {
               <td>{patient.firstName}</td>
               <td>{patient.lastName}</td>
               <td>{formatDate(patient.birthdate)}</td>
-              <td><UpdatePatientModal patient={patient}/></td>
+              <td><UpdatePatientModal patient={patient} update={update}/></td>
               <td><Button onClick={() => openPatientGroups(patient)} variant="success" style={{display: "flex", width: "36px", justifyContent: "center"}}><img alt="groupicon" style={{margin: "auto"}} src={GroupIcon}></img></Button></td>
             </tr>
             ))}

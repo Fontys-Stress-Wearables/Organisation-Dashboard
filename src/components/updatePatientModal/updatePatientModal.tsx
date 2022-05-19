@@ -8,9 +8,10 @@ import Form from "react-bootstrap/esm/Form";
 
 interface IUpdatePatientModal {
     patient: PatientProps
+  update: () => void
 }
 
-const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
+const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => {
     const [error, setError] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -71,6 +72,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
             const resPatient = response.response
             setError(false)
             // updatePatientGroupTable(true)
+            update()
           }
         }).catch((err) => {
           console.error('Error occurred while updating patient', err)
@@ -89,6 +91,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient}) => {
             console.error('Error occurred while updating patient', err)
             setError(true)
             // updatePatientGroupTable(true)
+            update()
           })
         });
       });  
