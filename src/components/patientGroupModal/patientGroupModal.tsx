@@ -3,17 +3,16 @@ import Modal from "react-bootstrap/esm/Modal";
 import {
   CaregiverGraphProps,
   caregiverLeaveGroup,
-  CaregiverProps,
   getPatientGroupCaregivers, getPatientGroupPatients,
   PatientGroupProps, patientLeaveGroup, PatientProps
 } from "../../utilities/api/calls";
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import SearchIcon from "../caregivers/search_white_48dp.svg";
 import Table from "react-bootstrap/Table";
 import { useEffect, useState } from "react";
 import { useMsal } from "@azure/msal-react";
-import AddIcon from "./group_add_white_24dp.svg";
 import RemoveIcon from "./person_remove_white_24dp.svg";
 import { callMsGraph } from "../../utilities/api/graph";
 
@@ -59,7 +58,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({ patientGroup, show
   }, [patientGroup]);
 
   const request = {
-    scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+    scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
     account: accounts[0]
   };
 

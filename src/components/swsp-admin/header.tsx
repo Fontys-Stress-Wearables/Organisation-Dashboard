@@ -5,6 +5,7 @@ import { useMsal } from "@azure/msal-react";
 import { loginRequest } from "../../authConfig";
 import { useIsAuthenticated } from "@azure/msal-react";
 import { callMsGraph } from "../../utilities/api/graph";
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 function handleLogin(instance: any) {
   instance.loginPopup(loginRequest).catch(
@@ -24,7 +25,7 @@ const SWSPHeader = () => {
 
   const requestToken = () => {
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0],
     };
 

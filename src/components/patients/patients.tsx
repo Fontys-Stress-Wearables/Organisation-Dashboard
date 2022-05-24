@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { getPatients, PatientProps } from "../../utilities/api/calls";
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 import styles from "./patients.module.scss";
 import {CreatePatientModal} from "../createPatientModal";
 import { useMsal } from "@azure/msal-react";
@@ -17,7 +18,7 @@ const Patients: React.FC = () => {
     }
 
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
   

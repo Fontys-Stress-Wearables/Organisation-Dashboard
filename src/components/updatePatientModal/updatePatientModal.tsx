@@ -2,8 +2,9 @@ import { useMsal } from "@azure/msal-react";
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
-import EditIcon from "./edit.svg"
-import { PatientGroupProps, PatientProps, updatePatient, updatePatientGroup } from "../../utilities/api/calls";
+import EditIcon from "./edit.svg";
+import { PatientGroupProps, PatientProps, updatePatient, updatePatientGroup } from "../../utilities/api/calls"; 
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment';
 import Form from "react-bootstrap/esm/Form";
 
 interface IUpdatePatientModal {
@@ -18,7 +19,7 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => 
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 
@@ -49,10 +50,6 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => 
         setDate(patient.birthdate)
         setShow(true);
     }
-
-    // const handleUpdate = useCallback(event => {
-    //     updatePatientGroupTable(!update)
-    // }, [updatePatientGroupTable])
     
     function handleSubmit(){
       
@@ -71,7 +68,6 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => 
           } else {
             const resPatient = response.response
             setError(false)
-            // updatePatientGroupTable(true)
             update()
           }
         }).catch((err) => {
@@ -90,7 +86,6 @@ const UpdatePatientModal:React.FC<IUpdatePatientModal> = ({patient, update}) => 
           }).catch((err) => {
             console.error('Error occurred while updating patient', err)
             setError(true)
-            // updatePatientGroupTable(true)
             update()
           })
         });

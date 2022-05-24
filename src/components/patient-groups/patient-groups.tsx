@@ -6,22 +6,24 @@ import Alert from "react-bootstrap/esm/Alert";
 import BasicPgTable from "./table";
 import { CreatePatientGroupModal } from "../createPatientGroupModal";
 import { callMsGraph } from "../../utilities/api/graph";
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 const PatientGroups: React.FC = () => {
-    const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([])
-    const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([])
+    const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([]);
+    const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([]);
     const [error, setError] = useState(false);
     const [updateTable, setUpdateTable] = useState(false);
     const { instance, accounts } = useMsal();
     const [edit, setEdit] = useState(false);
-    const [patientGroupToEdit, setPatientGroupToEdit] = useState<PatientGroupProps>()
+    const [patientGroupToEdit, setPatientGroupToEdit] = useState<PatientGroupProps>();
+    
 
     const updatePatientGroupTable = (update: boolean):void => {
       fetchPatientGroups()
     };
   
     const request = {
-        scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+        scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
         account: accounts[0]
     };
 

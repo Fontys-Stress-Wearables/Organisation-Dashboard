@@ -1,9 +1,7 @@
 import { useState } from "react";
 import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
-import AddIcon from "./person_add_white.svg"
-import { CaregiverGraphProps, OrganizationProps } from "../../utilities/api/calls";
+import { CaregiverGraphProps } from "../../utilities/api/calls";
 
 interface CaregiverDetailsProps {
   show: boolean
@@ -12,7 +10,6 @@ interface CaregiverDetailsProps {
 }
 
 const CaregiverDetailsModal: React.FC<CaregiverDetailsProps> = ({caregiver,show,closeModal})  => {
-  console.log(caregiver);
   return (
       <>
         <Modal size="xl" show={show} onHide={closeModal} aria-labelledby="contained-modal-title-vcenter" centered>

@@ -1,12 +1,17 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
 import { createPatient, PatientProps } from "../../utilities/api/calls";
 import AddIcon from "./person_add_white.svg";
 import { useMsal } from "@azure/msal-react";
-import { IModalProps } from "../createCaregiverModal/createCaregiverModal";
+import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
+
+export interface IModalProps {
+  update: boolean,
+  updateTable: (arg: boolean) => void
+}
 
 const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     const [error, setError] = useState(false);
@@ -17,7 +22,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 
@@ -38,11 +43,6 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
       setDate(event.target.value);
     };
-
-    const handleUpdate = useCallback(event => {
-      updateTable(!update)
-    }, [updateTable])
-  
 
     function handleSubmit(){
 
