@@ -18,7 +18,7 @@ export const AppGuard = (props) => {
 
         const currentAccount = instance.getActiveAccount()
 
-        if (currentAccount && currentAccount.tenantId == "acdb33d3-0c54-4037-804d-768f633cbb6c") {
+        if (currentAccount && currentAccount.tenantId == process.env.REACT_APP_TENANT_ID) {
             setIsSwsp(true);
         }
         else if (currentAccount && currentAccount.idTokenClaims['roles']) {

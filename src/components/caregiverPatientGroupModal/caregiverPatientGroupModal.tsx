@@ -6,7 +6,7 @@ import {
   getPatientGroups,
   PatientGroupProps,
 } from "../../utilities/api/calls";
-import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import SearchIcon from "../caregivers/search_white_48dp.svg";
@@ -58,7 +58,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({ caregiver
   }, [caregiver]);
 
   const request = {
-    scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
+    scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
     account: accounts[0]
   };
 

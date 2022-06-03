@@ -6,7 +6,7 @@ import Alert from "react-bootstrap/esm/Alert";
 import BasicPgTable from "./table";
 import { CreatePatientGroupModal } from "../createPatientGroupModal";
 import { callMsGraph } from "../../utilities/api/graph";
-import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 const PatientGroups: React.FC = () => {
     const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([]);
@@ -23,7 +23,7 @@ const PatientGroups: React.FC = () => {
     };
   
     const request = {
-        scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
+        scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
         account: accounts[0]
     };
 

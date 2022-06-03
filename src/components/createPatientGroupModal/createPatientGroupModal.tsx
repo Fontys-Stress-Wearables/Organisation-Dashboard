@@ -5,7 +5,7 @@ import { useMsal } from "@azure/msal-react";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/esm/Form";
 import Button from "react-bootstrap/esm/Button";
-import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 export interface IPatientGroupModalProps{
   update: boolean,
@@ -21,7 +21,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({ update, up
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
+      scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 

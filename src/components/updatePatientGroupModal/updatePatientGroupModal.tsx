@@ -4,7 +4,7 @@ import Button from "react-bootstrap/esm/Button";
 import Modal from "react-bootstrap/esm/Modal";
 import EditIcon from "./edit.svg"
 import { PatientGroupProps, updatePatientGroup } from "../../utilities/api/calls";
-import { REACT_APP_AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 import Form from "react-bootstrap/esm/Form";
 
 interface IUpdatePatientGroupModal {
@@ -19,7 +19,7 @@ const UpdatePatientGroupModal:React.FC<IUpdatePatientGroupModal> = ({patientGrou
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: [REACT_APP_AUTH_REQUEST_SCOPE_URL, "User.Read"],
+      scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 
