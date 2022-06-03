@@ -2,6 +2,7 @@ import { useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
 import SWSPApp from "./swspAdminApp";
 import App from "./App";
+import { TENANT_ID } from "./utilities/environment";
 
 export const AppGuard = (props) => {
 
@@ -18,7 +19,7 @@ export const AppGuard = (props) => {
 
         const currentAccount = instance.getActiveAccount()
 
-        if (currentAccount && currentAccount.tenantId == "acdb33d3-0c54-4037-804d-768f633cbb6c") {
+        if (currentAccount && currentAccount.tenantId == TENANT_ID) {
             setIsSwsp(true);
         }
         else if (currentAccount && currentAccount.idTokenClaims['roles']) {

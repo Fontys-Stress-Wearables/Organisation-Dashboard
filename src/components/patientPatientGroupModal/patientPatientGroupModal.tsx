@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useMsal } from "@azure/msal-react";
 import AddIcon from "./group_add_white_24dp.svg";
 import RemoveIcon from "./group_remove_white_24dp.svg";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 interface PatientDetailsProps {
   closeModal: () => void;
@@ -56,7 +57,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({ patient, show
   }, [patient]);
 
   const request = {
-    scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+    scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
     account: accounts[0]
   };
 

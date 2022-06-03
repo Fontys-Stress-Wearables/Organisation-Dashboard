@@ -7,15 +7,17 @@ import { useMsal } from "@azure/msal-react";
 import { useEffect, useState } from "react";
 import { getOrganizations, OrganizationProps, removeOrganization } from './utilities/api/calls';
 import CreateOrganizationModal from './components/swsp-admin/createOrganizationModal';
+import { AUTH_REQUEST_SCOPE_URL } from "./utilities/environment";
 
 const SWSPApp: React.FC = () => {
   const [error, setError] = useState(false);
   const [updateTable, setUpdateTable] = useState(false);
   const { instance, accounts } = useMsal();
   const [organizations, setOrganizations] = useState<OrganizationProps[]>([]);
+  
 
   const request = {
-    scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+    scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
     account: accounts[0]
   };
 

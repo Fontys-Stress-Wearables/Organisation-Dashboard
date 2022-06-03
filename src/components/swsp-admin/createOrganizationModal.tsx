@@ -3,6 +3,7 @@ import Button from "react-bootstrap/esm/Button";
 import Form from "react-bootstrap/esm/Form";
 import Modal from "react-bootstrap/esm/Modal";
 import { createOrganization, OrganizationProps } from "../../utilities/api/calls";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 import AddIcon from "./home-plus.svg";
 import { useMsal } from "@azure/msal-react";
 
@@ -20,7 +21,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 

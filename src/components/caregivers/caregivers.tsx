@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react";
 import Alert from "react-bootstrap/esm/Alert";
 import { CaregiverGraphProps } from "../../utilities/api/calls";
-import { Searchbar } from "../searchbar";
 import styles from "./caregivers.module.scss"
 import { callMsGraph } from "../../utilities/api/graph";
 import CaregiverTable from "./table";
 import { useMsal } from "@azure/msal-react";
-import { CreateCaregiverModal } from "../createCaregiverModal";
 
 const Caregivers = () => {
   const { instance, accounts } = useMsal();
   const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([]);
-  const [updateTable, setUpdateTable] = useState(false);
 
-  const updateCaregiverTable = (update: boolean):void => {
-    // setUpdateTable(true)
-    requestCaregivers()
-  }
 
   useEffect(() => {
     requestCaregivers()
-  }, [updateTable]);
+  }, []);
 
   const requestCaregivers = () => {
     const graphRequest = {

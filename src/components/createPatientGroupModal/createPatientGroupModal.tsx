@@ -1,16 +1,16 @@
-import React, { useCallback, useState } from "react";
-import { CaregiverGraphProps, createPatientGroup, PatientGroupProps } from "../../utilities/api/calls";
+import React, { useState } from "react";
+import { createPatientGroup, PatientGroupProps } from "../../utilities/api/calls";
 import AddIcon from "./group_add.svg";
 import { useMsal } from "@azure/msal-react";
 import Modal from "react-bootstrap/esm/Modal";
 import Form from "react-bootstrap/esm/Form";
 import Button from "react-bootstrap/esm/Button";
+import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
 
 export interface IPatientGroupModalProps{
   update: boolean,
   updatePatientGroupTable: (arg: boolean) => void
 }
-
 
 const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({ update, updatePatientGroupTable}) => {
     const [error, setError] = useState(false);
@@ -21,7 +21,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({ update, up
     const { instance, accounts } = useMsal();
 
     const request = {
-      scopes: ["api://5720ed34-04b7-4397-9239-9eb8581ce2b7/access_as_caregiver", "User.Read"],
+      scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
       account: accounts[0]
     };
 
@@ -36,13 +36,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({ update, up
     const handleChangeDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
       setDescription(event.target.value);
     };
-
-    const [assignedCaregivers, setAssignedCaregivers] = useState<CaregiverGraphProps>();
-
-    const handleUpdate = useCallback(event => {
-      updatePatientGroupTable(!update)
-    }, [updatePatientGroupTable])
-  
+    
     function handleSubmit(){
       
       const handlePatientGroup: PatientGroupProps = {
