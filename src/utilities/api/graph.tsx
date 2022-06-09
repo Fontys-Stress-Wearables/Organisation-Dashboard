@@ -1,5 +1,3 @@
-import { AUTH_CLIENT_ID, ROLE_ID } from "../environment";
-
 export async function callMsGraph(accessToken: string) {
   const headers = new Headers();
   const bearer = `Bearer ${accessToken}`;
@@ -12,7 +10,7 @@ export async function callMsGraph(accessToken: string) {
     headers: headers
   };
 
-  var servicePrincipalRequest = await fetch(`https://graph.microsoft.com/v1.0/servicePrincipals?$count=true&$search="appId:${AUTH_CLIENT_ID}"&$select=id`, options);
+  var servicePrincipalRequest = await fetch(`https://graph.microsoft.com/v1.0/servicePrincipals?$count=true&$search="appId:5720ed34-04b7-4397-9239-9eb8581ce2b7"&$select=id`, options);
   var servicePrincipal = (await servicePrincipalRequest.json()).value[0].id;
 
   var rolesResponse = await fetch(`https://graph.microsoft.com/v1.0/servicePrincipals/${servicePrincipal}/appRoleAssignedTo?$select=appRoleId,principalId`, options)
@@ -22,7 +20,7 @@ export async function callMsGraph(accessToken: string) {
   }, {});
 
   var userResponse = await fetch("https://graph.microsoft.com/v1.0/users", options)
-  var users = (await userResponse.json()).value.filter((z: any) => roles[z.id] === ROLE_ID)
+  var users = (await userResponse.json()).value.filter((z: any) => roles[z.id] === "730e52c5-2c18-4a73-a690-c5d3307a4e84")
 
   return users;
 }
