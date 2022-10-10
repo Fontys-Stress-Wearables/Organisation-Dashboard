@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import Table from 'react-bootstrap/Table'
-import { PatientProps } from '../../utilities/api/calls'
 import Button from 'react-bootstrap/esm/Button'
 import FormControl from 'react-bootstrap/esm/FormControl'
 import InputGroup from 'react-bootstrap/esm/InputGroup'
+import { PatientProps } from '../../utilities/api/calls'
 import SearchIcon from './search_white_48dp.svg'
 import GroupIcon from './groups_white_24dp.svg'
 import styles from '../caregivers/caregivers.module.scss'
@@ -20,7 +20,7 @@ const BasicTable: React.FC<TablePropsArray> = ({ patients, update }) => {
   const [showPatientGroups, setShowPatientGroups] = useState(false)
 
   const formatDate = (birthdate: string) => {
-    var date = new Date(birthdate)
+    const date = new Date(birthdate)
     return date.toLocaleDateString()
   }
 

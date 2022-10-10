@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Alert } from 'react-bootstrap'
+import { useMsal } from '@azure/msal-react'
 import { getPatients, PatientProps } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 import styles from './patients.module.scss'
 import { CreatePatientModal } from '../createPatientModal'
-import { useMsal } from '@azure/msal-react'
 import BasicTable from '../table/table'
 
 const Patients: React.FC = () => {

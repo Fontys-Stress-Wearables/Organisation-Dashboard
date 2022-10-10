@@ -1,8 +1,6 @@
-import Button from 'react-bootstrap/esm/Button'
-import Form from 'react-bootstrap/esm/Form'
 import styles from './loading.module.scss'
 
-const Loading = () => {
+function Loading() {
   return <div className={styles.container}></div>
 }
 

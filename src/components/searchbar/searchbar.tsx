@@ -8,13 +8,13 @@ interface Searchbar {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const Searchbar = (props: Searchbar) => {
+function Searchbar(props: Searchbar) {
   return (
     <div>
       <InputGroup className="mb-3">
         <FormControl aria-label="Search" aria-describedby="basic-addon1" />
         <Button>
-          <img src={SearchIcon}></img>
+          <img src={SearchIcon} alt="search"></img>
         </Button>
       </InputGroup>
     </div>

@@ -2,13 +2,13 @@ import { useMsal } from '@azure/msal-react'
 import { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
+import Form from 'react-bootstrap/esm/Form'
 import EditIcon from './edit.svg'
 import {
   PatientGroupProps,
   updatePatientGroup,
 } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
-import Form from 'react-bootstrap/esm/Form'
 
 interface IUpdatePatientGroupModal {
   patientGroup: PatientGroupProps
@@ -61,8 +61,8 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
   function handleSubmit() {
     const handlePatientGroup: PatientGroupProps = {
       id: patientGroup.id,
-      groupName: groupName,
-      description: description,
+      groupName,
+      description,
     }
 
     instance

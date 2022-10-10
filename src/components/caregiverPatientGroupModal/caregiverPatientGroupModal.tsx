@@ -1,5 +1,12 @@
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import Table from 'react-bootstrap/Table'
+import { useEffect, useState } from 'react'
+import { useMsal } from '@azure/msal-react'
+import SearchIcon from '../caregivers/search_white_48dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 import {
   CaregiverGraphProps,
   caregiverJoinGroup,
@@ -8,13 +15,6 @@ import {
   getPatientGroups,
   PatientGroupProps,
 } from '../../utilities/api/calls'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
-import Table from 'react-bootstrap/Table'
-import { useEffect, useState } from 'react'
-import { useMsal } from '@azure/msal-react'
 import AddIcon from './group_add_white_24dp.svg'
 import RemoveIcon from './group_remove_white_24dp.svg'
 
@@ -55,7 +55,7 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({
       ),
     )
 
-    var otherGroups = patientGroups
+    const otherGroups = patientGroups
       .filter((p) => p.groupName.toLowerCase().includes(search.toLowerCase()))
       .filter((p) => caregiversGroups.find((c) => c.id === p.id) === undefined)
 
@@ -215,100 +215,96 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   }
 
   return (
-    <>
-      <Modal
-        size="xl"
-        show={show}
-        onHide={closeModal}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>
-            {caregiver && caregiver.givenName} {caregiver && caregiver.surname}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <InputGroup className="mb-3">
-              <FormControl
-                aria-label="Search"
-                aria-describedby="basic-addon1"
-                onChange={handleSearch}
-              />
-              <Button>
-                <img src={SearchIcon}></img>
-              </Button>
-            </InputGroup>
-          </div>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>{caregiver?.givenName}'s Groups</th>
-                <th style={{ width: '10px' }}></th>
+    <Modal
+      size="xl"
+      show={show}
+      onHide={closeModal}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>
+          {caregiver && caregiver.givenName} {caregiver && caregiver.surname}
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          <InputGroup className="mb-3">
+            <FormControl
+              aria-label="Search"
+              aria-describedby="basic-addon1"
+              onChange={handleSearch}
+            />
+            <Button>
+              <img src={SearchIcon}></img>
+            </Button>
+          </InputGroup>
+        </div>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>{caregiver?.givenName}'s Groups</th>
+              <th style={{ width: '10px' }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchCaregiversResults.map((patientGroup: PatientGroupProps) => (
+              <tr key={patientGroup.id}>
+                <td>{patientGroup.groupName}</td>
+                <td style={{ display: 'flex' }}>
+                  <Button
+                    onClick={() => leaveGroup(patientGroup)}
+                    variant="danger"
+                    style={{
+                      display: 'flex',
+                      marginLeft: 'auto',
+                      width: '36px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {searchCaregiversResults.map(
-                (patientGroup: PatientGroupProps) => (
-                  <tr key={patientGroup.id}>
-                    <td>{patientGroup.groupName}</td>
-                    <td style={{ display: 'flex' }}>
-                      <Button
-                        onClick={() => leaveGroup(patientGroup)}
-                        variant="danger"
-                        style={{
-                          display: 'flex',
-                          marginLeft: 'auto',
-                          width: '36px',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
-                      </Button>
-                    </td>
-                  </tr>
-                ),
-              )}
-            </tbody>
-          </Table>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Other Groups</th>
-                <th style={{ width: '10px' }}></th>
+            ))}
+          </tbody>
+        </Table>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>Other Groups</th>
+              <th style={{ width: '10px' }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchAllResults.map((patientGroup: PatientGroupProps) => (
+              <tr key={patientGroup.id}>
+                <td>{patientGroup.groupName}</td>
+                <td style={{ display: 'flex' }}>
+                  <Button
+                    onClick={() => joinGroup(patientGroup)}
+                    variant="success"
+                    style={{
+                      display: 'flex',
+                      marginLeft: 'auto',
+                      width: '36px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img style={{ margin: 'auto' }} src={AddIcon}></img>
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {searchAllResults.map((patientGroup: PatientGroupProps) => (
-                <tr key={patientGroup.id}>
-                  <td>{patientGroup.groupName}</td>
-                  <td style={{ display: 'flex' }}>
-                    <Button
-                      onClick={() => joinGroup(patientGroup)}
-                      variant="success"
-                      style={{
-                        display: 'flex',
-                        marginLeft: 'auto',
-                        width: '36px',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img style={{ margin: 'auto' }} src={AddIcon}></img>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+            ))}
+          </tbody>
+        </Table>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={closeModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   )
 }
 

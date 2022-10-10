@@ -1,5 +1,12 @@
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
+import InputGroup from 'react-bootstrap/InputGroup'
+import FormControl from 'react-bootstrap/FormControl'
+import Table from 'react-bootstrap/Table'
+import { useEffect, useState } from 'react'
+import { useMsal } from '@azure/msal-react'
+import SearchIcon from '../caregivers/search_white_48dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 import {
   CaregiverGraphProps,
   caregiverLeaveGroup,
@@ -9,13 +16,6 @@ import {
   patientLeaveGroup,
   PatientProps,
 } from '../../utilities/api/calls'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
-import InputGroup from 'react-bootstrap/InputGroup'
-import FormControl from 'react-bootstrap/FormControl'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
-import Table from 'react-bootstrap/Table'
-import { useEffect, useState } from 'react'
-import { useMsal } from '@azure/msal-react'
 import RemoveIcon from './person_remove_white_24dp.svg'
 import { callMsGraph } from '../../utilities/api/graph'
 
@@ -93,8 +93,8 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
       })
   }
 
-  const requestCaregivers = (): Promise<CaregiverGraphProps[]> => {
-    return new Promise<CaregiverGraphProps[]>((resolve, reject) => {
+  const requestCaregivers = (): Promise<CaregiverGraphProps[]> =>
+    new Promise<CaregiverGraphProps[]>((resolve, reject) => {
       const graphRequest = {
         scopes: ['User.Read'],
         account: accounts[0],
@@ -117,7 +117,6 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
           })
         })
     })
-  }
 
   const fetchPatientGroupCaregiversRequest = (
     accessToken: string,
@@ -265,100 +264,98 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   }
 
   return (
-    <>
-      <Modal
-        size="xl"
-        show={show}
-        onHide={closeModal}
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>{patientGroup && patientGroup.groupName}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <InputGroup className="mb-3">
-              <FormControl
-                aria-label="Search"
-                aria-describedby="basic-addon1"
-                onChange={handleSearch}
-              />
-              <Button>
-                <img src={SearchIcon}></img>
-              </Button>
-            </InputGroup>
-          </div>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Caregivers</th>
-                <th style={{ width: '10px' }}></th>
+    <Modal
+      size="xl"
+      show={show}
+      onHide={closeModal}
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>{patientGroup && patientGroup.groupName}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <div>
+          <InputGroup className="mb-3">
+            <FormControl
+              aria-label="Search"
+              aria-describedby="basic-addon1"
+              onChange={handleSearch}
+            />
+            <Button>
+              <img src={SearchIcon}></img>
+            </Button>
+          </InputGroup>
+        </div>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>Caregivers</th>
+              <th style={{ width: '10px' }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchCaregiversResults.map((caregiver: CaregiverGraphProps) => (
+              <tr key={caregiver.id}>
+                <td>
+                  {caregiver.givenName} {caregiver.surname}
+                </td>
+                <td style={{ display: 'flex' }}>
+                  <Button
+                    onClick={() => removeCaregiver(caregiver, patientGroup!)}
+                    variant="danger"
+                    style={{
+                      display: 'flex',
+                      marginLeft: 'auto',
+                      width: '36px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {searchCaregiversResults.map((caregiver: CaregiverGraphProps) => (
-                <tr key={caregiver.id}>
-                  <td>
-                    {caregiver.givenName} {caregiver.surname}
-                  </td>
-                  <td style={{ display: 'flex' }}>
-                    <Button
-                      onClick={() => removeCaregiver(caregiver, patientGroup!)}
-                      variant="danger"
-                      style={{
-                        display: 'flex',
-                        marginLeft: 'auto',
-                        width: '36px',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Patients</th>
-                <th style={{ width: '10px' }}></th>
+            ))}
+          </tbody>
+        </Table>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>Patients</th>
+              <th style={{ width: '10px' }}></th>
+            </tr>
+          </thead>
+          <tbody>
+            {searchPatientResults.map((patient: PatientProps) => (
+              <tr key={patient.id}>
+                <td>
+                  {patient.firstName} {patient.lastName}
+                </td>
+                <td style={{ display: 'flex' }}>
+                  <Button
+                    onClick={() => removePatient(patient, patientGroup!)}
+                    variant="danger"
+                    style={{
+                      display: 'flex',
+                      marginLeft: 'auto',
+                      width: '36px',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {searchPatientResults.map((patient: PatientProps) => (
-                <tr key={patient.id}>
-                  <td>
-                    {patient.firstName} {patient.lastName}
-                  </td>
-                  <td style={{ display: 'flex' }}>
-                    <Button
-                      onClick={() => removePatient(patient, patientGroup!)}
-                      variant="danger"
-                      style={{
-                        display: 'flex',
-                        marginLeft: 'auto',
-                        width: '36px',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={closeModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+            ))}
+          </tbody>
+        </Table>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={closeModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   )
 }
 

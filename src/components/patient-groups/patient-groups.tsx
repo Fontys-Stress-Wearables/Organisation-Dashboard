@@ -1,5 +1,6 @@
 import { useMsal } from '@azure/msal-react'
 import { useEffect, useState } from 'react'
+import Alert from 'react-bootstrap/esm/Alert'
 import {
   CaregiverGraphProps,
   getPatientGroups,
@@ -7,7 +8,6 @@ import {
   removePatientGroup,
 } from '../../utilities/api/calls'
 import styles from './patient-groups.module.scss'
-import Alert from 'react-bootstrap/esm/Alert'
 import BasicPgTable from './table'
 import { CreatePatientGroupModal } from '../createPatientGroupModal'
 import { callMsGraph } from '../../utilities/api/graph'

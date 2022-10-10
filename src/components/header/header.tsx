@@ -1,9 +1,8 @@
 import Container from 'react-bootstrap/esm/Container'
 import Nav from 'react-bootstrap/esm/Nav'
 import Navbar from 'react-bootstrap/Navbar'
-import { useMsal } from '@azure/msal-react'
+import { useMsal, useIsAuthenticated } from '@azure/msal-react'
 import { loginRequest } from '../../authConfig'
-import { useIsAuthenticated } from '@azure/msal-react'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 function handleLogin(instance: any) {
@@ -14,7 +13,7 @@ function handleLogout(instance: any) {
   instance.logoutRedirect().catch(console.error)
 }
 
-const Header = () => {
+function Header() {
   const { instance, accounts } = useMsal()
   const isAuthenticated = useIsAuthenticated()
 

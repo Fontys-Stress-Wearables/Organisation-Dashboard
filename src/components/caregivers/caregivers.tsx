@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import Alert from 'react-bootstrap/esm/Alert'
+import { useMsal } from '@azure/msal-react'
 import { CaregiverGraphProps } from '../../utilities/api/calls'
 import styles from './caregivers.module.scss'
 import { callMsGraph } from '../../utilities/api/graph'
 import CaregiverTable from './table'
-import { useMsal } from '@azure/msal-react'
 
-const Caregivers = () => {
+function Caregivers() {
   const { instance, accounts } = useMsal()
   const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([])
 

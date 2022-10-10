@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import {
-  createPatientGroup,
-  PatientGroupProps,
-} from '../../utilities/api/calls'
-import AddIcon from './group_add.svg'
 import { useMsal } from '@azure/msal-react'
 import Modal from 'react-bootstrap/esm/Modal'
 import Form from 'react-bootstrap/esm/Form'
 import Button from 'react-bootstrap/esm/Button'
+import AddIcon from './group_add.svg'
+import {
+  createPatientGroup,
+  PatientGroupProps,
+} from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 export interface IPatientGroupModalProps {
@@ -49,8 +49,8 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
 
   function handleSubmit() {
     const handlePatientGroup: PatientGroupProps = {
-      groupName: groupName,
-      description: description,
+      groupName,
+      description,
     }
 
     setPatientGroup(handlePatientGroup)

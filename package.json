@@ -34,7 +34,7 @@
     "build": "dotenv -e .env.${REACT_APP_ENVIRONMENT} react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src/* --ignore-path .gitignore",
+    "lint": "eslint . --ignore-path .gitignore",
     "lint-fix": "npm run lint -- --fix",
     "format": "prettier --write ."
   },

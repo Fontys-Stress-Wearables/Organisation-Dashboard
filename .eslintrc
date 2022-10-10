@@ -11,7 +11,14 @@
   "plugins": ["@typescript-eslint"],
   "rules": {
     "import/extensions": [0, "never"],
+    "no-shadow": [0, "never"],
     "react/react-in-jsx-scope": "off",
-    "@typescript-eslint/no-explicit-any": ["off"]
+    "react/prop-types": "warn",
+    "react/no-unused-prop-types": "warn",
+    "react/no-unescaped-entities": "off",
+    "react/function-component-definition": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/alt-text": "warn"
   }
 }

@@ -2,6 +2,7 @@ import { useMsal } from '@azure/msal-react'
 import { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
+import Form from 'react-bootstrap/esm/Form'
 import EditIcon from './edit.svg'
 import {
   PatientGroupProps,
@@ -10,7 +11,6 @@ import {
   updatePatientGroup,
 } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
-import Form from 'react-bootstrap/esm/Form'
 
 interface IUpdatePatientModal {
   patient: PatientProps
