@@ -6,9 +6,9 @@ services:
       args:
         - REACT_APP_ENVIRONMENT=development
     volumes:
-      - "./conf/nginx.dev.conf:/etc/nginx/nginx.conf"
+      - './conf/nginx.dev.conf:/etc/nginx/nginx.conf'
     ports:
-      - "3030:80"
+      - '3030:80'
 
 networks:
   default:

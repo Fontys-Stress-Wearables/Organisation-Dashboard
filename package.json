@@ -35,7 +35,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint src/* --ignore-path .gitignore",
-    "lint-fix": "npm run lint -- --fix"
+    "lint-fix": "npm run lint -- --fix",
+    "format": "prettier --write \"{,!(node_modules)/**/}*.js\""
   },
   "prettier": "@imaginary-cloud/prettier-config",
   "browserslist": {

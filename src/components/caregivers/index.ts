@@ -1,1 +1,1 @@
-export {default as Caregivers} from './caregivers'
+export { default as Caregivers } from './caregivers'

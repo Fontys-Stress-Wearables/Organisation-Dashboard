@@ -1,1 +1,1 @@
-export {default as Patients} from './patients'
+export { default as Patients } from './patients'

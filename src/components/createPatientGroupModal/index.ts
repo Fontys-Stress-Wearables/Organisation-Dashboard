@@ -1,1 +1,1 @@
-export {default as CreatePatientGroupModal } from "./createPatientGroupModal"
+export { default as CreatePatientGroupModal } from './createPatientGroupModal'

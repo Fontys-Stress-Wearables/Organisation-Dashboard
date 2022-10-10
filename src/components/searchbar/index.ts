@@ -1,1 +1,1 @@
-export {default as Searchbar} from './searchbar'
+export { default as Searchbar } from './searchbar'

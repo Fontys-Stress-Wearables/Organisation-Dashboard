@@ -6,21 +6,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: organization-dashboard
+  name: organization-dashboard
 spec:
- selector:
-  matchLabels:
-   app: organization-dashboard
- replicas: 1
- template:
-  metadata:
-   labels:
-    app: organization-dashboard
-  spec:
-   containers:
-    - name: organization-dashboard
-      image: localhost:5000/organization-dashboard:latest
-
+  selector:
+    matchLabels:
+      app: organization-dashboard
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: organization-dashboard
+    spec:
+      containers:
+        - name: organization-dashboard
+          image: localhost:5000/organization-dashboard:latest
 
 ---
 # service
@@ -28,14 +27,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
- name: organization-dashboard
+  name: organization-dashboard
 spec:
- selector:
-  app: organization-dashboard
- ports:
-  - port: 80 # Default port for image
-    targetPort: 80 # Default port for image
-
+  selector:
+    app: organization-dashboard
+  ports:
+    - port: 80 # Default port for image
+      targetPort: 80 # Default port for image
 
 ---
 # replacePathRegex middleware
@@ -61,7 +59,7 @@ metadata:
 spec:
   headers:
     customRequestHeaders:
-      X-Forwarded-For: "/organizations"
+      X-Forwarded-For: '/organizations'
 
 ---
 # ingress
@@ -76,12 +74,12 @@ metadata:
     traefik.ingress.kubernetes.io/router.middlewares: default-organization-dashboard-path-middleware@kubernetescrd, default-organization-dashboard-header-middleware@kubernetescrd
 spec:
   rules:
-  - http:
-      paths:
-        - path: /organization
-          pathType: Prefix
-          backend:
-            service:
-              name: organization-dashboard
-              port:
-                number: 80
+    - http:
+        paths:
+          - path: /organization
+            pathType: Prefix
+            backend:
+              service:
+                name: organization-dashboard
+                port:
+                  number: 80
