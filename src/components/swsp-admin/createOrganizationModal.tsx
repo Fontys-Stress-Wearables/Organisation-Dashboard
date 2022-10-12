@@ -1,94 +1,106 @@
-import React, { useState } from "react";
-import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/esm/Form";
-import Modal from "react-bootstrap/esm/Modal";
-import { createOrganization, OrganizationProps } from "../../utilities/api/calls";
-import { AUTH_REQUEST_SCOPE_URL } from "../../utilities/environment";
-import AddIcon from "./home-plus.svg";
-import { useMsal } from "@azure/msal-react";
+import React, { useState } from 'react'
+import Button from 'react-bootstrap/esm/Button'
+import Form from 'react-bootstrap/esm/Form'
+import Modal from 'react-bootstrap/esm/Modal'
+import { useMsal } from '@azure/msal-react'
+import {
+  createOrganization,
+  OrganizationProps,
+} from '../../utilities/api/calls'
+import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import AddIcon from './home-plus.svg'
 
-interface  ICreatePatinetModalProps {
-  update: boolean,
+interface ICreatePatinetModalProps {
   updateOrganizationTable: (arg: boolean) => void
 }
 
-const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, updateOrganizationTable }) => {
-    const [error, setError] = useState(false)
-    const [show, setShow] = useState(false);
-    const [organization, setOrganization] = useState<OrganizationProps>();
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    const { instance, accounts } = useMsal();
+const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({
+  updateOrganizationTable,
+}) => {
+  const [error, setError] = useState(false)
+  const [show, setShow] = useState(false)
+  const [organization, setOrganization] = useState<OrganizationProps>()
+  const handleClose = () => setShow(false)
+  const handleShow = () => setShow(true)
+  const { instance, accounts } = useMsal()
 
-    const request = {
-      scopes: [AUTH_REQUEST_SCOPE_URL, "User.Read"],
-      account: accounts[0]
-    };
+  const request = {
+    scopes: [AUTH_REQUEST_SCOPE_URL, 'User.Read'],
+    account: accounts[0],
+  }
 
-    const [name, setName] = useState("");
-    const [tenantId, setTenantId] = useState("");
+  const [name, setName] = useState('')
+  const [tenantId, setTenantId] = useState('')
 
-    const handleChangeOrganizationname = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setName(event.target.value);
-    };
+  const handleChangeOrganizationname = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setName(event.target.value)
+  }
 
-    const handleChangeTenantId = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setTenantId(event.target.value);
-    };
+  const handleChangeTenantId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTenantId(event.target.value)
+  }
 
-    function handleSubmit(){
-      
-      const handleOrganization: OrganizationProps = {
-        name: name,
-        id: tenantId,
-      }
+  function handleSubmit() {
+    const handleOrganization: OrganizationProps = {
+      name,
+      id: tenantId,
+    }
 
-      setOrganization(handleOrganization);
+    setOrganization(handleOrganization)
 
-      instance.acquireTokenSilent(request).then((res: any) => {
-        console.log(organization);
-        createOrganization(res.accessToken, handleOrganization).then((response) => {
-          if(response.error){
-            setError(true)
-          } else {
-            const resOrganization = response.response
-            setError(false)
-            setOrganization(resOrganization)
-            
-            updateOrganizationTable(true);
-          }
-        }).catch((err) => {
-          console.error('Error occurred while fetching organizations', err)
-          setError(true)
-        })
-      }).catch((error) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          createOrganization(res.accessToken, handleOrganization).then((response) => {
-            if(response.error){
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        console.log(organization)
+        createOrganization(res.accessToken, handleOrganization)
+          .then((response) => {
+            if (response.error) {
               setError(true)
             } else {
               const resOrganization = response.response
               setError(false)
               setOrganization(resOrganization)
 
-              updateOrganizationTable(true);
+              updateOrganizationTable(true)
             }
-          }).catch((err) => {
+          })
+          .catch((err) => {
             console.error('Error occurred while fetching organizations', err)
             setError(true)
           })
-        });
-      });  
+      })
+      .catch((error) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          createOrganization(res.accessToken, handleOrganization)
+            .then((response) => {
+              if (response.error) {
+                setError(true)
+              } else {
+                const resOrganization = response.response
+                setError(false)
+                setOrganization(resOrganization)
 
-      handleClose();
-    }
+                updateOrganizationTable(true)
+              }
+            })
+            .catch((err) => {
+              console.error('Error occurred while fetching organizations', err)
+              setError(true)
+            })
+        })
+      })
 
-    return (
-      <div>
-          {!error ? (
-        <div>    
+    handleClose()
+  }
+
+  return (
+    <div>
+      {!error ? (
+        <div>
           <Button variant="success" onClick={handleShow}>
-            Add organization <img alt="addicon" src={AddIcon}></img> 
+            Add organization <img alt="addicon" src={AddIcon}></img>
           </Button>
           <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -96,7 +108,10 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
             </Modal.Header>
             <Modal.Body>
               <Form>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
                   <Form.Label>Organization name</Form.Label>
                   <Form.Control
                     type="string"
@@ -105,7 +120,10 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
                     onChange={handleChangeOrganizationname}
                   />
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput1"
+                >
                   <Form.Label>Tenant ID</Form.Label>
                   <Form.Control
                     type="string"
@@ -126,12 +144,11 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({ update, u
             </Modal.Footer>
           </Modal>
         </div>
-        ) : (
-            <h2> ERROR PLEASE RELOAD PAGE</h2>
-        )}
-      </div>
-    );
+      ) : (
+        <h2> ERROR PLEASE RELOAD PAGE</h2>
+      )}
+    </div>
+  )
 }
-  
-export default CreateOrganizationModal
 
+export default CreateOrganizationModal

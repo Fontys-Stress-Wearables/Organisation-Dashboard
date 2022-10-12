@@ -1,0 +1,24 @@
+{
+  "extends": [
+    "@imaginary-cloud/react",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "rules": {
+    "import/extensions": [0, "never"],
+    "no-shadow": [0, "never"],
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "warn",
+    "react/no-unused-prop-types": "warn",
+    "react/no-unescaped-entities": "off",
+    "react/function-component-definition": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/alt-text": "warn"
+  }
+}
