@@ -37,6 +37,22 @@ jobs:
         with:
           name: organisation-dashboard-merge-artifact
           path: ./build
+          
+  codeQL-analyse:
+    name: CodeQL-Analyse
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
 
   # define job to build and publish docker image
   build-and-push-docker-image:
