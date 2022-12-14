@@ -160,12 +160,16 @@ const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   ) => {
     caregiverJoinGroup(accessToken, groupId, caregiverId)
       .then((response) => {
+        console.log(groupId)
+        console.log(caregiverId)
         if (!response.error) {
           fetchCaregiverPatientGroups(caregiverId)
           fetchPatientGroups()
         }
       })
       .catch((err) => {
+        console.log(groupId)
+        console.log(caregiverId)
         console.error('Error occurred while joining patient group', err)
       })
   }

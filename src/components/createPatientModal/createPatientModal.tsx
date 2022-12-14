@@ -45,11 +45,18 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     setDate(event.target.value)
   }
 
+  const [userRole, setRole] = useState('')
+
+  const handleChangeRole = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRole(event.target.value)
+  }
+
   function handleSubmit() {
     const handlePatient: PatientProps = {
       firstName: firstname,
       lastName: lastname,
       birthdate: date,
+      role: userRole,
     }
 
     setPatient(handlePatient)
@@ -133,6 +140,15 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
                 autoFocus
                 max={new Date().toISOString().split('T')[0]}
                 onChange={handleChangeDate}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Role</Form.Label>
+              <Form.Control
+                type="string"
+                placeholder="Role"
+                autoFocus
+                onChange={handleChangeRole}
               />
             </Form.Group>
           </Form>

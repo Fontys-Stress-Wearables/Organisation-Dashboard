@@ -20,6 +20,7 @@ export type PatientProps = {
   lastName: string
   birthdate: string
   isActive?: boolean
+  role?: string
   patientGroups?: PatientGroupProps[]
 }
 
@@ -29,6 +30,7 @@ export type XPatientProps = {
   lastName: string
   birthdate: string
   isActive?: boolean
+  role?: string
   patientGroups?: PatientGroupProps[]
 }
 
@@ -134,7 +136,7 @@ const callApi = async ({ token, apiUrl, path, method, body }: ApiCalls) => {
 export const getPatients = (
   accessToken: string,
 ): Promise<PatientsPropsResponse> =>
-  callApi({ token: accessToken, path: 'patients', method: 'GET' })
+  callApi({ token: accessToken, path: 'users', method: 'GET' })
 
 export const createPatient = (
   accesToken: string,
@@ -142,13 +144,13 @@ export const createPatient = (
 ): Promise<PatientPropsResponse> =>
   callApi({
     token: accesToken,
-    path: 'patients',
+    path: 'users',
     method: 'POST',
     body: patientProps,
   })
 
 export const getPatient = (id: string): Promise<PatientPropsResponse> =>
-  callApi({ path: 'patients', method: 'POST', body: id })
+  callApi({ path: 'users', method: 'POST', body: id })
 
 export const updatePatient = (
   accesToken: string,
@@ -156,7 +158,7 @@ export const updatePatient = (
 ): Promise<PatientPropsResponse> =>
   callApi({
     token: accesToken,
-    path: `patients/${patient.id}`,
+    path: `users/${patient.id}`,
     method: 'PUT',
     body: patient,
   })
@@ -231,11 +233,11 @@ export const removePatientGroup = (accessToken: string, id: string) =>
 
 export const getCaregiverPatientGroups = (
   accessToken: string,
-  caregiverId: string,
+  userId: string,
 ): Promise<PatientGroupsPropsResponse> =>
   callApi({
     token: accessToken,
-    path: `patient-groups/caregivers/${caregiverId}`,
+    path: `patient-groups/caregivers/${userId}`,
     method: 'GET',
   })
 
@@ -252,34 +254,34 @@ export const getPatientGroupCaregivers = (
 export const caregiverLeaveGroup = (
   accessToken: string,
   groupId: string,
-  caregiverId: string,
+  userId: string,
 ) =>
   callApi({
     token: accessToken,
     path: `patient-groups/${groupId}/caregiver`,
     method: 'DELETE',
-    body: `"${caregiverId}"`,
+    body: `"${userId}"`,
   })
 
 export const caregiverJoinGroup = (
   accessToken: string,
-  groupId: string,
-  caregiverId: string,
+  patientGroupID: string,
+  userId: string,
 ) =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${groupId}/caregivers`,
+    path: `patient-groups/${patientGroupID}/user`,
     method: 'POST',
-    body: `"${caregiverId}"`,
+    body: `"${userId}"`,
   })
 
 export const getPatientPatientGroups = (
   accessToken: string,
-  patientId: string,
+  userId: string,
 ): Promise<PatientGroupsPropsResponse> =>
   callApi({
     token: accessToken,
-    path: `patient-groups/patients/${patientId}`,
+    path: `patient-groups/patients/${userId}`,
     method: 'GET',
   })
 
@@ -296,23 +298,23 @@ export const getPatientGroupPatients = (
 export const patientLeaveGroup = (
   accessToken: string,
   groupId: string,
-  patientId: string,
+  userId: string,
 ) =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${groupId}/patient`,
+    path: `patient-groups/${groupId}/user`,
     method: 'DELETE',
-    body: `"${patientId}"`,
+    body: `"${userId}"`,
   })
 
 export const patientJoinGroup = (
   accessToken: string,
-  groupId: string,
-  patientId: string,
+  patientGroupID: string,
+  userId: string,
 ) =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${groupId}/patients`,
+    path: `patient-groups/${patientGroupID}/user`,
     method: 'POST',
-    body: `"${patientId}"`,
+    body: `"${userId}"`,
   })
