@@ -243,11 +243,11 @@ export const getCaregiverPatientGroups = (
 
 export const getPatientGroupCaregivers = (
   accessToken: string,
-  patientGroupId: string,
+  patientGroupID: string,
 ): Promise<CaregiversPropsResponse> =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${patientGroupId}/caregivers`,
+    path: `patient-groups/${patientGroupID}/caregivers`,
     method: 'GET',
   })
 
@@ -287,11 +287,11 @@ export const getPatientPatientGroups = (
 
 export const getPatientGroupPatients = (
   accessToken: string,
-  patientGroupId: string,
+  patientGroupID: string,
 ): Promise<PatientsPropsResponse> =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${patientGroupId}/patients`,
+    path: `patient-groups/${patientGroupID}/patients`,
     method: 'GET',
   })
 
