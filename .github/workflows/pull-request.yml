@@ -1,29 +1,29 @@
 name: Pull Request
 
-on: [ pull_request ]
+on: [pull_request]
 
 jobs:
   build:
     # Defines the type of runner the job runs on
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Development Code
         uses: actions/checkout@v2
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 17.x
-          
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Build
         run: npm run build --if-present
         env:
           CI: false
-      
+
       - name: Check linting and formatting
         # Custom script for checking the linting and formatting being in place
         run: npm run lint
@@ -33,7 +33,7 @@ jobs:
         with:
           name: organisation-dashboard-artifact
           path: ./build
-          
+
   codeQL-analyse:
     name: CodeQL-Analyse
     runs-on: ubuntu-latest

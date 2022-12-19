@@ -14,20 +14,20 @@ jobs:
     steps:
       - name: Development Code
         uses: actions/checkout@v2
-        
+
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 17.x
-          
+
       - name: Install dependencies
         run: npm install
-      
+
       - name: Build
         run: npm run build --if-present
         env:
           CI: false
-      
+
       - name: Check linting and formatting
         # Custom script for checking the linting and formatting being in place
         run: npm run lint
@@ -37,7 +37,7 @@ jobs:
         with:
           name: organisation-dashboard-merge-artifact
           path: ./build
-          
+
   codeQL-analyse:
     name: CodeQL-Analyse
     runs-on: ubuntu-latest
@@ -57,7 +57,7 @@ jobs:
   # define job to build and publish docker image
   build-and-push-docker-image:
     name: Build Docker image and push to repository
-    needs: [ build, codeQL-analyse ]
+    needs: [build, codeQL-analyse]
     # run only when code is compiling and tests are passing
     runs-on: ubuntu-latest
 
@@ -76,7 +76,7 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Extract Docker Metadata
         id: meta
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
