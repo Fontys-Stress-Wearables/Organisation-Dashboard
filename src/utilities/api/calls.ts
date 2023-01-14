@@ -54,7 +54,7 @@ export type CaregiverGraphProps = {
   mail: string | null
   mobilePhone: string | null
   officeLocation: string | null
-  preferrendLanguage: string | null
+  preferredLanguage: string | null
   surname: string
   userPrincipalName: string
 }

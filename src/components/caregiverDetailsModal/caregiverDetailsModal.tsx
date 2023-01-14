@@ -2,17 +2,17 @@ import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import { CaregiverGraphProps } from '../../utilities/api/calls'
 
-interface CaregiverDetailsProps {
+type CaregiverDetailsProps = {
   show: boolean
   closeModal: () => void
   caregiver: CaregiverGraphProps | undefined
 }
 
-const CaregiverDetailsModal: React.FC<CaregiverDetailsProps> = ({
+const CaregiverDetailsModal = ({
   caregiver,
   show,
   closeModal,
-}) => (
+}: CaregiverDetailsProps) => (
   <Modal
     size="xl"
     show={show}

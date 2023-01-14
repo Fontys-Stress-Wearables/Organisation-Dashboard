@@ -18,17 +18,17 @@ import {
 import AddIcon from './group_add_white_24dp.svg'
 import RemoveIcon from './group_remove_white_24dp.svg'
 
-interface CaregiverDetailsProps {
+type CaregiverDetailsProps = {
   closeModal: () => void
   show: boolean
   caregiver: CaregiverGraphProps | undefined
 }
 
-const CaregiverPatientGroupModal: React.FC<CaregiverDetailsProps> = ({
+const CaregiverPatientGroupModal = ({
   caregiver,
   show,
   closeModal,
-}) => {
+}: CaregiverDetailsProps) => {
   const { instance, accounts } = useMsal()
 
   const [search, setSearch] = useState('')
