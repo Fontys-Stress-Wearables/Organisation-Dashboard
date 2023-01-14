@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import { CaregiverGraphProps } from '../../utilities/api/calls'
