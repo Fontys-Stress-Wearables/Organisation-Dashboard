@@ -41,7 +41,7 @@ const BasicPgTable: React.FC<TablePropsArray> = ({
   const onDeleteClickHandler = (patientGroup: PatientGroupProps) => {
     if (
       window.confirm(
-        `Are you sure about deleting this patient-group: ${patientGroup.groupName}?`,
+        `Are you sure you want to delete this patient-group: ${patientGroup.groupName}?`,
       )
     )
       onRemove(patientGroup.id ? patientGroup.id : '1')

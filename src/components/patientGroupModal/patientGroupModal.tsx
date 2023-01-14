@@ -181,30 +181,20 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
     caregiver: CaregiverGraphProps,
     patientGroup: PatientGroupProps,
   ) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${caregiver.givenName} ${caregiver.surname} from the ${patientGroup.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        removeCaregiverRequest(res.accessToken, patientGroup.id!, caregiver.id!)
+      })
+      .catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
           removeCaregiverRequest(
             res.accessToken,
             patientGroup.id!,
             caregiver.id!,
           )
         })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            removeCaregiverRequest(
-              res.accessToken,
-              patientGroup.id!,
-              caregiver.id!,
-            )
-          })
-        })
-    }
+      })
   }
 
   const removeCaregiverRequest = (
@@ -228,22 +218,16 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
     patient: PatientProps,
     patientGroup: PatientGroupProps,
   ) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${patient?.firstName} ${patient?.lastName} from the ${patientGroup.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
+      })
+      .catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
           removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
         })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
-          })
-        })
-    }
+      })
   }
 
   const removePatientRequest = (

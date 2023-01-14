@@ -94,7 +94,7 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Update patient-group: {patientGroup.groupName}
+            Update Patient Group: {patientGroup.groupName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -35,7 +35,7 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({
   const onClickHandler = (organization: OrganizationProps) => {
     if (
       window.confirm(
-        `Are you sure about deleting this organization: ${organization.name}?`,
+        `Are you you want to delete this organization: ${organization.name}?`,
       )
     )
       onRemove(organization.id)

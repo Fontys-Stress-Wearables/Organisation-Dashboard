@@ -4,12 +4,7 @@ import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import Form from 'react-bootstrap/esm/Form'
 import EditIcon from './edit.svg'
-import {
-  PatientGroupProps,
-  PatientProps,
-  updatePatient,
-  updatePatientGroup,
-} from '../../utilities/api/calls'
+import { PatientProps, updatePatient } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 interface IUpdatePatientModal {
@@ -126,7 +121,7 @@ const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Update patient:{patient.firstName && patient.lastName}{' '}
+            Update Patient: {patient.firstName && patient.lastName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

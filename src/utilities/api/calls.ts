@@ -244,12 +244,12 @@ export const getPatientGroupCaregivers = (
 
 export const caregiverLeaveGroup = (
   accessToken: string,
-  groupId: string,
+  patientGroupId: string,
   userId: string,
 ) =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${groupId}/user`,
+    path: `patient-groups/${patientGroupId}/user`,
     method: 'DELETE',
     body: `"${userId}"`,
   })
