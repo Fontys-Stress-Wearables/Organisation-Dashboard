@@ -54,10 +54,6 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
     setShow(true)
   }
 
-  // const handleUpdate = useCallback(event => {
-  //     updatePatientGroupTable(!update)
-  // }, [updatePatientGroupTable])
-
   function handleSubmit() {
     const handlePatientGroup: PatientGroupProps = {
       id: patientGroup.id,
@@ -65,46 +61,23 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
       description,
     }
 
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        updatePatientGroup(res.accessToken, handlePatientGroup)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const resPatientGroup = response.response
-              setError(false)
-
-              update()
-              // updatePatientGroupTable(true)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while creating patient group', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      updatePatientGroup(res.accessToken, handlePatientGroup)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((error) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          updatePatientGroup(res.accessToken, handlePatientGroup)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const resPatientGroup = response.response
-                setError(false)
+          } else {
+            const resPatientGroup = response.response
+            setError(false)
 
-                update()
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while creating patient group', err)
-              setError(true)
-              // updatePatientGroupTable(true)
-            })
+            update()
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while creating patient group', err)
+          setError(true)
+        })
+    })
 
     handleClose()
   }
@@ -121,7 +94,7 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Update patient-group:{patientGroup.groupName}
+            Update patient-group: {patientGroup.groupName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>

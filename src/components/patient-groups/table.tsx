@@ -12,14 +12,12 @@ import PatientGroupModal from '../patientGroupModal/patientGroupModal'
 
 interface TablePropsArray {
   onRemove: (id: string) => void
-  onEdit: (patientGroup: PatientGroupProps) => void
   update: () => void
   patientGroups: PatientGroupProps[]
 }
 
 const BasicPgTable: React.FC<TablePropsArray> = ({
   onRemove,
-  onEdit,
   patientGroups,
   update,
 }) => {
@@ -47,10 +45,6 @@ const BasicPgTable: React.FC<TablePropsArray> = ({
       )
     )
       onRemove(patientGroup.id ? patientGroup.id : '1')
-  }
-
-  const onClickHandler = (patientGroup: PatientGroupProps) => {
-    onEdit(patientGroup)
   }
 
   const openPatientGroup = (patientGroup: PatientGroupProps) => {

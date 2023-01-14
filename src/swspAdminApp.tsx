@@ -1,5 +1,5 @@
 import { useMsal } from '@azure/msal-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import SWSPHeader from './components/swsp-admin/header'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -23,47 +23,31 @@ function SWSPApp() {
     account: accounts[0],
   }
 
+  useEffect(() => {
+    fetchOrganizations()
+  }, [])
+
   const updateOrganizationTable = () => {
     fetchOrganizations()
   }
 
   const fetchOrganizations = () => {
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        getOrganizations(res.accessToken)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const foundOrganizations = response.response
-              setError(false)
-              setOrganizations([...foundOrganizations])
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while fetching organizations', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      getOrganizations(res.accessToken)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch(() => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          getOrganizations(res.accessToken)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const foundOrganizations = response.response
-                setError(false)
-                setOrganizations([...foundOrganizations])
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while fetching organizations', err)
-              setError(true)
-            })
+          } else {
+            const foundOrganizations = response.response
+            setError(false)
+            setOrganizations(foundOrganizations)
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while fetching organizations', err)
+          setError(true)
+        })
+    })
   }
 
   const onRemove = (id: string) => {

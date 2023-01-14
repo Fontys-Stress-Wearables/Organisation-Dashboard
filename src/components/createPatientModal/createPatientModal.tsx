@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/esm/Form'
 import Modal from 'react-bootstrap/esm/Modal'
@@ -61,44 +61,23 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
 
     setPatient(handlePatient)
 
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        createPatient(res.accessToken, handlePatient)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const resPatient = response.response
-              setError(false)
-              setPatient(resPatient)
-              updateTable(true)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while fetching patients', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      createPatient(res.accessToken, handlePatient)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((error) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          createPatient(res.accessToken, handlePatient)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const resPatient = response.response
-                setError(false)
-                setPatient(resPatient)
-                updateTable(true)
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while fetching patients', err)
-              setError(true)
-            })
+          } else {
+            const resPatient = response.response
+            setError(false)
+            setPatient(resPatient)
+            updateTable(true)
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while fetching patients', err)
+          setError(true)
+        })
+    })
 
     handleClose()
   }
@@ -110,7 +89,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a new patient in the system</Modal.Title>
+          <Modal.Title>Add Patient</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>

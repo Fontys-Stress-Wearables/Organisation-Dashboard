@@ -27,42 +27,22 @@ const Patients: React.FC = () => {
   }, [updateTable])
 
   const fetchPatients = () => {
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        getPatients(res.accessToken)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const foundPatients = response.response
-              setError(false)
-              setPatients(foundPatients)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while fetching patients', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      getPatients(res.accessToken)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((e: any) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          getPatients(res.accessToken)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const foundPatients = response.response
-                setError(false)
-                setPatients(foundPatients)
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while fetching patients', err)
-              setError(true)
-            })
+          } else {
+            const foundPatients = response.response
+            setError(false)
+            setPatients(foundPatients)
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while fetching patients', err)
+          setError(true)
+        })
+    })
   }
 
   return (

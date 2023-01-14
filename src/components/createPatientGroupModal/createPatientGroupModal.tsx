@@ -11,17 +11,14 @@ import {
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 export interface IPatientGroupModalProps {
-  update: boolean
-  updatePatientGroupTable: (arg: boolean) => void
+  update: () => void
 }
 
 const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
   update,
-  updatePatientGroupTable,
 }) => {
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
-  const [patientGroup, setPatientGroup] = useState<PatientGroupProps>()
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   const { instance, accounts } = useMsal()
@@ -53,47 +50,22 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
       description,
     }
 
-    setPatientGroup(handlePatientGroup)
-
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        createPatientGroup(res.accessToken, handlePatientGroup)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const resPatientGroup = response.response
-              setError(false)
-              setPatientGroup(resPatientGroup)
-              updatePatientGroupTable(true)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while creating patient group', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      createPatientGroup(res.accessToken, handlePatientGroup)
+        .then((response) => {
+          console.log(response)
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((error) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          createPatientGroup(res.accessToken, handlePatientGroup)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const resPatientGroup = response.response
-                setError(false)
-                setPatientGroup(resPatientGroup)
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while creating patient group', err)
-              setError(true)
-              updatePatientGroupTable(true)
-            })
+          } else {
+            setError(false)
+            update()
+          }
         })
-      })
-
+        .catch((err) => {
+          console.error('Error occurred while creating patient group', err)
+          setError(true)
+        })
+    })
     handleClose()
   }
 
@@ -104,7 +76,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a new patient-group in the system</Modal.Title>
+          <Modal.Title>Create Patient Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
