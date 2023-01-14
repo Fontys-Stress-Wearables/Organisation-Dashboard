@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/esm/Modal'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
 import SearchIcon from '../caregivers/search_white_48dp.svg'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
@@ -19,17 +19,17 @@ import {
 import RemoveIcon from './person_remove_white_24dp.svg'
 import { callMsGraph } from '../../utilities/api/graph'
 
-interface CaregiverDetailsProps {
+type CaregiverDetailsProps = {
   closeModal: () => void
   show: boolean
   patientGroup: PatientGroupProps | undefined
 }
 
-const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
+const PatientGroupModal = ({
   patientGroup,
   show,
   closeModal,
-}) => {
+}: CaregiverDetailsProps) => {
   const { instance, accounts } = useMsal()
 
   const [search, setSearch] = useState('')
@@ -43,7 +43,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   const [patients, setPatients] = useState<PatientProps[]>([])
   const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([])
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
@@ -94,7 +94,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   }
 
   const requestCaregivers = (): Promise<CaregiverGraphProps[]> =>
-    new Promise<CaregiverGraphProps[]>((resolve, reject) => {
+    new Promise<CaregiverGraphProps[]>((resolve) => {
       const graphRequest = {
         scopes: ['User.Read'],
         account: accounts[0],
@@ -129,10 +129,9 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
 
           requestCaregivers().then((response: CaregiverGraphProps[]) => {
             const filteredCaregivers = response.filter(
-              (c) =>
-                foundCaregivers.find((f) => f.azureId === c.id) !== undefined,
+              (c) => foundCaregivers.find((f) => f.id === c.id) !== undefined,
             )
-            console.log(filteredCaregivers)
+
             setCaregivers([...filteredCaregivers])
           })
         }

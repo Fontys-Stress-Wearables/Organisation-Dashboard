@@ -169,14 +169,24 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
   }
 
   const leaveGroup = (group: PatientGroupProps) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${patient?.firstName} from the ${group.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        if (group.id != null && patient?.id != null) {
+          patientLeaveGroup(res.accessToken, group.id, patient?.id)
+            .then((response) => {
+              if (!response.error) {
+                fetchPatientPatientGroups(patient.id ? patient.id : '1')
+                fetchPatientGroups()
+              }
+            })
+            .catch((err) => {
+              console.error('Error occurred while leaving patient group', err)
+            })
+        }
+      })
+      .catch((e: any) => {
+        instance.acquireTokenPopup(request).then((res: any) => {
           if (group.id != null && patient?.id != null) {
             patientLeaveGroup(res.accessToken, group.id, patient?.id)
               .then((response) => {
@@ -190,26 +200,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
               })
           }
         })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            if (group.id != null && patient?.id != null) {
-              patientLeaveGroup(res.accessToken, group.id, patient?.id)
-                .then((response) => {
-                  if (!response.error) {
-                    fetchPatientPatientGroups(patient.id ? patient.id : '1')
-                    fetchPatientGroups()
-                  }
-                })
-                .catch((err) => {
-                  console.error(
-                    'Error occurred while leaving patient group',
-                    err,
-                  )
-                })
-            }
-          })
-        })
-    }
+      })
   }
 
   return (

@@ -24,16 +24,6 @@ export type PatientProps = {
   patientGroups?: PatientGroupProps[]
 }
 
-export type XPatientProps = {
-  id: string
-  firstName: string
-  lastName: string
-  birthdate: string
-  isActive?: boolean
-  role?: string
-  patientGroups?: PatientGroupProps[]
-}
-
 export type CaregiverProps = {
   id: string
   firstName: string
@@ -234,11 +224,11 @@ export const getCaregiverPatientGroups = (
 
 export const getPatientGroupCaregivers = (
   accessToken: string,
-  patientGroupID: string,
+  patientGroupId: string,
 ): Promise<CaregiversPropsResponse> =>
   callApi({
     token: accessToken,
-    path: `patient-groups/${patientGroupID}/caregivers`,
+    path: `patient-groups/${patientGroupId}/caregivers`,
     method: 'GET',
   })
 

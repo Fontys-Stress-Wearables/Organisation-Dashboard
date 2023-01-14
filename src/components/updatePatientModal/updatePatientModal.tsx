@@ -121,7 +121,7 @@ const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Update Patient: {patient.firstName && patient.lastName}
+            Update Patient: {patient.firstName} {patient.lastName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
