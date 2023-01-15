@@ -12,7 +12,7 @@ function Caregivers() {
 
   useEffect(() => {
     requestCaregivers()
-  }, [])
+  })
 
   const requestCaregivers = () => {
     const graphRequest = {

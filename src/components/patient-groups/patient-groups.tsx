@@ -23,7 +23,7 @@ const PatientGroups: React.FC = () => {
 
   useEffect(() => {
     fetchPatientGroups()
-  }, [])
+  })
 
   const onRemove = (id: string) => {
     instance.acquireTokenSilent(request).then((res: any) => {

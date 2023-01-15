@@ -25,7 +25,7 @@ function SWSPApp() {
 
   useEffect(() => {
     fetchOrganizations()
-  }, [])
+  })
 
   const updateOrganizationTable = () => {
     fetchOrganizations()

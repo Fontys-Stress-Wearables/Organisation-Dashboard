@@ -23,7 +23,7 @@ const Patients: React.FC = () => {
 
   useEffect(() => {
     fetchPatients()
-  }, [])
+  })
 
   const fetchPatients = () => {
     instance.acquireTokenSilent(request).then((res: any) => {
