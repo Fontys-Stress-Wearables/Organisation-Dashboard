@@ -3,9 +3,9 @@ import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/esm/Form'
 import Modal from 'react-bootstrap/esm/Modal'
 import { useMsal } from '@azure/msal-react'
-import { createPatient, PatientProps } from '../../utilities/api/calls'
+import { createPatient, PatientProps } from '../../../utilities/api/calls'
 import AddIcon from './person_add_white.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
 type IModalProps = {
   updateTable: () => void

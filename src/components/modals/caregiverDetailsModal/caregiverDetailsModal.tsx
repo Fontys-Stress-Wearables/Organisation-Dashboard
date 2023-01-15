@@ -1,6 +1,6 @@
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
-import { CaregiverGraphProps } from '../../utilities/api/calls'
+import { CaregiverGraphProps } from '../../../utilities/api/calls'
 
 type CaregiverDetailsProps = {
   show: boolean

@@ -4,7 +4,7 @@ import { useMsal } from '@azure/msal-react'
 import { getPatients, PatientProps } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 import styles from './patients.module.scss'
-import { CreatePatientModal } from '../createPatientModal'
+import { CreatePatientModal } from '../modals/createPatientModal'
 import BasicTable from '../table/table'
 
 const Patients: React.FC = () => {

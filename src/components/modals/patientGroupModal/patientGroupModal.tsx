@@ -5,8 +5,8 @@ import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import SearchIcon from '../../caregivers/search_white_48dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 import {
   CaregiverGraphProps,
   caregiverLeaveGroup,
@@ -15,9 +15,9 @@ import {
   PatientGroupProps,
   patientLeaveGroup,
   PatientProps,
-} from '../../utilities/api/calls'
+} from '../../../utilities/api/calls'
 import RemoveIcon from './person_remove_white_24dp.svg'
-import { callMsGraph } from '../../utilities/api/graph'
+import { callMsGraph } from '../../../utilities/api/graph'
 
 type CaregiverDetailsProps = {
   closeModal: () => void

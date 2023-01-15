@@ -6,9 +6,9 @@ import InputGroup from 'react-bootstrap/esm/InputGroup'
 import { PatientGroupProps } from '../../utilities/api/calls'
 import SearchIcon from './search_white_48dp.svg'
 import DeleteIcon from '../swsp-admin/delete_forever_white_24dp.svg'
-import { UpdatePatientGroupModal } from '../updatePatientGroupModal'
+import { UpdatePatientGroupModal } from '../modals/updatePatientGroupModal'
 import GroupIcon from '../caregivers/groups_white_24dp.svg'
-import PatientGroupModal from '../patientGroupModal/patientGroupModal'
+import PatientGroupModal from '../modals/patientGroupModal/patientGroupModal'
 
 type TablePropsArray = {
   onRemove: (id: string) => void

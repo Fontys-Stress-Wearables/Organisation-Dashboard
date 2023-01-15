@@ -8,7 +8,7 @@ import {
 } from '../../utilities/api/calls'
 import styles from './patient-groups.module.scss'
 import BasicPgTable from './table'
-import { CreatePatientGroupModal } from '../createPatientGroupModal'
+import { CreatePatientGroupModal } from '../modals/createPatientGroupModal'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 const PatientGroups: React.FC = () => {

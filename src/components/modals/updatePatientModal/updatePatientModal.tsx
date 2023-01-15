@@ -4,8 +4,8 @@ import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import Form from 'react-bootstrap/esm/Form'
 import EditIcon from './edit.svg'
-import { PatientProps, updatePatient } from '../../utilities/api/calls'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import { PatientProps, updatePatient } from '../../../utilities/api/calls'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
 type IUpdatePatientModal = {
   patient: PatientProps

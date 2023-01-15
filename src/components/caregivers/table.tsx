@@ -8,8 +8,8 @@ import SearchIcon from './search_white_48dp.svg'
 import GroupIcon from './groups_white_24dp.svg'
 import InfoIcon from './info_outline_white_24dp.svg'
 import styles from './caregivers.module.scss'
-import CaregiverDetailsModal from '../caregiverDetailsModal/caregiverDetailsModal'
-import CaregiverPatientGroupModal from '../caregiverPatientGroupModal/caregiverPatientGroupModal'
+import CaregiverDetailsModal from '../modals/caregiverDetailsModal/caregiverDetailsModal'
+import CaregiverPatientGroupModal from '../modals/caregiverPatientGroupModal/caregiverPatientGroupModal'
 
 type TablePropsArray = {
   caregivers: CaregiverGraphProps[]

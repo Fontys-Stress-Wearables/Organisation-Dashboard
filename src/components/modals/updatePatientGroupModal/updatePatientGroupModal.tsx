@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
 import { useMsal } from '@azure/msal-react'
+import { useState } from 'react'
+import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import Form from 'react-bootstrap/esm/Form'
-import Button from 'react-bootstrap/esm/Button'
-import AddIcon from './group_add.svg'
+import EditIcon from './edit.svg'
 import {
-  createPatientGroup,
   PatientGroupProps,
-} from '../../utilities/api/calls'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+  updatePatientGroup,
+} from '../../../utilities/api/calls'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
-export interface IPatientGroupModalProps {
+type IUpdatePatientGroupModal = {
+  patientGroup: PatientGroupProps
   update: () => void
 }
 
-const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
+const UpdatePatientGroupModal = ({
+  patientGroup,
   update,
-}) => {
+}: IUpdatePatientGroupModal) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
   const { instance, accounts } = useMsal()
 
   const request = {
@@ -45,14 +46,24 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
     setDescription(event.target.value)
   }
 
+  const handleShow = () => {
+    if (show) {
+      setShow(false)
+    }
+    setGroupName(patientGroup.groupName)
+    setDescription(patientGroup.description)
+    setShow(true)
+  }
+
   function handleSubmit() {
     const handlePatientGroup: PatientGroupProps = {
+      id: patientGroup.id,
       groupName,
       description,
     }
 
     instance.acquireTokenSilent(request).then((res: any) => {
-      createPatientGroup(res.accessToken, handlePatientGroup)
+      updatePatientGroup(res.accessToken, handlePatientGroup)
         .then((response) => {
           if (response.error) {
             setError(true)
@@ -66,18 +77,24 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
           setError(true)
         })
     })
+
     handleClose()
   }
 
   return (
-    <>
-      <Button variant="success" onClick={handleShow}>
-        Add patient-group
-        <img src={AddIcon} alt="add" />
+    <div>
+      <Button
+        style={{ display: 'flex', width: '36px', justifyContent: 'center' }}
+        variant="success"
+        onClick={handleShow}
+      >
+        <img alt="editicon" src={EditIcon}></img>
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Create Patient Group</Modal.Title>
+          <Modal.Title>
+            Update Patient Group: {patientGroup.groupName}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -88,7 +105,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
               <Form.Label>Group name</Form.Label>
               <Form.Control
                 type="string"
-                placeholder="Group name"
+                placeholder={patientGroup.groupName}
                 autoFocus
                 onChange={handleChangeGroupName}
               />
@@ -100,7 +117,7 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
               <Form.Label>Description</Form.Label>
               <Form.Control
                 type="string"
-                placeholder="Description"
+                placeholder={patientGroup.description}
                 autoFocus
                 onChange={handleChangeDescription}
               />
@@ -116,8 +133,8 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   )
 }
 
-export default CreatePatientGroupModal
+export default UpdatePatientGroupModal

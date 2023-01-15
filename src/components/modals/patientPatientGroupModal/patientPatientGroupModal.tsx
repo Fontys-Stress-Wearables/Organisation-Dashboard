@@ -5,69 +5,66 @@ import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
 import { useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import SearchIcon from '../../caregivers/search_white_48dp.svg'
 import {
-  CaregiverGraphProps,
-  caregiverJoinGroup,
-  caregiverLeaveGroup,
-  getCaregiverPatientGroups,
+  patientJoinGroup,
+  patientLeaveGroup,
+  getPatientPatientGroups,
   getPatientGroups,
   PatientGroupProps,
-} from '../../utilities/api/calls'
+  PatientProps,
+} from '../../../utilities/api/calls'
 import AddIcon from './group_add_white_24dp.svg'
 import RemoveIcon from './group_remove_white_24dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
-type CaregiverDetailsProps = {
+type PatientDetailsProps = {
   closeModal: () => void
   show: boolean
-  caregiver: CaregiverGraphProps | undefined
+  patient: PatientProps | undefined
 }
 
-const CaregiverPatientGroupModal = ({
-  caregiver,
+const PatientPatientGroupModal = ({
+  patient,
   show,
   closeModal,
-}: CaregiverDetailsProps) => {
+}: PatientDetailsProps) => {
   const { instance, accounts } = useMsal()
-
   const [search, setSearch] = useState('')
   const [searchAllResults, setSearchAllResults] = useState<PatientGroupProps[]>(
     [],
   )
-  const [searchCaregiversResults, setSearchCaregiversResults] = useState<
+  const [searchPatientsResults, setSearchPatientsResults] = useState<
     PatientGroupProps[]
   >([])
 
   const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([])
-  const [caregiversGroups, setCaregiversGroups] = useState<PatientGroupProps[]>(
-    [],
-  )
+  const [patientsGroups, setPatientsGroups] = useState<PatientGroupProps[]>([])
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
   useEffect(() => {
-    setSearchCaregiversResults(
-      caregiversGroups.filter((p) =>
+    setSearchPatientsResults(
+      patientsGroups.filter((p) =>
         p.groupName.toLowerCase().includes(search.toLowerCase()),
       ),
     )
 
     const otherGroups = patientGroups
-      .filter((p) => p.groupName.toLowerCase().includes(search.toLowerCase()))
-      .filter((p) => caregiversGroups.find((c) => c.id === p.id) === undefined)
+      .filter((pg) => pg.groupName.toLowerCase().includes(search.toLowerCase()))
+      .filter((pg) => patientsGroups.find((p) => p.id === pg.id) === undefined)
 
     setSearchAllResults(otherGroups)
-  }, [search, patientGroups, caregiversGroups])
+  }, [search, patientGroups, patientsGroups])
 
   useEffect(() => {
-    if (caregiver !== undefined) {
-      fetchCaregiverPatientGroups(caregiver.id)
+    if (patient?.id) {
+      fetchPatientPatientGroups(patient.id)
       fetchPatientGroups()
     }
-  }, [caregiver])
+  }, [patient])
 
   const request = {
     scopes: [AUTH_REQUEST_SCOPE_URL, 'User.Read'],
@@ -105,15 +102,15 @@ const CaregiverPatientGroupModal = ({
       })
   }
 
-  const fetchCaregiverPatientGroups = (caregiverId: string) => {
+  const fetchPatientPatientGroups = (patientId: string) => {
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        getCaregiverPatientGroups(res.accessToken, caregiverId)
+        getPatientPatientGroups(res.accessToken, patientId)
           .then((response) => {
             if (!response.error) {
               const foundPatientGroups = response.response
-              setCaregiversGroups(foundPatientGroups)
+              setPatientsGroups(foundPatientGroups)
             }
           })
           .catch((err) => {
@@ -122,11 +119,11 @@ const CaregiverPatientGroupModal = ({
       })
       .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          getCaregiverPatientGroups(res.accessToken, caregiverId)
+          getPatientPatientGroups(res.accessToken, patientId)
             .then((response) => {
               if (!response.error) {
                 const foundPatientGroups = response.response
-                setCaregiversGroups(foundPatientGroups)
+                setPatientsGroups(foundPatientGroups)
               }
             })
             .catch((err) => {
@@ -140,51 +137,70 @@ const CaregiverPatientGroupModal = ({
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        if (group.id != null && caregiver?.id != null) {
-          joinGroupRequest(res.accessToken, group.id, caregiver.id)
+        if (group.id != null && patient?.id != null) {
+          patientJoinGroup(res.accessToken, group.id, patient.id)
+            .then((response) => {
+              if (!response.error && patient?.id) {
+                fetchPatientPatientGroups(patient.id)
+                fetchPatientGroups()
+              }
+            })
+            .catch((err) => {
+              console.error('Error occurred while joining patient group', err)
+            })
         }
       })
       .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          if (group.id != null && caregiver?.id != null) {
-            joinGroupRequest(res.accessToken, group.id, caregiver.id)
+          if (group.id != null && patient?.id != null) {
+            patientJoinGroup(res.accessToken, group.id, patient.id)
+              .then(() => {
+                if (group.id != null && patient?.id != null) {
+                  fetchPatientPatientGroups(patient.id)
+                  fetchPatientGroups()
+                }
+              })
+              .catch((err) => {
+                console.error('Error occurred while joining patient group', err)
+              })
           }
         })
       })
   }
 
-  const joinGroupRequest = (
-    accessToken: string,
-    groupId: string,
-    caregiverId: string,
-  ) => {
-    caregiverJoinGroup(accessToken, groupId, caregiverId)
-      .then((response) => {
-        if (!response.error) {
-          fetchCaregiverPatientGroups(caregiverId)
-          fetchPatientGroups()
+  const leaveGroup = (group: PatientGroupProps) => {
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        if (group.id != null && patient?.id != null) {
+          patientLeaveGroup(res.accessToken, group.id, patient?.id)
+            .then((response) => {
+              if (!response.error) {
+                fetchPatientPatientGroups(patient.id ? patient.id : '1')
+                fetchPatientGroups()
+              }
+            })
+            .catch((err) => {
+              console.error('Error occurred while leaving patient group', err)
+            })
         }
       })
-      .catch((err) => {
-        console.error('Error occurred while joining patient group', err)
+      .catch(() => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          if (group.id != null && patient?.id != null) {
+            patientLeaveGroup(res.accessToken, group.id, patient?.id)
+              .then((response) => {
+                if (!response.error) {
+                  fetchPatientPatientGroups(patient.id ? patient.id : '1')
+                  fetchPatientGroups()
+                }
+              })
+              .catch((err) => {
+                console.error('Error occurred while leaving patient group', err)
+              })
+          }
+        })
       })
-  }
-
-  const leaveGroup = (group: PatientGroupProps) => {
-    instance.acquireTokenSilent(request).then((res: any) => {
-      if (group.id != null && caregiver?.id != null) {
-        caregiverLeaveGroup(res.accessToken, group.id, caregiver?.id)
-          .then((response) => {
-            if (!response.error) {
-              fetchCaregiverPatientGroups(caregiver.id)
-              fetchPatientGroups()
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while leaving patient group', err)
-          })
-      }
-    })
   }
 
   return (
@@ -197,7 +213,7 @@ const CaregiverPatientGroupModal = ({
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          {caregiver && caregiver.givenName} {caregiver && caregiver.surname}
+          {patient && patient.firstName} {patient && patient.lastName}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -209,19 +225,19 @@ const CaregiverPatientGroupModal = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon} alt="search"></img>
+              <img src={SearchIcon} alt="search" />
             </Button>
           </InputGroup>
         </div>
         <Table responsive striped bordered hover>
           <thead>
             <tr>
-              <th>{caregiver?.givenName}'s Groups</th>
+              <th>{patient?.firstName}'s Groups</th>
               <th style={{ width: '10px' }}></th>
             </tr>
           </thead>
           <tbody>
-            {searchCaregiversResults.map((patientGroup: PatientGroupProps) => (
+            {searchPatientsResults.map((patientGroup: PatientGroupProps) => (
               <tr key={patientGroup.id}>
                 <td>{patientGroup.groupName}</td>
                 <td style={{ display: 'flex' }}>
@@ -237,8 +253,8 @@ const CaregiverPatientGroupModal = ({
                   >
                     <img
                       style={{ margin: 'auto' }}
+                      alt="removeicon"
                       src={RemoveIcon}
-                      alt="delete"
                     ></img>
                   </Button>
                 </td>
@@ -270,8 +286,8 @@ const CaregiverPatientGroupModal = ({
                   >
                     <img
                       style={{ margin: 'auto' }}
+                      alt="addicon"
                       src={AddIcon}
-                      alt="add"
                     ></img>
                   </Button>
                 </td>
@@ -289,4 +305,4 @@ const CaregiverPatientGroupModal = ({
   )
 }
 
-export default CaregiverPatientGroupModal
+export default PatientPatientGroupModal
