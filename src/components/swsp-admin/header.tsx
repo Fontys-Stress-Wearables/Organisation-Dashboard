@@ -4,7 +4,6 @@ import Navbar from 'react-bootstrap/Navbar'
 import { useMsal, useIsAuthenticated } from '@azure/msal-react'
 import { loginRequest } from '../../authConfig'
 import { callMsGraph } from '../../utilities/api/graph'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
 function handleLogin(instance: any) {
   instance.loginPopup(loginRequest).catch(console.error)
@@ -17,25 +16,6 @@ function handleLogout(instance: any) {
 function SWSPHeader() {
   const { instance, accounts } = useMsal()
   const isAuthenticated = useIsAuthenticated()
-
-  const requestToken = () => {
-    const request = {
-      scopes: [AUTH_REQUEST_SCOPE_URL, 'User.Read'],
-      account: accounts[0],
-    }
-
-    instance
-      .acquireTokenSilent(request)
-      .then((response: any) => {
-        console.log(response.accessToken)
-      })
-      .catch((e: any) => {
-        instance.acquireTokenPopup(request).then((response: any) => {
-          console.log(response.accessToken)
-        })
-      })
-  }
-
   const requestCaregivers = () => {
     const graphRequest = {
       scopes: ['User.Read'],
@@ -49,7 +29,7 @@ function SWSPHeader() {
           console.log(response)
         })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(graphRequest).then((response: any) => {
           callMsGraph(response.accessToken).then((response: any) => {
             console.log(response)

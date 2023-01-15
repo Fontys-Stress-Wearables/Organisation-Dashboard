@@ -18,17 +18,17 @@ import AddIcon from './group_add_white_24dp.svg'
 import RemoveIcon from './group_remove_white_24dp.svg'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
-interface PatientDetailsProps {
+type PatientDetailsProps = {
   closeModal: () => void
   show: boolean
   patient: PatientProps | undefined
 }
 
-const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
+const PatientPatientGroupModal = ({
   patient,
   show,
   closeModal,
-}) => {
+}: PatientDetailsProps) => {
   const { instance, accounts } = useMsal()
   const [search, setSearch] = useState('')
   const [searchAllResults, setSearchAllResults] = useState<PatientGroupProps[]>(
@@ -86,7 +86,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           getPatientGroups(res.accessToken)
             .then((response) => {
@@ -117,7 +117,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           getPatientPatientGroups(res.accessToken, patientId)
             .then((response) => {
@@ -150,11 +150,11 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
             })
         }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           if (group.id != null && patient?.id != null) {
             patientJoinGroup(res.accessToken, group.id, patient.id)
-              .then((response) => {
+              .then(() => {
                 if (group.id != null && patient?.id != null) {
                   fetchPatientPatientGroups(patient.id)
                   fetchPatientGroups()
@@ -185,7 +185,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
             })
         }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           if (group.id != null && patient?.id != null) {
             patientLeaveGroup(res.accessToken, group.id, patient?.id)
@@ -225,7 +225,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon}></img>
+              <img src={SearchIcon} alt="search" />
             </Button>
           </InputGroup>
         </div>

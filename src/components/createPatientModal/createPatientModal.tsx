@@ -7,15 +7,14 @@ import { createPatient, PatientProps } from '../../utilities/api/calls'
 import AddIcon from './person_add_white.svg'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
-export interface IModalProps {
-  update: boolean
-  updateTable: (arg: boolean) => void
+type IModalProps = {
+  updateTable: () => void
 }
 
-const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
+const CreatePatientModal = ({ updateTable }: IModalProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
-  const [patient, setPatient] = useState<PatientProps>()
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   const { instance, accounts } = useMsal()
@@ -53,18 +52,14 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
       role: 'Patient',
     }
 
-    setPatient(handlePatient)
-
     instance.acquireTokenSilent(request).then((res: any) => {
       createPatient(res.accessToken, handlePatient)
         .then((response) => {
           if (response.error) {
             setError(true)
           } else {
-            const resPatient = response.response
             setError(false)
-            setPatient(resPatient)
-            updateTable(true)
+            updateTable()
           }
         })
         .catch((err) => {
@@ -79,7 +74,7 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
   return (
     <>
       <Button variant="success" onClick={handleShow}>
-        Add patient <img src={AddIcon}></img>
+        Add patient <img src={AddIcon} alt="search" />
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

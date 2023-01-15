@@ -89,7 +89,7 @@ const CaregiverPatientGroupModal = ({
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           getPatientGroups(res.accessToken)
             .then((response) => {
@@ -120,7 +120,7 @@ const CaregiverPatientGroupModal = ({
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           getCaregiverPatientGroups(res.accessToken, caregiverId)
             .then((response) => {
@@ -144,7 +144,7 @@ const CaregiverPatientGroupModal = ({
           joinGroupRequest(res.accessToken, group.id, caregiver.id)
         }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           if (group.id != null && caregiver?.id != null) {
             joinGroupRequest(res.accessToken, group.id, caregiver.id)
@@ -209,7 +209,7 @@ const CaregiverPatientGroupModal = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon}></img>
+              <img src={SearchIcon} alt="search"></img>
             </Button>
           </InputGroup>
         </div>
@@ -235,7 +235,11 @@ const CaregiverPatientGroupModal = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={RemoveIcon}
+                      alt="delete"
+                    ></img>
                   </Button>
                 </td>
               </tr>
@@ -264,7 +268,11 @@ const CaregiverPatientGroupModal = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={AddIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={AddIcon}
+                      alt="add"
+                    ></img>
                   </Button>
                 </td>
               </tr>

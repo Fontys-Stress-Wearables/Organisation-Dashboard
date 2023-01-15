@@ -10,15 +10,16 @@ import {
 } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
-interface IUpdatePatientGroupModal {
+type IUpdatePatientGroupModal = {
   patientGroup: PatientGroupProps
   update: () => void
 }
 
-const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
+const UpdatePatientGroupModal = ({
   patientGroup,
   update,
-}) => {
+}: IUpdatePatientGroupModal) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
@@ -67,9 +68,7 @@ const UpdatePatientGroupModal: React.FC<IUpdatePatientGroupModal> = ({
           if (response.error) {
             setError(true)
           } else {
-            const resPatientGroup = response.response
             setError(false)
-
             update()
           }
         })

@@ -11,11 +11,11 @@ import styles from './caregivers.module.scss'
 import CaregiverDetailsModal from '../caregiverDetailsModal/caregiverDetailsModal'
 import CaregiverPatientGroupModal from '../caregiverPatientGroupModal/caregiverPatientGroupModal'
 
-interface TablePropsArray {
+type TablePropsArray = {
   caregivers: CaregiverGraphProps[]
 }
 
-const CaregiverTable: React.FC<TablePropsArray> = ({ caregivers }) => {
+const CaregiverTable = ({ caregivers }: TablePropsArray) => {
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<CaregiverGraphProps[]>([])
 
@@ -71,7 +71,7 @@ const CaregiverTable: React.FC<TablePropsArray> = ({ caregivers }) => {
             onChange={handleSearch}
           />
           <Button>
-            <img src={SearchIcon}></img>
+            <img src={SearchIcon} alt="search" />
           </Button>
         </InputGroup>
       </div>
@@ -102,7 +102,7 @@ const CaregiverTable: React.FC<TablePropsArray> = ({ caregivers }) => {
                     justifyContent: 'center',
                   }}
                 >
-                  <img style={{ margin: 'auto' }} src={InfoIcon}></img>
+                  <img style={{ margin: 'auto' }} src={InfoIcon} alt="info" />
                 </Button>
               </td>
               <td>
@@ -116,7 +116,7 @@ const CaregiverTable: React.FC<TablePropsArray> = ({ caregivers }) => {
                     justifyContent: 'center',
                   }}
                 >
-                  <img style={{ margin: 'auto' }} src={GroupIcon}></img>
+                  <img style={{ margin: 'auto' }} src={GroupIcon} alt="users" />
                 </Button>
               </td>
             </tr>

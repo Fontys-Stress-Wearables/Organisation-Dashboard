@@ -71,7 +71,7 @@ const CreateOrganizationModal: React.FC<ICreatePatinetModalProps> = ({
             setError(true)
           })
       })
-      .catch((error) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           createOrganization(res.accessToken, handleOrganization)
             .then((response) => {

@@ -86,7 +86,7 @@ const PatientGroupModal = ({
       .then((res: any) => {
         fetchPatientGroupCaregiversRequest(res.accessToken, patientGroupId)
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           fetchPatientGroupCaregiversRequest(res.accessToken, patientGroupId)
         })
@@ -109,7 +109,7 @@ const PatientGroupModal = ({
             },
           )
         })
-        .catch((e: any) => {
+        .catch(() => {
           instance.acquireTokenPopup(graphRequest).then((response: any) => {
             callMsGraph(response.accessToken).then((response: any) => {
               resolve(response)
@@ -150,7 +150,7 @@ const PatientGroupModal = ({
       .then((res: any) => {
         fetchPatientGroupPatientsRequest(res.accessToken, patientGroupId)
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           fetchPatientGroupPatientsRequest(res.accessToken, patientGroupId)
         })
@@ -183,15 +183,19 @@ const PatientGroupModal = ({
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        removeCaregiverRequest(res.accessToken, patientGroup.id!, caregiver.id!)
+        if (patientGroup.id != null) {
+          removeCaregiverRequest(res.accessToken, patientGroup.id, caregiver.id)
+        }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          removeCaregiverRequest(
-            res.accessToken,
-            patientGroup.id!,
-            caregiver.id!,
-          )
+          if (patientGroup.id != null) {
+            removeCaregiverRequest(
+              res.accessToken,
+              patientGroup.id,
+              caregiver.id,
+            )
+          }
         })
       })
   }
@@ -220,11 +224,15 @@ const PatientGroupModal = ({
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
+        if (patientGroup.id != null && patient.id != null) {
+          removePatientRequest(res.accessToken, patientGroup.id, patient.id)
+        }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
+          if (patientGroup.id != null && patient.id != null) {
+            removePatientRequest(res.accessToken, patientGroup.id, patient.id)
+          }
         })
       })
   }
@@ -266,7 +274,7 @@ const PatientGroupModal = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon}></img>
+              <img src={SearchIcon} alt="search" />
             </Button>
           </InputGroup>
         </div>
@@ -294,7 +302,11 @@ const PatientGroupModal = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={RemoveIcon}
+                      alt="delete"
+                    />
                   </Button>
                 </td>
               </tr>
@@ -325,7 +337,11 @@ const PatientGroupModal = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={RemoveIcon}
+                      alt="delete"
+                    />
                   </Button>
                 </td>
               </tr>

@@ -9,11 +9,10 @@ import BasicTable from '../table/table'
 
 const Patients: React.FC = () => {
   const [error, setError] = useState(false)
-  const [updateTable, setUpdateTable] = useState(false)
   const [patients, setPatients] = useState<PatientProps[]>([])
   const { instance, accounts } = useMsal()
 
-  const updatePatientTable = (update: boolean): void => {
+  const updatePatientTable = (): void => {
     fetchPatients()
   }
 
@@ -24,7 +23,7 @@ const Patients: React.FC = () => {
 
   useEffect(() => {
     fetchPatients()
-  }, [updateTable])
+  }, [])
 
   const fetchPatients = () => {
     instance.acquireTokenSilent(request).then((res: any) => {
@@ -50,10 +49,7 @@ const Patients: React.FC = () => {
       {!error ? (
         <div className={styles.container}>
           <div className={styles.createPatientModal}>
-            <CreatePatientModal
-              update={updateTable}
-              updateTable={updatePatientTable}
-            />
+            <CreatePatientModal updateTable={updatePatientTable} />
           </div>
           <div className={styles.Table}>
             {patients && patients.length ? (

@@ -17,6 +17,7 @@ export interface IPatientGroupModalProps {
 const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
   update,
 }) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
@@ -53,7 +54,6 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
     instance.acquireTokenSilent(request).then((res: any) => {
       createPatientGroup(res.accessToken, handlePatientGroup)
         .then((response) => {
-          console.log(response)
           if (response.error) {
             setError(true)
           } else {
@@ -72,7 +72,8 @@ const CreatePatientGroupModal: React.FC<IPatientGroupModalProps> = ({
   return (
     <>
       <Button variant="success" onClick={handleShow}>
-        Add patient-group <img src={AddIcon}></img>
+        Add patient-group
+        <img src={AddIcon} alt="add" />
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

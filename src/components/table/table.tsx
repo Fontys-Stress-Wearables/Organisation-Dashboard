@@ -10,12 +10,12 @@ import styles from '../caregivers/caregivers.module.scss'
 import { PatientPatientGroupModal } from '../patientPatientGroupModal'
 import { UpdatePatientModal } from '../updatePatientModal'
 
-interface TablePropsArray {
+type TablePropsArray = {
   patients: PatientProps[]
   update: () => void
 }
 
-const BasicTable: React.FC<TablePropsArray> = ({ patients, update }) => {
+const BasicTable = ({ patients, update }: TablePropsArray) => {
   const [selectedPatient, setSelectedPatient] = useState<PatientProps>()
   const [showPatientGroups, setShowPatientGroups] = useState(false)
 
