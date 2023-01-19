@@ -5,66 +5,69 @@ import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
 import { useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
+import SearchIcon from '../../caregivers/search_white_48dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 import {
-  patientJoinGroup,
-  patientLeaveGroup,
-  getPatientPatientGroups,
+  CaregiverGraphProps,
+  caregiverJoinGroup,
+  caregiverLeaveGroup,
+  getCaregiverPatientGroups,
   getPatientGroups,
   PatientGroupProps,
-  PatientProps,
-} from '../../utilities/api/calls'
+} from '../../../utilities/api/calls'
 import AddIcon from './group_add_white_24dp.svg'
 import RemoveIcon from './group_remove_white_24dp.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 
-interface PatientDetailsProps {
+type CaregiverDetailsProps = {
   closeModal: () => void
   show: boolean
-  patient: PatientProps | undefined
+  caregiver: CaregiverGraphProps | undefined
 }
 
-const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
-  patient,
+const CaregiverPatientGroupModal = ({
+  caregiver,
   show,
   closeModal,
-}) => {
+}: CaregiverDetailsProps) => {
   const { instance, accounts } = useMsal()
+
   const [search, setSearch] = useState('')
   const [searchAllResults, setSearchAllResults] = useState<PatientGroupProps[]>(
     [],
   )
-  const [searchPatientsResults, setSearchPatientsResults] = useState<
+  const [searchCaregiversResults, setSearchCaregiversResults] = useState<
     PatientGroupProps[]
   >([])
 
   const [patientGroups, setPatientGroups] = useState<PatientGroupProps[]>([])
-  const [patientsGroups, setPatientsGroups] = useState<PatientGroupProps[]>([])
+  const [caregiversGroups, setCaregiversGroups] = useState<PatientGroupProps[]>(
+    [],
+  )
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
   useEffect(() => {
-    setSearchPatientsResults(
-      patientsGroups.filter((p) =>
+    setSearchCaregiversResults(
+      caregiversGroups.filter((p) =>
         p.groupName.toLowerCase().includes(search.toLowerCase()),
       ),
     )
 
     const otherGroups = patientGroups
-      .filter((pg) => pg.groupName.toLowerCase().includes(search.toLowerCase()))
-      .filter((pg) => patientsGroups.find((p) => p.id === pg.id) === undefined)
+      .filter((p) => p.groupName.toLowerCase().includes(search.toLowerCase()))
+      .filter((p) => caregiversGroups.find((c) => c.id === p.id) === undefined)
 
     setSearchAllResults(otherGroups)
-  }, [search, patientGroups, patientsGroups])
+  }, [search, patientGroups, caregiversGroups])
 
   useEffect(() => {
-    if (patient?.id) {
-      fetchPatientPatientGroups(patient.id)
+    if (caregiver !== undefined) {
+      fetchCaregiverPatientGroups(caregiver.id)
       fetchPatientGroups()
     }
-  }, [patient])
+  }, [caregiver])
 
   const request = {
     scopes: [AUTH_REQUEST_SCOPE_URL, 'User.Read'],
@@ -86,7 +89,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           getPatientGroups(res.accessToken)
             .then((response) => {
@@ -102,28 +105,28 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
       })
   }
 
-  const fetchPatientPatientGroups = (patientId: string) => {
+  const fetchCaregiverPatientGroups = (caregiverId: string) => {
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        getPatientPatientGroups(res.accessToken, patientId)
+        getCaregiverPatientGroups(res.accessToken, caregiverId)
           .then((response) => {
             if (!response.error) {
               const foundPatientGroups = response.response
-              setPatientsGroups(foundPatientGroups)
+              setCaregiversGroups(foundPatientGroups)
             }
           })
           .catch((err) => {
             console.error('Error occurred while fetching patient groups', err)
           })
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          getPatientPatientGroups(res.accessToken, patientId)
+          getCaregiverPatientGroups(res.accessToken, caregiverId)
             .then((response) => {
               if (!response.error) {
                 const foundPatientGroups = response.response
-                setPatientsGroups(foundPatientGroups)
+                setCaregiversGroups(foundPatientGroups)
               }
             })
             .catch((err) => {
@@ -137,79 +140,51 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
     instance
       .acquireTokenSilent(request)
       .then((res: any) => {
-        if (group.id != null && patient?.id != null) {
-          patientJoinGroup(res.accessToken, group.id, patient.id)
-            .then((response) => {
-              if (!response.error && patient?.id) {
-                fetchPatientPatientGroups(patient.id)
-                fetchPatientGroups()
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while joining patient group', err)
-            })
+        if (group.id != null && caregiver?.id != null) {
+          joinGroupRequest(res.accessToken, group.id, caregiver.id)
         }
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
-          if (group.id != null && patient?.id != null) {
-            patientJoinGroup(res.accessToken, group.id, patient.id)
-              .then((response) => {
-                if (group.id != null && patient?.id != null) {
-                  fetchPatientPatientGroups(patient.id)
-                  fetchPatientGroups()
-                }
-              })
-              .catch((err) => {
-                console.error('Error occurred while joining patient group', err)
-              })
+          if (group.id != null && caregiver?.id != null) {
+            joinGroupRequest(res.accessToken, group.id, caregiver.id)
           }
         })
       })
   }
 
+  const joinGroupRequest = (
+    accessToken: string,
+    groupId: string,
+    caregiverId: string,
+  ) => {
+    caregiverJoinGroup(accessToken, groupId, caregiverId)
+      .then((response) => {
+        if (!response.error) {
+          fetchCaregiverPatientGroups(caregiverId)
+          fetchPatientGroups()
+        }
+      })
+      .catch((err) => {
+        console.error('Error occurred while joining patient group', err)
+      })
+  }
+
   const leaveGroup = (group: PatientGroupProps) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${patient?.firstName} from the ${group.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
-          if (group.id != null && patient?.id != null) {
-            patientLeaveGroup(res.accessToken, group.id, patient?.id)
-              .then((response) => {
-                if (!response.error) {
-                  fetchPatientPatientGroups(patient.id ? patient.id : '1')
-                  fetchPatientGroups()
-                }
-              })
-              .catch((err) => {
-                console.error('Error occurred while leaving patient group', err)
-              })
-          }
-        })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            if (group.id != null && patient?.id != null) {
-              patientLeaveGroup(res.accessToken, group.id, patient?.id)
-                .then((response) => {
-                  if (!response.error) {
-                    fetchPatientPatientGroups(patient.id ? patient.id : '1')
-                    fetchPatientGroups()
-                  }
-                })
-                .catch((err) => {
-                  console.error(
-                    'Error occurred while leaving patient group',
-                    err,
-                  )
-                })
+    instance.acquireTokenSilent(request).then((res: any) => {
+      if (group.id != null && caregiver?.id != null) {
+        caregiverLeaveGroup(res.accessToken, group.id, caregiver?.id)
+          .then((response) => {
+            if (!response.error) {
+              fetchCaregiverPatientGroups(caregiver.id)
+              fetchPatientGroups()
             }
           })
-        })
-    }
+          .catch((err) => {
+            console.error('Error occurred while leaving patient group', err)
+          })
+      }
+    })
   }
 
   return (
@@ -222,7 +197,7 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
     >
       <Modal.Header closeButton>
         <Modal.Title>
-          {patient && patient.firstName} {patient && patient.lastName}
+          {caregiver && caregiver.givenName} {caregiver && caregiver.surname}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -234,19 +209,19 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon}></img>
+              <img src={SearchIcon} alt="search"></img>
             </Button>
           </InputGroup>
         </div>
         <Table responsive striped bordered hover>
           <thead>
             <tr>
-              <th>{patient?.firstName}'s Groups</th>
+              <th>{caregiver?.givenName}'s Groups</th>
               <th style={{ width: '10px' }}></th>
             </tr>
           </thead>
           <tbody>
-            {searchPatientsResults.map((patientGroup: PatientGroupProps) => (
+            {searchCaregiversResults.map((patientGroup: PatientGroupProps) => (
               <tr key={patientGroup.id}>
                 <td>{patientGroup.groupName}</td>
                 <td style={{ display: 'flex' }}>
@@ -262,8 +237,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
                   >
                     <img
                       style={{ margin: 'auto' }}
-                      alt="removeicon"
                       src={RemoveIcon}
+                      alt="delete"
                     ></img>
                   </Button>
                 </td>
@@ -295,8 +270,8 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
                   >
                     <img
                       style={{ margin: 'auto' }}
-                      alt="addicon"
                       src={AddIcon}
+                      alt="add"
                     ></img>
                   </Button>
                 </td>
@@ -314,4 +289,4 @@ const PatientPatientGroupModal: React.FC<PatientDetailsProps> = ({
   )
 }
 
-export default PatientPatientGroupModal
+export default CaregiverPatientGroupModal

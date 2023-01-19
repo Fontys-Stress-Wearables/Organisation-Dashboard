@@ -4,16 +4,15 @@ import { useMsal } from '@azure/msal-react'
 import { getPatients, PatientProps } from '../../utilities/api/calls'
 import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
 import styles from './patients.module.scss'
-import { CreatePatientModal } from '../createPatientModal'
+import { CreatePatientModal } from '../modals/createPatientModal'
 import BasicTable from '../table/table'
 
 const Patients: React.FC = () => {
   const [error, setError] = useState(false)
-  const [updateTable, setUpdateTable] = useState(false)
   const [patients, setPatients] = useState<PatientProps[]>([])
   const { instance, accounts } = useMsal()
 
-  const updatePatientTable = (update: boolean): void => {
+  const updatePatientTable = (): void => {
     fetchPatients()
   }
 
@@ -24,45 +23,25 @@ const Patients: React.FC = () => {
 
   useEffect(() => {
     fetchPatients()
-  }, [updateTable])
+  })
 
   const fetchPatients = () => {
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        getPatients(res.accessToken)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const foundPatients = response.response
-              setError(false)
-              setPatients(foundPatients)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while fetching patients', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      getPatients(res.accessToken)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((e: any) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          getPatients(res.accessToken)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const foundPatients = response.response
-                setError(false)
-                setPatients(foundPatients)
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while fetching patients', err)
-              setError(true)
-            })
+          } else {
+            const foundPatients = response.response
+            setError(false)
+            setPatients(foundPatients)
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while fetching patients', err)
+          setError(true)
+        })
+    })
   }
 
   return (
@@ -70,10 +49,7 @@ const Patients: React.FC = () => {
       {!error ? (
         <div className={styles.container}>
           <div className={styles.createPatientModal}>
-            <CreatePatientModal
-              update={updateTable}
-              updateTable={updatePatientTable}
-            />
+            <CreatePatientModal updateTable={updatePatientTable} />
           </div>
           <div className={styles.Table}>
             {patients && patients.length ? (

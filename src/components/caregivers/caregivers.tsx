@@ -12,7 +12,7 @@ function Caregivers() {
 
   useEffect(() => {
     requestCaregivers()
-  }, [])
+  })
 
   const requestCaregivers = () => {
     const graphRequest = {
@@ -29,7 +29,7 @@ function Caregivers() {
           },
         )
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(graphRequest).then((response: any) => {
           callMsGraph(response.accessToken).then((response: any) => {
             setCaregivers(response)

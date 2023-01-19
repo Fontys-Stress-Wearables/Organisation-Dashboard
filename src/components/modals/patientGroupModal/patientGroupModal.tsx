@@ -3,10 +3,10 @@ import Modal from 'react-bootstrap/esm/Modal'
 import InputGroup from 'react-bootstrap/InputGroup'
 import FormControl from 'react-bootstrap/FormControl'
 import Table from 'react-bootstrap/Table'
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { useMsal } from '@azure/msal-react'
-import SearchIcon from '../caregivers/search_white_48dp.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import SearchIcon from '../../caregivers/search_white_48dp.svg'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 import {
   CaregiverGraphProps,
   caregiverLeaveGroup,
@@ -15,21 +15,21 @@ import {
   PatientGroupProps,
   patientLeaveGroup,
   PatientProps,
-} from '../../utilities/api/calls'
+} from '../../../utilities/api/calls'
 import RemoveIcon from './person_remove_white_24dp.svg'
-import { callMsGraph } from '../../utilities/api/graph'
+import { callMsGraph } from '../../../utilities/api/graph'
 
-interface CaregiverDetailsProps {
+type CaregiverDetailsProps = {
   closeModal: () => void
   show: boolean
   patientGroup: PatientGroupProps | undefined
 }
 
-const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
+const PatientGroupModal = ({
   patientGroup,
   show,
   closeModal,
-}) => {
+}: CaregiverDetailsProps) => {
   const { instance, accounts } = useMsal()
 
   const [search, setSearch] = useState('')
@@ -43,7 +43,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   const [patients, setPatients] = useState<PatientProps[]>([])
   const [caregivers, setCaregivers] = useState<CaregiverGraphProps[]>([])
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value)
   }
 
@@ -86,7 +86,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
       .then((res: any) => {
         fetchPatientGroupCaregiversRequest(res.accessToken, patientGroupId)
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           fetchPatientGroupCaregiversRequest(res.accessToken, patientGroupId)
         })
@@ -94,7 +94,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
   }
 
   const requestCaregivers = (): Promise<CaregiverGraphProps[]> =>
-    new Promise<CaregiverGraphProps[]>((resolve, reject) => {
+    new Promise<CaregiverGraphProps[]>((resolve) => {
       const graphRequest = {
         scopes: ['User.Read'],
         account: accounts[0],
@@ -109,7 +109,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
             },
           )
         })
-        .catch((e: any) => {
+        .catch(() => {
           instance.acquireTokenPopup(graphRequest).then((response: any) => {
             callMsGraph(response.accessToken).then((response: any) => {
               resolve(response)
@@ -129,10 +129,9 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
 
           requestCaregivers().then((response: CaregiverGraphProps[]) => {
             const filteredCaregivers = response.filter(
-              (c) =>
-                foundCaregivers.find((f) => f.azureId === c.id) !== undefined,
+              (c) => foundCaregivers.find((f) => f.id === c.id) !== undefined,
             )
-            console.log(filteredCaregivers)
+
             setCaregivers([...filteredCaregivers])
           })
         }
@@ -151,7 +150,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
       .then((res: any) => {
         fetchPatientGroupPatientsRequest(res.accessToken, patientGroupId)
       })
-      .catch((e: any) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           fetchPatientGroupPatientsRequest(res.accessToken, patientGroupId)
         })
@@ -181,30 +180,24 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
     caregiver: CaregiverGraphProps,
     patientGroup: PatientGroupProps,
   ) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${caregiver.givenName} ${caregiver.surname} from the ${patientGroup.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
-          removeCaregiverRequest(
-            res.accessToken,
-            patientGroup.id!,
-            caregiver.id!,
-          )
-        })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        if (patientGroup.id != null) {
+          removeCaregiverRequest(res.accessToken, patientGroup.id, caregiver.id)
+        }
+      })
+      .catch(() => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          if (patientGroup.id != null) {
             removeCaregiverRequest(
               res.accessToken,
-              patientGroup.id!,
-              caregiver.id!,
+              patientGroup.id,
+              caregiver.id,
             )
-          })
+          }
         })
-    }
+      })
   }
 
   const removeCaregiverRequest = (
@@ -228,22 +221,20 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
     patient: PatientProps,
     patientGroup: PatientGroupProps,
   ) => {
-    if (
-      window.confirm(
-        `Are you sure you want to remove ${patient?.firstName} ${patient?.lastName} from the ${patientGroup.groupName}?`,
-      )
-    ) {
-      instance
-        .acquireTokenSilent(request)
-        .then((res: any) => {
-          removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
+    instance
+      .acquireTokenSilent(request)
+      .then((res: any) => {
+        if (patientGroup.id != null && patient.id != null) {
+          removePatientRequest(res.accessToken, patientGroup.id, patient.id)
+        }
+      })
+      .catch(() => {
+        instance.acquireTokenPopup(request).then((res: any) => {
+          if (patientGroup.id != null && patient.id != null) {
+            removePatientRequest(res.accessToken, patientGroup.id, patient.id)
+          }
         })
-        .catch((e: any) => {
-          instance.acquireTokenPopup(request).then((res: any) => {
-            removePatientRequest(res.accessToken, patientGroup.id!, patient.id!)
-          })
-        })
-    }
+      })
   }
 
   const removePatientRequest = (
@@ -283,7 +274,7 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
               onChange={handleSearch}
             />
             <Button>
-              <img src={SearchIcon}></img>
+              <img src={SearchIcon} alt="search" />
             </Button>
           </InputGroup>
         </div>
@@ -311,7 +302,11 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={RemoveIcon}
+                      alt="delete"
+                    />
                   </Button>
                 </td>
               </tr>
@@ -342,7 +337,11 @@ const PatientGroupModal: React.FC<CaregiverDetailsProps> = ({
                       justifyContent: 'center',
                     }}
                   >
-                    <img style={{ margin: 'auto' }} src={RemoveIcon}></img>
+                    <img
+                      style={{ margin: 'auto' }}
+                      src={RemoveIcon}
+                      alt="delete"
+                    />
                   </Button>
                 </td>
               </tr>

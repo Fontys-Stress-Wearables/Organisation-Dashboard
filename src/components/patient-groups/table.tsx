@@ -6,23 +6,17 @@ import InputGroup from 'react-bootstrap/esm/InputGroup'
 import { PatientGroupProps } from '../../utilities/api/calls'
 import SearchIcon from './search_white_48dp.svg'
 import DeleteIcon from '../swsp-admin/delete_forever_white_24dp.svg'
-import { UpdatePatientGroupModal } from '../updatePatientGroupModal'
+import { UpdatePatientGroupModal } from '../modals/updatePatientGroupModal'
 import GroupIcon from '../caregivers/groups_white_24dp.svg'
-import PatientGroupModal from '../patientGroupModal/patientGroupModal'
+import PatientGroupModal from '../modals/patientGroupModal/patientGroupModal'
 
-interface TablePropsArray {
+type TablePropsArray = {
   onRemove: (id: string) => void
-  onEdit: (patientGroup: PatientGroupProps) => void
   update: () => void
   patientGroups: PatientGroupProps[]
 }
 
-const BasicPgTable: React.FC<TablePropsArray> = ({
-  onRemove,
-  onEdit,
-  patientGroups,
-  update,
-}) => {
+const BasicPgTable = ({ onRemove, patientGroups, update }: TablePropsArray) => {
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<PatientGroupProps[]>([])
 
@@ -43,14 +37,11 @@ const BasicPgTable: React.FC<TablePropsArray> = ({
   const onDeleteClickHandler = (patientGroup: PatientGroupProps) => {
     if (
       window.confirm(
-        `Are you sure about deleting this patient-group: ${patientGroup.groupName}?`,
+        `Are you sure you want to delete this patient-group: ${patientGroup.groupName}?`,
       )
-    )
+    ) {
       onRemove(patientGroup.id ? patientGroup.id : '1')
-  }
-
-  const onClickHandler = (patientGroup: PatientGroupProps) => {
-    onEdit(patientGroup)
+    }
   }
 
   const openPatientGroup = (patientGroup: PatientGroupProps) => {
@@ -108,7 +99,7 @@ const BasicPgTable: React.FC<TablePropsArray> = ({
                     justifyContent: 'center',
                   }}
                 >
-                  <img style={{ margin: 'auto' }} src={GroupIcon}></img>
+                  <img style={{ margin: 'auto' }} src={GroupIcon} alt="users" />
                 </Button>
               </td>
               <td>
@@ -127,7 +118,7 @@ const BasicPgTable: React.FC<TablePropsArray> = ({
                   onClick={() => onDeleteClickHandler(patientGroup)}
                   variant="danger"
                 >
-                  <img alt="deleteicon" src={DeleteIcon}></img>
+                  <img src={DeleteIcon} alt="delete" />
                 </Button>
               </td>
             </tr>

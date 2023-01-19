@@ -1,21 +1,20 @@
-import React, { useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Form from 'react-bootstrap/esm/Form'
 import Modal from 'react-bootstrap/esm/Modal'
 import { useMsal } from '@azure/msal-react'
-import { createPatient, PatientProps } from '../../utilities/api/calls'
+import { createPatient, PatientProps } from '../../../utilities/api/calls'
 import AddIcon from './person_add_white.svg'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
-export interface IModalProps {
-  update: boolean
-  updateTable: (arg: boolean) => void
+type IModalProps = {
+  updateTable: () => void
 }
 
-const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
+const CreatePatientModal = ({ updateTable }: IModalProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
-  const [patient, setPatient] = useState<PatientProps>()
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   const { instance, accounts } = useMsal()
@@ -45,60 +44,29 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
     setDate(event.target.value)
   }
 
-  const [userRole, setRole] = useState('')
-
-  const handleChangeRole = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRole(event.target.value)
-  }
-
   function handleSubmit() {
     const handlePatient: PatientProps = {
       firstName: firstname,
       lastName: lastname,
       birthdate: date,
-      role: userRole,
+      role: 'Patient',
     }
 
-    setPatient(handlePatient)
-
-    instance
-      .acquireTokenSilent(request)
-      .then((res: any) => {
-        createPatient(res.accessToken, handlePatient)
-          .then((response) => {
-            if (response.error) {
-              setError(true)
-            } else {
-              const resPatient = response.response
-              setError(false)
-              setPatient(resPatient)
-              updateTable(true)
-            }
-          })
-          .catch((err) => {
-            console.error('Error occurred while fetching patients', err)
+    instance.acquireTokenSilent(request).then((res: any) => {
+      createPatient(res.accessToken, handlePatient)
+        .then((response) => {
+          if (response.error) {
             setError(true)
-          })
-      })
-      .catch((error) => {
-        instance.acquireTokenPopup(request).then((res: any) => {
-          createPatient(res.accessToken, handlePatient)
-            .then((response) => {
-              if (response.error) {
-                setError(true)
-              } else {
-                const resPatient = response.response
-                setError(false)
-                setPatient(resPatient)
-                updateTable(true)
-              }
-            })
-            .catch((err) => {
-              console.error('Error occurred while fetching patients', err)
-              setError(true)
-            })
+          } else {
+            setError(false)
+            updateTable()
+          }
         })
-      })
+        .catch((err) => {
+          console.error('Error occurred while fetching patients', err)
+          setError(true)
+        })
+    })
 
     handleClose()
   }
@@ -106,11 +74,11 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
   return (
     <>
       <Button variant="success" onClick={handleShow}>
-        Add patient <img src={AddIcon}></img>
+        Add patient <img src={AddIcon} alt="search" />
       </Button>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Create a new patient in the system</Modal.Title>
+          <Modal.Title>Add Patient</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -140,15 +108,6 @@ const CreatePatientModal: React.FC<IModalProps> = ({ update, updateTable }) => {
                 autoFocus
                 max={new Date().toISOString().split('T')[0]}
                 onChange={handleChangeDate}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Role</Form.Label>
-              <Form.Control
-                type="string"
-                placeholder="Role"
-                autoFocus
-                onChange={handleChangeRole}
               />
             </Form.Group>
           </Form>

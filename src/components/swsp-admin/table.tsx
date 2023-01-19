@@ -7,15 +7,15 @@ import SearchIcon from './search_white_48dp.svg'
 import DeleteIcon from './delete_forever_white_24dp.svg'
 import { OrganizationProps } from '../../utilities/api/calls'
 
-interface OrganizationPropsArray {
+type OrganizationPropsArray = {
   onRemove: (id: string) => void
   organizations: OrganizationProps[]
 }
 
-const OrganizationTable: React.FC<OrganizationPropsArray> = ({
+const OrganizationTable = ({
   onRemove,
   organizations,
-}) => {
+}: OrganizationPropsArray) => {
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState<OrganizationProps[]>([])
 
@@ -35,10 +35,11 @@ const OrganizationTable: React.FC<OrganizationPropsArray> = ({
   const onClickHandler = (organization: OrganizationProps) => {
     if (
       window.confirm(
-        `Are you sure about deleting this organization: ${organization.name}?`,
+        `Are you you want to delete this organization: ${organization.name}?`,
       )
-    )
+    ) {
       onRemove(organization.id)
+    }
   }
 
   return (

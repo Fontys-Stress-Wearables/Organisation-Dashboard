@@ -1,26 +1,19 @@
 import { useMsal } from '@azure/msal-react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import Button from 'react-bootstrap/esm/Button'
 import Modal from 'react-bootstrap/esm/Modal'
 import Form from 'react-bootstrap/esm/Form'
 import EditIcon from './edit.svg'
-import {
-  PatientGroupProps,
-  PatientProps,
-  updatePatient,
-  updatePatientGroup,
-} from '../../utilities/api/calls'
-import { AUTH_REQUEST_SCOPE_URL } from '../../utilities/environment'
+import { PatientProps, updatePatient } from '../../../utilities/api/calls'
+import { AUTH_REQUEST_SCOPE_URL } from '../../../utilities/environment'
 
-interface IUpdatePatientModal {
+type IUpdatePatientModal = {
   patient: PatientProps
   update: () => void
 }
 
-const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
-  patient,
-  update,
-}) => {
+const UpdatePatientModal = ({ patient, update }: IUpdatePatientModal) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [error, setError] = useState(false)
   const [show, setShow] = useState(false)
   const handleClose = () => setShow(false)
@@ -77,7 +70,6 @@ const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
             if (response.error) {
               setError(true)
             } else {
-              const resPatient = response.response
               setError(false)
               update()
             }
@@ -87,15 +79,15 @@ const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
             setError(true)
           })
       })
-      .catch((error) => {
+      .catch(() => {
         instance.acquireTokenPopup(request).then((res: any) => {
           updatePatient(res.accessToken, handlePatient)
             .then((response) => {
               if (response.error) {
                 setError(true)
               } else {
-                const resPatient = response.response
                 setError(false)
+                update()
               }
             })
             .catch((err) => {
@@ -126,7 +118,7 @@ const UpdatePatientModal: React.FC<IUpdatePatientModal> = ({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>
-            Update patient:{patient.firstName && patient.lastName}{' '}
+            Update Patient: {patient.firstName} {patient.lastName}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
