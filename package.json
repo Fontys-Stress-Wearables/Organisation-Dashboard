@@ -5,7 +5,7 @@
   "dependencies": {
     "@azure/msal-browser": "^2.23.0",
     "@azure/msal-react": "^1.4.0",
-    "@emotion/react": "^11.8.2",
+    "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.8.1",
     "@microsoft/mgt-msal2-provider": "^2.4.0",
     "@microsoft/microsoft-graph-client": "^3.0.2",
